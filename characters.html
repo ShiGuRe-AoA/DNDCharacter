@@ -5,18 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>我的角色 · 冒险者角色卡</title>
   <link rel="stylesheet" href="css/site.css">
+  <script src="js/cloud.js" defer></script>
   <script src="js/db.js" defer></script>
   <script src="js/characters.js" defer></script>
 </head>
 <body>
   <main class="sheet">
-    <nav aria-label="网站导航"><a href="index.html">首页</a><a aria-current="page" href="characters.html">我的角色</a></nav>
+    <nav aria-label="网站导航"><a href="index.html">首页</a><a aria-current="page" href="characters.html">我的角色</a><a href="account.html">账号</a></nav>
     <header class="hero">
-      <div><p class="eyebrow">D&D · FIFTH EDITION</p><h1>我的角色</h1><p class="hero-note">管理保存在当前浏览器的角色卡。</p></div>
+      <div><p class="eyebrow">D&D · FIFTH EDITION</p><h1>我的角色</h1><p class="hero-note">管理本机和账号中的角色卡。</p></div>
       <div class="dragon" aria-hidden="true">🐉</div>
     </header>
     <section class="content" aria-label="角色存档">
-      <div class="actions">
+      <div class="actions storage-tabs" aria-label="存档位置">
+        <a id="local-tab" class="button" href="characters.html">本机角色</a>
+        <a id="cloud-tab" class="button" href="characters.html?storage=cloud">云端角色</a>
+        <span id="cloud-account"></span>
+      </div>
+      <div id="character-actions" class="actions">
         <a class="button primary" href="character.html?mode=new">创建角色</a>
         <a class="button" href="character.html?mode=import">导入 JSON</a>
         <label>搜索角色 <input id="search" type="search" placeholder="名称、种族、职业或等级"></label>

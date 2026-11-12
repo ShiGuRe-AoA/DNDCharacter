@@ -37,3 +37,11 @@ input[type=search] { max-width: 100%; padding: .55rem .75rem; font: inherit; col
   .actions label { margin-left: 0; }
 }
 
+
+[hidden] { display: none !important; }
+.storage-tabs { margin-bottom: 1rem; }
+#cloud-account { color: var(--muted); overflow-wrap: anywhere; }
+.account-panel { max-width: 32rem; margin-inline: auto; }
+.account-panel label { display: block; margin: .8rem 0 .3rem; }
+.account-panel input { width: 100%; border: 1px solid var(--line); border-radius: 9px; background: #fffaf0; padding: .55rem .75rem; font: inherit; color: var(--ink); }
+.account-panel form .actions { margin-top: 1rem; }

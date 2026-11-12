@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>账号 · 冒险者角色卡</title>
+  <link rel="stylesheet" href="css/site.css">
+  <script src="js/cloud.js" defer></script>
+  <script src="js/account.js" defer></script>
+</head>
+<body>
+  <main class="sheet">
+    <nav aria-label="网站导航"><a href="index.html">首页</a><a href="characters.html">我的角色</a><a href="account.html" aria-current="page">账号</a></nav>
+    <header class="hero">
+      <div><h1>冒险者账号</h1><p class="hero-note">登录后可在不同设备上继续编辑自己的云端角色卡。</p></div>
+      <div class="dragon" aria-hidden="true">🐉</div>
+    </header>
+    <section class="content">
+      <div class="panel account-panel">
+        <p id="account-status" role="status">正在检查登录状态…</p>
+        <form id="account-form" hidden>
+          <label for="username">用户名</label>
+          <input id="username" name="username" autocomplete="username" maxlength="32" required>
+          <label for="password">密码</label>
+          <input id="password" name="password" type="password" autocomplete="current-password" maxlength="128" required>
+          <div class="actions">
+            <button class="button primary" value="login" type="submit">登录</button>
+            <button class="button" value="register" type="submit">注册</button>
+          </div>
+        </form>
+        <div id="signed-in" hidden>
+          <a class="button primary" href="characters.html?storage=cloud">打开云端角色</a>
+          <button id="logout" class="button" type="button">退出登录</button>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
