@@ -135,7 +135,7 @@ async function characterRequest(db, request, user, id) {
   fail(405, '此操作不受支持');
 }
 
-export async function onRequest({ request, env, params }) {
+async function handleApi(request, env, path) {
   try {
     const db = env.DB;
     if (!db) fail(503, '云端存档尚未配置');
@@ -145,7 +145,7 @@ export async function onRequest({ request, env, params }) {
 
     const token = request.headers.get('Cookie')?.match(/(?:^|;\s*)__Host-dnd_session=([a-f0-9]{64})(?:;|$)/)?.[1];
     const tokenHash = token ? await hashToken(token) : null;
-    const [resource, id, ...rest] = params.path || [];
+    const [resource, id, ...rest] = path;
     if (!rest.length && !id && method === 'POST') {
       if (resource === 'register' || resource === 'login') return await signIn(db, request, resource === 'register', tokenHash);
       if (resource === 'logout') {
@@ -166,3 +166,14 @@ export async function onRequest({ request, env, params }) {
     return json({ error: '云端服务暂时不可用，请稍后重试' }, 500);
   }
 }
+
+export default {
+  fetch(request, env) {
+    const { pathname } = new URL(request.url);
+    if (pathname === '/api' || pathname.startsWith('/api/')) {
+      const path = pathname.slice('/api/'.length).split('/');
+      return handleApi(request, env, path);
+    }
+    return env.ASSETS.fetch(request);
+  }
+};
