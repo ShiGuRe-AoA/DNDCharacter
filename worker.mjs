@@ -135,8 +135,58 @@ async function characterRequest(db, request, user, id) {
   fail(405, '此操作不受支持');
 }
 
+function spellSearchKey(value) {
+  return value.normalize('NFKC').toLowerCase().replace(/[^\p{L}\p{N}]/gu, '');
+}
+
+async function searchSpells(request, db) {
+  if (request.method !== 'GET') fail(405, '此操作不受支持');
+  const query = new URL(request.url).searchParams.get('q') || '';
+  if (query.length > 80) fail(400, '法术名称查询过长');
+  const key = spellSearchKey(query);
+  if (!key) return json({ spells: [] });
+  if (!db) fail(503, '测试法术库尚未配置');
+
+  const ordered = '%' + [...key].join('%') + '%';
+  const { results } = await db.prepare(`
+    WITH search(key, pattern) AS (VALUES (?, ?))
+    SELECT id, name, english_name, ruleset, source, source_type, level, school,
+           verbal, somatic, material, concentration, ritual, duration, description
+    FROM spells CROSS JOIN search
+    WHERE name_key LIKE search.pattern OR english_key LIKE search.pattern
+    ORDER BY CASE
+      WHEN name_key = search.key OR english_key = search.key THEN 0
+      WHEN instr(name_key, search.key) = 1 OR instr(english_key, search.key) = 1 THEN 1
+      WHEN instr(name_key, search.key) > 0 OR instr(english_key, search.key) > 0 THEN 2
+      ELSE 3
+    END, name, ruleset DESC, id
+    LIMIT 8
+  `).bind(key, ordered).all();
+
+  return json({ spells: results.map(row => ({
+    id: row.id,
+    name: row.name,
+    englishName: row.english_name,
+    ruleset: row.ruleset,
+    source: row.source,
+    sourceType: row.source_type,
+    level: row.level,
+    school: row.school,
+    components: {
+      verbal: Boolean(row.verbal), somatic: Boolean(row.somatic), material: Boolean(row.material)
+    },
+    concentration: Boolean(row.concentration),
+    ritual: Boolean(row.ritual),
+    duration: row.duration,
+    description: row.description
+  })) });
+}
+
 async function handleApi(request, env, path) {
   try {
+    if (path.length === 2 && path[0] === 'rules' && path[1] === 'spells') {
+      return await searchSpells(request, env.RULES_DB);
+    }
     const db = env.DB;
     if (!db) fail(503, '云端存档尚未配置');
     const url = new URL(request.url);

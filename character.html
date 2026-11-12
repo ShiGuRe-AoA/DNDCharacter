@@ -325,6 +325,13 @@ textarea.rich-source+.rich-editor{min-height:2.6rem;resize:none}
 .spell-dialog select{width:100%;min-width:0;font:inherit;color:var(--ink);background:#fffdf6;border:1px solid var(--line);border-radius:6px;padding:.3rem}
 .spell-dialog textarea{min-height:3rem;resize:none;overflow:hidden}
 .spell-dialog-actions{justify-content:flex-end}
+.spell-matches{list-style:none;margin:.25rem 0 0;padding:0;max-height:12rem;overflow:auto;border:1px solid var(--line);border-radius:8px;background:#fffdf6}
+.spell-matches button{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:.25rem .6rem;width:100%;padding:.42rem .55rem;border:0;background:transparent;text-align:left;color:var(--deep);font:inherit;cursor:pointer}
+.spell-matches li+li{border-top:1px solid var(--line)}
+.spell-matches button:is(:hover,:focus-visible){background:#eee3f1;outline-offset:-2px}
+.spell-matches small,.spell-lookup-status{color:var(--muted);font-size:.78rem}
+.spell-lookup-status{margin:.25rem 0 0}
+.spell-lookup-status:empty{margin:0}
 @media(max-width:560px){
   .spell-level{grid-template-columns:5.6rem minmax(0,1fr);gap:.45rem}
   .spell-list{padding:.4rem .45rem}
@@ -419,7 +426,11 @@ textarea.rich-source+.rich-editor{min-height:2.6rem;resize:none}
 <dialog class="spell-dialog" id="spell-dialog" aria-labelledby="spell-dialog-title">
   <form id="spell-form">
     <h3 id="spell-dialog-title">添加法术</h3>
-    <label>法术名<input name="spellName" placeholder="未命名法术" data-rich-skip autofocus></label>
+    <div class="spell-lookup">
+      <label>法术名<input name="spellName" placeholder="未命名法术" autocomplete="off" aria-describedby="spell-lookup-status" data-rich-skip autofocus></label>
+      <ul class="spell-matches" id="spell-matches" aria-label="匹配的法术" hidden></ul>
+      <p class="spell-lookup-status" id="spell-lookup-status" role="status"></p>
+    </div>
     <div class="grid two">
       <label>环阶<select name="level"></select></label>
       <label>学派<select name="school"></select></label>
@@ -483,18 +494,92 @@ function resizeSpellDescription(){
   spellDescription.style.height='auto';
   spellDescription.style.height=(spellDescription.scrollHeight+2)+'px';
 }
-function openSpellForm(entry=null){
-  editingSpell=entry;
-  const data=entry?spellEntries.get(entry):{};
-  spellForm.reset();
+const spellMatches=document.querySelector('#spell-matches');
+const spellLookupStatus=document.querySelector('#spell-lookup-status');
+let spellRuleRef=null;
+let lookupTimer;
+let lookupRequest;
+
+function clearSpellMatches(){
+  clearTimeout(lookupTimer);
+  lookupRequest?.abort();
+  lookupRequest=null;
+  spellMatches.replaceChildren();
+  spellMatches.hidden=true;
+  spellLookupStatus.textContent='';
+}
+
+function fillSpellForm(data,level){
   spellControls.spellName.value=data.name??'';
-  spellControls.level.value=entry?.closest('[data-spell-level]').dataset.spellLevel??'0';
+  spellControls.level.value=level;
   spellControls.school.value=Object.hasOwn(spellSchools,data.school)?data.school:'';
   for(const key of Object.keys(spellComponentLabels)) spellControls[key].checked=Boolean(data.components?.[key]);
   spellControls.concentration.checked=Boolean(data.concentration);
   spellControls.ritual.checked=Boolean(data.ritual);
   spellControls.duration.value=data.duration??'';
   spellDescription.value=data.description??'';
+}
+
+function pickRuleSpell(data){
+  clearSpellMatches();
+  fillSpellForm(data,data.level);
+  spellRuleRef={id:data.id,ruleset:data.ruleset,source:data.source,sourceType:data.sourceType};
+  resizeSpellDescription();
+  spellControls.spellName.focus();
+  spellLookupStatus.textContent='已填入 '+data.name+'（'+data.ruleset+'）';
+}
+
+function renderSpellMatches(spells){
+  const items=spells.map(data=>{
+    const item=document.createElement('li');
+    const button=document.createElement('button');
+    button.type='button';
+    const name=document.createElement('span');
+    name.textContent=data.name;
+    const meta=document.createElement('small');
+    meta.textContent=[data.englishName,data.ruleset,spellLevelLabel(data.level)].join(' · ');
+    button.append(name,meta);
+    button.addEventListener('click',()=>pickRuleSpell(data));
+    item.append(button);
+    return item;
+  });
+  spellMatches.replaceChildren(...items);
+  spellMatches.hidden=!items.length;
+  spellLookupStatus.textContent=items.length?'找到 '+items.length+' 条法术':'没有匹配的法术，可继续手填';
+}
+
+function queueSpellLookup(event){
+  spellRuleRef=null;
+  clearSpellMatches();
+  const query=spellControls.spellName.value.trim();
+  if(event.isComposing||!query||query.length>80||!/^https?:$/.test(location.protocol))return;
+  lookupTimer=setTimeout(async()=>{
+    const request=new AbortController();
+    lookupRequest=request;
+    try{
+      const response=await fetch('/api/rules/spells?q='+encodeURIComponent(query),{signal:request.signal});
+      if(!response.ok)throw new Error('法术搜索不可用');
+      const {spells}=await response.json();
+      if(!request.signal.aborted&&spellDialog.open)renderSpellMatches(spells);
+    }catch(error){
+      if(!request.signal.aborted&&spellDialog.open)spellLookupStatus.textContent='法术库暂不可用，可继续手填';
+    }finally{
+      if(lookupRequest===request)lookupRequest=null;
+    }
+  },200);
+}
+spellControls.spellName.addEventListener('input',queueSpellLookup);
+spellControls.spellName.addEventListener('compositionend',queueSpellLookup);
+spellDialog.addEventListener('close',clearSpellMatches);
+
+
+function openSpellForm(entry=null){
+  editingSpell=entry;
+  const data=entry?spellEntries.get(entry):{};
+  clearSpellMatches();
+  spellForm.reset();
+  spellRuleRef=data.ruleRef??null;
+  fillSpellForm(data,entry?.closest('[data-spell-level]').dataset.spellLevel??'0');
   document.querySelector('#spell-dialog-title').textContent=entry?'编辑法术':'添加法术';
   spellDialog.showModal();
   resizeSpellDescription();
@@ -514,7 +599,8 @@ function createSpellEntry(data){
     components.length?'成分：'+components.join('、'):'',
     data.concentration?'专注':'',
     data.ritual?'仪式':'',
-    data.duration?'持续时间：'+data.duration:''
+    data.duration?'持续时间：'+data.duration:'',
+    [data.ruleRef?.source,data.ruleRef?.ruleset].filter(Boolean).join(' ')
   ].filter(Boolean).join(' · ');
   const description=entry.querySelector('.spell-description');
   description.textContent=data.description??'';
@@ -597,6 +683,8 @@ spellForm.addEventListener('submit',event=>{
     duration:spellControls.duration.value.trim(),
     description:spellDescription.value.trim()
   };
+  if(spellRuleRef)data.ruleRef=spellRuleRef;
+  else delete data.ruleRef;
   const list=spellList(spellControls.level.value);
   const entry=createSpellEntry(data);
   if(editingSpell?.parentElement===list)editingSpell.replaceWith(entry);

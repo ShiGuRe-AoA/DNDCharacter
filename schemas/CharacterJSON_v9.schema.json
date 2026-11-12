@@ -683,7 +683,18 @@
                   "concentration": { "type": "boolean" },
                   "ritual": { "type": "boolean" },
                   "duration": { "type": "string" },
-                  "description": { "type": "string" }
+                  "description": { "type": "string" },
+                  "ruleRef": {
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "string" },
+                      "ruleset": { "type": "string" },
+                      "source": { "type": "string" },
+                      "sourceType": { "type": "string" }
+                    },
+                    "required": ["id"],
+                    "additionalProperties": true
+                  }
                 },
                 "additionalProperties": true,
                 "required": ["name", "prepared"]
