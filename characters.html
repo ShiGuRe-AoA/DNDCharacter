@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>我的角色 · 冒险者角色卡</title>
+  <link rel="stylesheet" href="css/site.css">
+  <script src="js/db.js" defer></script>
+  <script src="js/characters.js" defer></script>
+</head>
+<body>
+  <main class="sheet">
+    <nav aria-label="网站导航"><a href="index.html">首页</a><a aria-current="page" href="characters.html">我的角色</a></nav>
+    <header class="hero">
+      <div><p class="eyebrow">D&D · FIFTH EDITION</p><h1>我的角色</h1><p class="hero-note">管理保存在当前浏览器的角色卡。</p></div>
+      <div class="dragon" aria-hidden="true">🐉</div>
+    </header>
+    <section class="content" aria-label="角色存档">
+      <div class="actions">
+        <a class="button primary" href="character.html?mode=new">创建角色</a>
+        <a class="button" href="character.html?mode=import">导入 JSON</a>
+        <label>搜索角色 <input id="search" type="search" placeholder="名称、种族、职业或等级"></label>
+      </div>
+      <p id="status" role="status">正在读取本地角色…</p>
+      <div id="characters" class="grid"></div>
+      <noscript>请启用 JavaScript 以读取本地角色。</noscript>
+    </section>
+  </main>
+</body>
+</html>

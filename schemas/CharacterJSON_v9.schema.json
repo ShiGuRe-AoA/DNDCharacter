@@ -1,0 +1,1214 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "DND Character JSON v9",
+  "description": "语义化网页角色卡数据契约；原始 JSON v1-v8 通过 HTML 内的兼容读取器迁移。",
+  "type": "object",
+  "required": [
+    "schema",
+    "version",
+    "sheetId",
+    "identity",
+    "abilities",
+    "combat",
+    "proficiencies",
+    "attacks",
+    "featureEntries",
+    "resources",
+    "profile",
+    "spellbook",
+    "summons",
+    "formattedText",
+    "automation"
+  ],
+  "properties": {
+    "schema": {
+      "const": "dnd-character-sheet"
+    },
+    "version": {
+      "const": 9
+    },
+    "sheetId": {
+      "type": "string"
+    },
+    "exportedAt": {
+      "type": "string"
+    },
+    "identity": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "classText": {
+          "type": "string"
+        },
+        "race": {
+          "type": "string"
+        },
+        "background": {
+          "type": "string"
+        },
+        "playerName": {
+          "type": "string"
+        },
+        "alignment": {
+          "type": "string"
+        },
+        "experience": {
+          "type": "string"
+        },
+        "inspiration": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true,
+      "required": [
+        "name",
+        "classText",
+        "race",
+        "background",
+        "playerName",
+        "alignment",
+        "experience",
+        "inspiration"
+      ]
+    },
+    "abilities": {
+      "type": "object",
+      "properties": {
+        "str": {
+          "type": "string"
+        },
+        "dex": {
+          "type": "string"
+        },
+        "con": {
+          "type": "string"
+        },
+        "int": {
+          "type": "string"
+        },
+        "wis": {
+          "type": "string"
+        },
+        "cha": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true,
+      "required": [
+        "str",
+        "dex",
+        "con",
+        "int",
+        "wis",
+        "cha"
+      ]
+    },
+    "combat": {
+      "type": "object",
+      "properties": {
+        "armorClass": {
+          "type": "string"
+        },
+        "initiative": {
+          "type": "string"
+        },
+        "speed": {
+          "type": "string"
+        },
+        "proficiencyBonus": {
+          "type": "string"
+        },
+        "passivePerception": {
+          "type": "string"
+        },
+        "hitPoints": {
+          "type": "object",
+          "properties": {
+            "maximum": {
+              "type": "string"
+            },
+            "current": {
+              "type": "string"
+            },
+            "temporary": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": true
+        },
+        "hitDice": {
+          "type": "object",
+          "properties": {
+            "total": {
+              "type": "string"
+            },
+            "denomination": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": true
+        },
+        "deathSaves": {
+          "type": "object",
+          "properties": {
+            "successes": {
+              "type": "string"
+            },
+            "failures": {
+              "type": "string"
+            },
+            "notes": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": true
+        },
+        "otherProficiencies": {
+          "type": "object",
+          "properties": {
+            "tools": {
+              "type": "string"
+            },
+            "armorAndWeapons": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": true
+        },
+        "passiveInvestigationInsight": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "proficiencies": {
+      "type": "object",
+      "properties": {
+        "savingThrows": {
+          "type": "object",
+          "properties": {
+            "str": {
+              "type": "integer",
+              "enum": [
+                0,
+                1,
+                2
+              ]
+            },
+            "dex": {
+              "type": "integer",
+              "enum": [
+                0,
+                1,
+                2
+              ]
+            },
+            "con": {
+              "type": "integer",
+              "enum": [
+                0,
+                1,
+                2
+              ]
+            },
+            "int": {
+              "type": "integer",
+              "enum": [
+                0,
+                1,
+                2
+              ]
+            },
+            "wis": {
+              "type": "integer",
+              "enum": [
+                0,
+                1,
+                2
+              ]
+            },
+            "cha": {
+              "type": "integer",
+              "enum": [
+                0,
+                1,
+                2
+              ]
+            }
+          },
+          "additionalProperties": true
+        },
+        "skills": {
+          "type": "object",
+          "properties": {
+            "acrobatics": {
+              "type": "integer",
+              "enum": [
+                0,
+                1,
+                2
+              ]
+            },
+            "animal-handling": {
+              "type": "integer",
+              "enum": [
+                0,
+                1,
+                2
+              ]
+            },
+            "arcana": {
+              "type": "integer",
+              "enum": [
+                0,
+                1,
+                2
+              ]
+            },
+            "athletics": {
+              "type": "integer",
+              "enum": [
+                0,
+                1,
+                2
+              ]
+            },
+            "deception": {
+              "type": "integer",
+              "enum": [
+                0,
+                1,
+                2
+              ]
+            },
+            "history": {
+              "type": "integer",
+              "enum": [
+                0,
+                1,
+                2
+              ]
+            },
+            "insight": {
+              "type": "integer",
+              "enum": [
+                0,
+                1,
+                2
+              ]
+            },
+            "intimidation": {
+              "type": "integer",
+              "enum": [
+                0,
+                1,
+                2
+              ]
+            },
+            "investigation": {
+              "type": "integer",
+              "enum": [
+                0,
+                1,
+                2
+              ]
+            },
+            "medicine": {
+              "type": "integer",
+              "enum": [
+                0,
+                1,
+                2
+              ]
+            },
+            "nature": {
+              "type": "integer",
+              "enum": [
+                0,
+                1,
+                2
+              ]
+            },
+            "perception": {
+              "type": "integer",
+              "enum": [
+                0,
+                1,
+                2
+              ]
+            },
+            "performance": {
+              "type": "integer",
+              "enum": [
+                0,
+                1,
+                2
+              ]
+            },
+            "persuasion": {
+              "type": "integer",
+              "enum": [
+                0,
+                1,
+                2
+              ]
+            },
+            "religion": {
+              "type": "integer",
+              "enum": [
+                0,
+                1,
+                2
+              ]
+            },
+            "sleight-of-hand": {
+              "type": "integer",
+              "enum": [
+                0,
+                1,
+                2
+              ]
+            },
+            "stealth": {
+              "type": "integer",
+              "enum": [
+                0,
+                1,
+                2
+              ]
+            },
+            "survival": {
+              "type": "integer",
+              "enum": [
+                0,
+                1,
+                2
+              ]
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "attacks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "attackBonus": {
+            "type": "string"
+          },
+          "damageAndType": {
+            "type": "string"
+          },
+          "rangeAndNotes": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "featureEntries": {
+      "type": "object",
+      "properties": {
+        "race": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "maxUses": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "richHTML": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "used": {
+                "type": "array",
+                "items": {
+                  "type": "boolean"
+                }
+              },
+              "open": {
+                "type": "boolean"
+              },
+              "currentUses": {
+                "type": "string",
+                "description": "剩余可用次数（0～最大可用次数），与 used 按钮同步。"
+              }
+            },
+            "additionalProperties": true,
+            "required": [
+              "name",
+              "maxUses",
+              "description",
+              "used"
+            ]
+          }
+        },
+        "classFeatures": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "maxUses": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "richHTML": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "used": {
+                "type": "array",
+                "items": {
+                  "type": "boolean"
+                }
+              },
+              "open": {
+                "type": "boolean"
+              },
+              "currentUses": {
+                "type": "string",
+                "description": "剩余可用次数（0～最大可用次数），与 used 按钮同步。"
+              }
+            },
+            "additionalProperties": true,
+            "required": [
+              "name",
+              "maxUses",
+              "description",
+              "used"
+            ]
+          }
+        },
+        "other": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "maxUses": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "richHTML": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "used": {
+                "type": "array",
+                "items": {
+                  "type": "boolean"
+                }
+              },
+              "open": {
+                "type": "boolean"
+              },
+              "currentUses": {
+                "type": "string",
+                "description": "剩余可用次数（0～最大可用次数），与 used 按钮同步。"
+              }
+            },
+            "additionalProperties": true,
+            "required": [
+              "name",
+              "maxUses",
+              "description",
+              "used"
+            ]
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "resources": {
+      "type": "object",
+      "properties": {
+        "languagesAndProficiencies": {
+          "type": "string"
+        },
+        "equipment": {
+          "type": "string"
+        },
+        "currency": {
+          "type": "object",
+          "properties": {
+            "cp": {
+              "type": "string"
+            },
+            "sp": {
+              "type": "string"
+            },
+            "ep": {
+              "type": "string"
+            },
+            "gp": {
+              "type": "string"
+            },
+            "pp": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": true
+        },
+        "encumbrance": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "profile": {
+      "type": "object",
+      "properties": {
+        "age": {
+          "type": "string"
+        },
+        "height": {
+          "type": "string"
+        },
+        "weight": {
+          "type": "string"
+        },
+        "build": {
+          "type": "string"
+        },
+        "eyes": {
+          "type": "string"
+        },
+        "skin": {
+          "type": "string"
+        },
+        "hair": {
+          "type": "string"
+        },
+        "faith": {
+          "type": "string"
+        },
+        "appearance": {
+          "type": "string"
+        },
+        "personality": {
+          "type": "string"
+        },
+        "ideal": {
+          "type": "string"
+        },
+        "bond": {
+          "type": "string"
+        },
+        "flaw": {
+          "type": "string"
+        },
+        "backstory": {
+          "type": "string"
+        },
+        "alliesAndOrganizations": {
+          "type": "string"
+        },
+        "treasuresAndNotes": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "spellbook": {
+      "type": "object",
+      "properties": {
+        "casting": {
+          "type": "object",
+          "properties": {
+            "className": {
+              "type": "string"
+            },
+            "ability": {
+              "type": "string"
+            },
+            "saveDC": {
+              "type": "string"
+            },
+            "attackBonus": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": true
+        },
+        "spells": {
+          "type": "object",
+          "properties": {
+            "0": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "prepared": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": true,
+                "required": [
+                  "name",
+                  "prepared"
+                ]
+              }
+            },
+            "1": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "prepared": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": true,
+                "required": [
+                  "name",
+                  "prepared"
+                ]
+              }
+            },
+            "2": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "prepared": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": true,
+                "required": [
+                  "name",
+                  "prepared"
+                ]
+              }
+            },
+            "3": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "prepared": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": true,
+                "required": [
+                  "name",
+                  "prepared"
+                ]
+              }
+            },
+            "4": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "prepared": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": true,
+                "required": [
+                  "name",
+                  "prepared"
+                ]
+              }
+            },
+            "5": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "prepared": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": true,
+                "required": [
+                  "name",
+                  "prepared"
+                ]
+              }
+            },
+            "6": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "prepared": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": true,
+                "required": [
+                  "name",
+                  "prepared"
+                ]
+              }
+            },
+            "7": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "prepared": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": true,
+                "required": [
+                  "name",
+                  "prepared"
+                ]
+              }
+            },
+            "8": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "prepared": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": true,
+                "required": [
+                  "name",
+                  "prepared"
+                ]
+              }
+            },
+            "9": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "prepared": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": true,
+                "required": [
+                  "name",
+                  "prepared"
+                ]
+              }
+            }
+          },
+          "additionalProperties": true
+        },
+        "slots": {
+          "type": "object",
+          "properties": {
+            "1": {
+              "type": "object",
+              "properties": {
+                "count": {
+                  "type": "string"
+                },
+                "used": {
+                  "type": "array",
+                  "items": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "2": {
+              "type": "object",
+              "properties": {
+                "count": {
+                  "type": "string"
+                },
+                "used": {
+                  "type": "array",
+                  "items": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "3": {
+              "type": "object",
+              "properties": {
+                "count": {
+                  "type": "string"
+                },
+                "used": {
+                  "type": "array",
+                  "items": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "4": {
+              "type": "object",
+              "properties": {
+                "count": {
+                  "type": "string"
+                },
+                "used": {
+                  "type": "array",
+                  "items": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "5": {
+              "type": "object",
+              "properties": {
+                "count": {
+                  "type": "string"
+                },
+                "used": {
+                  "type": "array",
+                  "items": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "6": {
+              "type": "object",
+              "properties": {
+                "count": {
+                  "type": "string"
+                },
+                "used": {
+                  "type": "array",
+                  "items": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "7": {
+              "type": "object",
+              "properties": {
+                "count": {
+                  "type": "string"
+                },
+                "used": {
+                  "type": "array",
+                  "items": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "8": {
+              "type": "object",
+              "properties": {
+                "count": {
+                  "type": "string"
+                },
+                "used": {
+                  "type": "array",
+                  "items": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "9": {
+              "type": "object",
+              "properties": {
+                "count": {
+                  "type": "string"
+                },
+                "used": {
+                  "type": "array",
+                  "items": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "summons": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "hpCurrent": {
+            "type": "string"
+          },
+          "hpMax": {
+            "type": "string"
+          },
+          "ac": {
+            "type": "string"
+          },
+          "speed": {
+            "type": "string"
+          },
+          "skills": {
+            "type": "string"
+          },
+          "damageImmunities": {
+            "type": "string"
+          },
+          "conditionImmunities": {
+            "type": "string"
+          },
+          "senses": {
+            "type": "string"
+          },
+          "languages": {
+            "type": "string"
+          },
+          "proficiency": {
+            "type": "string"
+          },
+          "features": {
+            "type": "string"
+          },
+          "actions": {
+            "type": "string"
+          },
+          "open": {
+            "type": "boolean"
+          },
+          "abilities": {
+            "type": "object",
+            "properties": {
+              "STR": {
+                "type": "object",
+                "properties": {
+                  "score": {
+                    "type": "string"
+                  },
+                  "mod": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": true
+              },
+              "DEX": {
+                "type": "object",
+                "properties": {
+                  "score": {
+                    "type": "string"
+                  },
+                  "mod": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": true
+              },
+              "CON": {
+                "type": "object",
+                "properties": {
+                  "score": {
+                    "type": "string"
+                  },
+                  "mod": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": true
+              },
+              "INT": {
+                "type": "object",
+                "properties": {
+                  "score": {
+                    "type": "string"
+                  },
+                  "mod": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": true
+              },
+              "WIS": {
+                "type": "object",
+                "properties": {
+                  "score": {
+                    "type": "string"
+                  },
+                  "mod": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": true
+              },
+              "CHA": {
+                "type": "object",
+                "properties": {
+                  "score": {
+                    "type": "string"
+                  },
+                  "mod": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": true
+              }
+            },
+            "additionalProperties": true
+          },
+          "rich": {
+            "type": "object",
+            "additionalProperties": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "portrait": {
+      "type": "string"
+    },
+    "formattedText": {
+      "type": "object",
+      "description": "以 data-field 语义路径为键，保存富文本 HTML；对应主字段依旧是纯文本。",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "automation": {
+      "type": "object",
+      "properties": {
+        "overrides": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "overridden": {
+                "type": "boolean"
+              },
+              "value": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": true
+          }
+        },
+        "modifiers": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "boolean"
+          }
+        },
+        "modifierValues": {
+          "type": "object",
+          "properties": {
+            "skillBonus": {
+              "type": [
+                "string",
+                "number"
+              ]
+            },
+            "saveBonus": {
+              "type": [
+                "string",
+                "number"
+              ]
+            },
+            "spellDCBonus": {
+              "type": [
+                "string",
+                "number"
+              ]
+            },
+            "spellAttackBonus": {
+              "type": [
+                "string",
+                "number"
+              ]
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "extensions": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

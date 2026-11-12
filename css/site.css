@@ -1,0 +1,39 @@
+:root{--ink:#493c4c;--muted:#796e79;--paper:#fff9ea;--purple:#6b557f;--deep:#493a5d;--lav:#b8a3d0;--gold:#c99f50;--sage:#8fa590;--rose:#c98493;--line:rgba(89,66,89,.28);--shadow:0 18px 55px rgba(52,38,49,.2)}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;color:var(--ink);font-family:"Noto Serif SC","Songti SC",STSong,Georgia,serif;background:radial-gradient(circle at 15% 8%,#ffffffa8 0 2px,transparent 3px),radial-gradient(circle at 82% 18%,#ffffff80 0 1px,transparent 2px),linear-gradient(135deg,#d8c9bd,#c6b8c6 55%,#bac8c1);background-size:92px 92px,68px 68px,auto}
+.sheet{--hp-tint:transparent;width:min(1180px,calc(100% - 2.5rem));margin:2rem auto 5rem;position:relative;overflow:hidden;border:1px solid #74523747;border-radius:34px 34px 24px 24px;box-shadow:var(--shadow);background:linear-gradient(var(--hp-tint),var(--hp-tint)),repeating-linear-gradient(4deg,#79573806 0 1px,transparent 1px 7px),radial-gradient(ellipse at 20% 0%,#ffffffe0,transparent 48%),var(--paper);transition:filter .55s ease,box-shadow .55s ease}
+.sheet:before{content:"";position:absolute;inset:10px;border:1px solid #c69e5185;border-radius:25px 25px 17px 17px;pointer-events:none;z-index:5}
+.hero{min-height:250px;position:relative;display:grid;grid-template-columns:1fr auto;align-items:center;gap:2rem;padding:3.1rem 4rem 2.7rem;color:#fff9ec;background:radial-gradient(circle at 77% 12%,#ffffff35 0 2px,transparent 3px),linear-gradient(125deg,var(--deep),#78618f 55%,#9e82b1);background-size:58px 58px,auto;border-bottom:7px double #ead39a}
+.hero:after{content:"";position:absolute;left:0;right:0;bottom:-15px;height:23px;background:radial-gradient(18px 13px at 18px 0,var(--paper) 98%,transparent 100%) repeat-x;background-size:36px 23px}
+.eyebrow{margin:0 0 .65rem;letter-spacing:.28em;font:700 .72rem/1.2 system-ui,sans-serif;opacity:.78}
+h1{margin:0;font-size:clamp(2.3rem,5vw,4.8rem);letter-spacing:.04em;text-shadow:0 3px 0 #34274140}
+.hero-note{margin:1rem 0 0;font-size:.96rem;opacity:.82;letter-spacing:.08em}
+.dragon{width:clamp(105px,14vw,155px);aspect-ratio:1;display:grid;place-items:center;position:relative;border-radius:50%;color:#fff9ec;font:4.3rem/1 "Segoe UI Emoji","Apple Color Emoji",sans-serif;border:2px solid #ead39a;outline:1px solid #ffffff73;outline-offset:7px;background:radial-gradient(circle,#ffffff35,#37294645);box-shadow:inset 0 0 0 8px #ffffff14,0 12px 28px #281c3138;transform:rotate(3deg);opacity:.88}
+.panel{position:relative;padding:1.2rem 1.25rem;border:1px solid #6f588559;border-radius:18px 12px;background:#fffdf6aa;box-shadow:inset 0 0 0 4px #ead39a2e,0 5px 18px #4e3d480f}
+.panel:before{content:"✦";position:absolute;left:.72rem;top:-.74rem;color:var(--gold);background:var(--paper);padding:0 .3rem}
+
+nav, .actions { display: flex; align-items: center; flex-wrap: wrap; gap: .7rem; }
+nav { padding: 1.2rem 3.5rem .7rem; }
+nav a { color: var(--deep); padding: .35rem .55rem; text-underline-offset: .25em; }
+nav [aria-current] { font-weight: 700; }
+.content { padding: 3rem 3.5rem; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); gap: 1.25rem; }
+.panel h2 { margin: 0 0 .6rem; color: var(--deep); overflow-wrap: anywhere; }
+.panel p { line-height: 1.65; overflow-wrap: anywhere; }
+.button { display: inline-block; color: var(--deep); background: #fffaf0; border: 1px solid var(--purple); border-radius: 9px; padding: .55rem .8rem; font: 700 .85rem/1.3 system-ui, sans-serif; text-decoration: none; cursor: pointer; }
+.button:hover { background: #efe4f4; }
+.button.primary { background: var(--purple); color: white; }
+.button.primary:hover { background: var(--deep); }
+:focus-visible { outline: 2px solid var(--purple); outline-offset: 3px; }
+.actions label { display: flex; align-items: center; flex-wrap: wrap; gap: .5rem; margin-left: auto; }
+input[type=search] { max-width: 100%; padding: .55rem .75rem; font: inherit; color: var(--ink); background: #fffaf0; border: 1px solid var(--line); border-radius: 9px; }
+.portrait { display: block; width: 100%; height: 11rem; object-fit: contain; border-radius: 9px; background: #efe6de; margin-bottom: 1rem; }
+.details, #status { color: var(--muted); font-size: .9rem; }
+@media (max-width: 640px) {
+  .sheet { width: calc(100% - 1rem); margin: .5rem auto 2rem; }
+  nav, .content { padding-inline: 1.5rem; }
+  .hero { min-height: 0; padding: 2.4rem 1.5rem; gap: 1rem; }
+  .dragon { width: 62px; font-size: 2rem; outline-offset: 4px; }
+  .actions label { margin-left: 0; }
+}
+

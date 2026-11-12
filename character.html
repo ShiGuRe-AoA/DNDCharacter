@@ -1,0 +1,1578 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#654f7c">
+<title>童话风 DND 角色卡</title>
+<style>
+:root{--ink:#493c4c;--muted:#796e79;--paper:#fff9ea;--purple:#6b557f;--deep:#493a5d;--lav:#b8a3d0;--gold:#c99f50;--sage:#8fa590;--rose:#c98493;--line:rgba(89,66,89,.28);--shadow:0 18px 55px rgba(52,38,49,.2)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-height:100vh;color:var(--ink);font-family:"Noto Serif SC","Songti SC",STSong,Georgia,serif;background:radial-gradient(circle at 15% 8%,#ffffffa8 0 2px,transparent 3px),radial-gradient(circle at 82% 18%,#ffffff80 0 1px,transparent 2px),linear-gradient(135deg,#d8c9bd,#c6b8c6 55%,#bac8c1);background-size:92px 92px,68px 68px,auto}
+input,textarea{width:100%;border:0;border-bottom:1px solid var(--line);background:transparent;color:var(--ink);font:inherit;outline:0;padding:.28rem .12rem;border-radius:0}input:focus,textarea:focus{border-color:var(--purple);box-shadow:0 2px 0 #6b557f1c}textarea{resize:vertical;min-height:7rem;line-height:1.7}::placeholder{color:#9b919a}
+.rail{position:fixed;z-index:20;left:1rem;top:50%;transform:translateY(-50%);display:grid;gap:.45rem;padding:.55rem;border:1px solid #ffffff70;border-radius:999px;background:#49384fce;box-shadow:0 8px 24px #31233430;backdrop-filter:blur(10px)}.rail a{display:grid;place-items:center;width:2.1rem;height:2.1rem;border-radius:50%;color:#fff9ec;text-decoration:none;font:700 .66rem/1 system-ui,sans-serif;transition:.2s}.rail a:hover{background:var(--gold);transform:scale(1.07)}
+.sheet{--hp-tint:transparent;width:min(1180px,calc(100% - 2.5rem));margin:2rem auto 5rem;position:relative;overflow:hidden;border:1px solid #74523747;border-radius:34px 34px 24px 24px;box-shadow:var(--shadow);background:linear-gradient(var(--hp-tint),var(--hp-tint)),repeating-linear-gradient(4deg,#79573806 0 1px,transparent 1px 7px),radial-gradient(ellipse at 20% 0%,#ffffffe0,transparent 48%),var(--paper);transition:filter .55s ease,box-shadow .55s ease}.sheet.hp-low{--hp-tint:rgba(153,0,25,.17);box-shadow:0 18px 60px rgba(110,0,22,.32)}.sheet.hp-zero{--hp-tint:rgba(32,32,32,.16);filter:grayscale(.96) brightness(.9);box-shadow:0 18px 58px rgba(0,0,0,.35)}.sheet:before{content:"";position:absolute;inset:10px;border:1px solid #c69e5185;border-radius:25px 25px 17px 17px;pointer-events:none;z-index:5}
+.hero{min-height:250px;position:relative;display:grid;grid-template-columns:1fr auto;align-items:center;gap:2rem;padding:3.1rem 4rem 2.7rem;color:#fff9ec;background:radial-gradient(circle at 77% 12%,#ffffff35 0 2px,transparent 3px),linear-gradient(125deg,var(--deep),#78618f 55%,#9e82b1);background-size:58px 58px,auto;border-bottom:7px double #ead39a}.hero:after{content:"";position:absolute;left:0;right:0;bottom:-15px;height:23px;background:radial-gradient(18px 13px at 18px 0,var(--paper) 98%,transparent 100%) repeat-x;background-size:36px 23px}.eyebrow{margin:0 0 .65rem;letter-spacing:.28em;font:700 .72rem/1.2 system-ui,sans-serif;opacity:.78}h1{margin:0;font-size:clamp(2.3rem,5vw,4.8rem);letter-spacing:.04em;text-shadow:0 3px 0 #34274140}.hero-note{margin:1rem 0 0;font-size:.96rem;opacity:.82;letter-spacing:.08em}.dragon{width:clamp(105px,14vw,155px);aspect-ratio:1;display:grid;place-items:center;position:relative;border-radius:50%;color:#fff9ec;font:4.3rem/1 "Segoe UI Emoji","Apple Color Emoji",sans-serif;border:2px solid #ead39a;outline:1px solid #ffffff73;outline-offset:7px;background:radial-gradient(circle,#ffffff35,#37294645);box-shadow:inset 0 0 0 8px #ffffff14,0 12px 28px #281c3138;transform:rotate(3deg);opacity:.88}
+.content{padding:3.8rem 3.5rem 4rem}.chapter{scroll-margin-top:1.5rem;margin-top:3.3rem;position:relative}.chapter:first-child{margin-top:0}.chapter-head{display:flex;align-items:center;gap:1rem;margin:0 0 1.1rem;color:var(--deep)}.chapter-head:before,.chapter-head:after{content:"";height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);flex:1}.chapter-head:before{max-width:3rem}.chapter-head h2{margin:0;white-space:nowrap;font-size:clamp(1.45rem,3vw,2.1rem);letter-spacing:.13em}.mark{display:inline-grid;place-items:center;width:2.2rem;height:2.2rem;border-radius:50%;background:var(--purple);color:white;font:1.1rem/1 sans-serif;box-shadow:0 0 0 4px #e6d5ae}.subtitle{margin:-.5rem 0 1.2rem 4.2rem;color:var(--muted);font-size:.82rem;letter-spacing:.08em}
+.panel{position:relative;padding:1.2rem 1.25rem;border:1px solid #6f588559;border-radius:18px 12px;background:#fffdf6aa;box-shadow:inset 0 0 0 4px #ead39a2e,0 5px 18px #4e3d480f}.panel:before{content:"✦";position:absolute;left:.72rem;top:-.74rem;color:var(--gold);background:var(--paper);padding:0 .3rem}.panel-title{margin:0 0 .85rem;color:var(--deep);font-size:1rem;letter-spacing:.12em}.grid{display:grid;gap:1rem}.identity{grid-template-columns:2fr 1.4fr 1fr 1fr}.field label{display:block;color:var(--muted);font:700 .67rem/1.2 system-ui,sans-serif;letter-spacing:.12em;text-transform:uppercase}
+.ability-showcase{display:grid;grid-template-columns:1.15fr .85fr;gap:1rem;margin-top:1rem;align-items:stretch}.abilities{grid-template-columns:repeat(3,1fr)}.ability{padding:.8rem .55rem .65rem;text-align:center;border:1px solid #6f58854d;border-radius:48% 48% 42% 42%/22% 22% 18% 18%;background:linear-gradient(#fffdfa,#f4ead5)}.ability:nth-child(2n){border-color:#8aa28e94}.ability h3{margin:0;font-size:.82rem;letter-spacing:.1em}.ability .score{margin:.35rem auto;width:3.4rem;font-size:1.7rem;font-weight:700;text-align:center;border:0}.modifier{width:2.75rem;height:2.25rem;margin:0 auto;display:grid;place-items:center;border:1px solid var(--gold);border-radius:50%;background:#fff9e9;font-weight:700}.radar-panel{min-height:320px;display:grid;grid-template-rows:auto 1fr auto;align-items:center;padding:1rem}.radar-panel .panel-title{text-align:center;margin-bottom:.2rem}.radar-wrap{position:relative;width:100%;height:270px}.radar-wrap canvas{display:block;width:100%;height:100%}.radar-summary{margin:.2rem 0 0;text-align:center;color:var(--muted);font:600 .68rem/1.5 system-ui,sans-serif}
+.combat{grid-template-columns:repeat(5,1fr)}.stat{text-align:center;padding:.55rem .45rem;min-height:4.25rem;display:grid;align-content:center}.stat strong{color:var(--deep);font:700 .65rem/1.2 system-ui,sans-serif;letter-spacing:.06em}.stat input,.stat output{text-align:center;font-size:1.15rem;font-weight:700;border:0;min-height:1.8rem;display:grid;place-items:center}.two{grid-template-columns:1fr 1fr}.three{grid-template-columns:repeat(3,1fr)}.skills-layout{grid-template-columns:.9fr 1.25fr;align-items:start}.skill-side{display:grid;gap:1rem}.checks{display:grid;gap:.38rem}.check{display:grid;grid-template-columns:1.5rem 1fr 2.8rem;gap:.45rem;align-items:center;min-height:1.85rem;font-size:.84rem}.prof{appearance:none;width:1.15rem;height:1.15rem;border:1px solid var(--purple);border-radius:50%;padding:0;cursor:pointer;background:transparent;position:relative}.prof[data-rank="1"]{background:radial-gradient(circle,var(--purple) 0 44%,transparent 49%)}.prof[data-rank="2"]{background:radial-gradient(circle,var(--gold) 0 30%,transparent 34% 54%,var(--purple) 57% 70%,transparent 73%);border-color:var(--gold)}.derived{display:block;text-align:center;font-weight:700;color:var(--deep);font-family:system-ui,sans-serif;border:0;padding:.08rem}.auto-field[data-overridden="1"]{color:#8d3f57;background:linear-gradient(transparent 72%,rgba(201,132,147,.17) 72%);border-bottom-color:var(--rose)}.auto-hint{margin:.7rem 0 0;color:var(--muted);font:600 .66rem/1.5 system-ui,sans-serif}.hp-bar{position:relative;height:1.05rem;margin-top:.85rem;overflow:hidden;border:1px solid #6b557f4d;border-radius:999px;background:#d8ccd0;box-shadow:inset 0 1px 3px #3d263535}.hp-fill{height:100%;width:0;background:linear-gradient(90deg,#8fa590,#6d9a78);border-radius:inherit;transition:width .35s ease,background .35s ease}.hp-bar.low .hp-fill{background:linear-gradient(90deg,#c75b65,#9c1830)}.hp-bar.zero .hp-fill{background:#555}.hp-label{margin:.35rem 0 0;text-align:center;color:var(--muted);font:700 .68rem/1 system-ui,sans-serif}.legend{margin:.7rem 0 0;color:var(--muted);font:600 .7rem/1.6 system-ui,sans-serif}.legend i{display:inline-block;width:.72rem;height:.72rem;border:1px solid var(--purple);border-radius:50%;vertical-align:-.08rem;margin:0 .16rem}.legend .p{background:var(--purple)}.legend .e{box-shadow:inset 0 0 0 2px var(--paper),inset 0 0 0 5px var(--gold)}table{width:100%;border-collapse:collapse;font-size:.84rem}th{padding:.55rem;color:white;background:var(--purple);font:700 .67rem/1.2 system-ui,sans-serif;letter-spacing:.07em}td{border-bottom:1px solid #6f58852b;padding:.25rem .45rem}td input{border:0}
+.toolbar{position:fixed;z-index:25;right:1rem;top:1rem;display:flex;gap:.5rem;padding:.55rem;border:1px solid #ffffff80;border-radius:14px;background:#fff9e9e8;box-shadow:0 8px 28px #34263135;backdrop-filter:blur(12px)}.toolbar button{border:1px solid #6b557f55;border-radius:9px;background:var(--purple);color:white;padding:.58rem .82rem;font:700 .75rem/1 system-ui,sans-serif;cursor:pointer;transition:.18s}.toolbar button:hover{background:var(--deep);transform:translateY(-1px)}.toolbar button.secondary{background:#fff;color:var(--deep)}.modifier-drawer{position:fixed;z-index:30;right:0;top:50%;width:320px;display:grid;grid-template-columns:46px 1fr;transform:translate(calc(100% - 46px),-50%);transition:transform .28s ease;filter:drop-shadow(0 12px 24px #24192b38)}.modifier-drawer.open{transform:translate(0,-50%)}.modifier-tab{align-self:start;min-height:6.2rem;border:1px solid #ffffff70;border-right:0;border-radius:16px 0 0 16px;background:var(--deep);color:white;cursor:pointer;font:700 .8rem/1.1 system-ui,sans-serif;letter-spacing:.18em;writing-mode:vertical-rl;padding:.8rem .65rem}.modifier-tab:hover{background:var(--purple)}.modifier-content{padding:1.15rem 1rem 1.2rem;border:1px solid #6b557f55;border-right:0;border-radius:0 0 0 18px;background:#fff9e9f5;backdrop-filter:blur(14px)}.modifier-content h2{margin:0;color:var(--deep);font-size:1.15rem;letter-spacing:.12em}.modifier-intro{margin:.45rem 0 1rem;color:var(--muted);font:600 .72rem/1.55 system-ui,sans-serif}.modifier-list{display:grid;gap:.75rem}.modifier-option{display:grid;grid-template-columns:auto 1fr;gap:.7rem;align-items:start;padding:.8rem;border:1px solid #6b557f38;border-radius:12px;background:#fffdf8;cursor:pointer}.modifier-option:hover{border-color:#6b557f70}.modifier-option input{appearance:none;width:2.2rem;height:1.2rem;margin:.08rem 0 0;border:1px solid #6b557f70;border-radius:999px;background:#d7ccd7;position:relative;cursor:pointer}.modifier-option input:after{content:"";position:absolute;width:.86rem;height:.86rem;left:.12rem;top:.1rem;border-radius:50%;background:white;box-shadow:0 1px 3px #3a283a55;transition:.18s}.modifier-option input:checked{background:var(--purple)}.modifier-option input:checked:after{left:1.08rem}.modifier-option strong{display:block;color:var(--deep);font-size:.88rem}.modifier-option small{display:block;margin-top:.2rem;color:var(--muted);font:600 .7rem/1.5 system-ui,sans-serif}.toast{position:fixed;z-index:40;left:50%;bottom:1.25rem;transform:translate(-50%,1rem);padding:.7rem 1rem;border-radius:999px;background:var(--deep);color:white;font:700 .78rem/1 system-ui,sans-serif;box-shadow:0 8px 24px #241b2940;opacity:0;pointer-events:none;transition:.22s}.toast.show{opacity:1;transform:translate(-50%,0)}
+.feature-grid{grid-template-columns:1fr}.feature-grid textarea{min-height:12rem}.inventory{grid-template-columns:1.15fr 1.5fr .7fr}.coins{display:grid;grid-template-columns:repeat(2,1fr);gap:.6rem}.coin{padding:.4rem;border:1px solid #c89e5185;border-radius:50%;text-align:center;background:#fff7d9}.coin label{font-size:.67rem}.coin input{text-align:center;border:0}.portrait-layout{grid-template-columns:1fr 1.15fr}.portrait{min-height:355px;display:grid;place-items:center;text-align:center;color:var(--muted);border:1px dashed #6f588566;border-radius:49% 49% 18px 18px/25% 25% 18px 18px;background:radial-gradient(ellipse,#b8a1d324,transparent 67%)}.portrait span{display:block;font-size:3.2rem;opacity:.35}.traits{grid-template-columns:repeat(2,1fr)}.traits textarea{min-height:8rem}.story textarea{min-height:20rem}
+.spell-summary{grid-template-columns:1.3fr repeat(3,1fr)}.spellbook{display:grid;gap:1.2rem}.spell-level{display:grid;grid-template-columns:8rem 1fr;gap:1rem;align-items:stretch}.level-badge{display:grid;place-items:center;align-content:center;gap:.15rem;min-height:8rem;border:1px solid var(--gold);border-radius:52% 48% 20px 20px/34% 34% 18px 18px;color:white;background:linear-gradient(150deg,var(--purple),#9075a5)}.level-badge b{font-size:2.2rem;line-height:1}.level-badge span{font-size:.72rem;letter-spacing:.12em}.slots{display:flex;gap:.35rem;margin-top:.4rem}.slots i{width:.7rem;height:.7rem;border:1px solid white;border-radius:50%}.spell-lines{display:grid;grid-template-columns:repeat(2,1fr);gap:.3rem 1rem;padding:.7rem 1rem}.spell-line{display:grid;grid-template-columns:1rem 1fr;gap:.45rem;align-items:center}.spell-line input[type=checkbox]{width:.8rem;height:.8rem;padding:0;accent-color:var(--purple)}.spell-line input[type=text]{padding:.18rem}.footer{padding:2.4rem 2rem 3rem;text-align:center;color:var(--muted);border-top:1px solid #c89e5166;background:linear-gradient(transparent,#ead39a2e)}.footer strong{color:var(--deep);letter-spacing:.16em}
+
+/* 召唤物角色卡 */
+.summon-section{margin-top:1.2rem}
+.summon-addbar{display:flex;align-items:center;justify-content:space-between;gap:1rem;min-height:2.65rem;padding:.45rem .8rem;border:1px solid #6f588559;border-radius:12px;background:#fffdf6aa;box-shadow:inset 0 0 0 3px #ead39a20}
+.summon-addbar p{margin:0;color:var(--muted);font:600 .72rem/1.4 system-ui,sans-serif}
+.summon-add{flex:none;border:1px solid #6b557f55;border-radius:9px;background:var(--purple);color:white;padding:.48rem .8rem;font:700 .75rem/1 system-ui,sans-serif;cursor:pointer}
+.summon-add:hover{background:var(--deep)}
+.summon-list{display:grid;gap:.85rem;margin-top:.85rem}
+.summon-card{overflow:hidden;border:1px solid #6f58856b;border-radius:16px;background:#fffdf6d9;box-shadow:inset 0 0 0 3px #ead39a20,0 5px 16px #4e3d480c}
+.summon-card summary{display:flex;align-items:center;gap:.8rem;min-height:3.2rem;padding:.65rem 1rem;cursor:pointer;list-style:none;color:var(--deep);font-weight:700}
+.summon-card summary::-webkit-details-marker{display:none}
+.summon-card summary:before{content:"＋";display:grid;place-items:center;width:1.45rem;height:1.45rem;flex:none;border:1px solid var(--gold);border-radius:50%;font:700 .85rem/1 system-ui,sans-serif}
+.summon-card[open] summary:before{content:"－"}
+.summon-summary-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.summon-summary-hp{margin-left:auto;flex:none;color:var(--muted);font:700 .76rem/1 system-ui,sans-serif;font-variant-numeric:tabular-nums}
+.summon-body{display:grid;gap:.8rem;padding:0 1rem 1rem}
+.summon-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:.8rem}
+.summon-abilities{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:.55rem}
+.summon-ability{padding:.55rem .4rem;border:1px solid #6f58854d;border-radius:12px;background:linear-gradient(#fffdfa,#f4ead5);text-align:center}
+.summon-ability label{display:block;color:var(--muted);font:700 .65rem/1.3 system-ui,sans-serif}
+.summon-ability input{text-align:center}
+.summon-ability .summon-score{font-size:1.2rem;font-weight:700}
+.summon-ability .summon-mod{font-size:.8rem;color:var(--deep)}
+.summon-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.8rem}
+.summon-fields .field textarea{min-height:5rem}
+.summon-fields .field.large{grid-column:1/-1}
+.summon-fields .field.large textarea{min-height:10rem}
+.summon-card-actions{display:flex;justify-content:flex-end}
+.summon-delete{border:1px solid #c9849370;border-radius:8px;background:#fff7f5;color:#984e60;padding:.38rem .7rem;font:700 .7rem/1 system-ui,sans-serif;cursor:pointer}
+@media(max-width:700px){.summon-top{grid-template-columns:repeat(2,minmax(0,1fr))}.summon-abilities{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:560px){.summon-fields{grid-template-columns:1fr}.summon-fields .field.large{grid-column:auto}.summon-summary-hp{font-size:.68rem}.summon-addbar p{font-size:.66rem}}
+@media print{.summon-addbar,.summon-card-actions{display:none}.summon-card:not([open]) .summon-body{display:none}.summon-card{break-inside:avoid}.summon-card summary:before{display:none}}
+
+
+/* 富文本输入：支持 Ctrl+B / Ctrl+I，保留原有表单数据接口 */
+.rich-source{display:none!important}
+.rich-editor{width:100%;min-height:1.9rem;height:auto;padding:.22rem .12rem;border-bottom:1px solid var(--line);background:transparent;color:var(--ink);font:inherit;line-height:1.65;outline:0;white-space:pre-wrap;overflow-wrap:anywhere;overflow:visible}
+.rich-editor:focus{border-color:var(--purple);box-shadow:0 2px 0 #6b557f1c}
+.rich-editor:empty:before{content:attr(data-placeholder);color:#9b919a;pointer-events:none}
+textarea.rich-source+.rich-editor{min-height:2.6rem;resize:none}
+.feature-grid textarea.rich-source+.rich-editor{min-height:3.4rem}
+.traits textarea.rich-source+.rich-editor{min-height:2.8rem}
+.story textarea.rich-source+.rich-editor{min-height:4.2rem}
+.summon-fields textarea.rich-source+.rich-editor{min-height:2.6rem}
+.summon-fields .field.large textarea.rich-source+.rich-editor{min-height:4rem}
+.rich-editor b,.rich-editor strong{font-weight:800}
+@media print{.rich-editor{border:0;box-shadow:none}}
+
+
+/* 法术位数量与使用状态 */
+.slot-tracker{display:grid;justify-items:center;gap:.28rem;margin-top:.35rem;width:100%}
+.slot-count{width:2.25rem!important;min-width:0;height:1.35rem;padding:.05rem .15rem!important;border:1px solid #ffffffa8!important;border-radius:6px!important;background:#ffffff20!important;color:#fff!important;text-align:center;font:700 .72rem/1 system-ui,sans-serif!important}
+.slot-count::-webkit-inner-spin-button,.slot-count::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+.slot-count[type=number]{appearance:textfield;-moz-appearance:textfield}
+.slot-pips{display:flex;flex-wrap:wrap;justify-content:center;gap:.22rem;max-width:7rem}
+.slot-pip{width:.68rem;height:.68rem;flex:none;padding:0;border:1px solid #fff;border-radius:50%;background:transparent;cursor:pointer;transition:background .12s,transform .12s}
+.slot-pip:hover{transform:scale(1.15)}
+.slot-pip.used{background:#fff;box-shadow:inset 0 0 0 2px #9075a5}
+.slot-count-label{color:#fff;font:600 .56rem/1 system-ui,sans-serif;opacity:.9}
+.spell-line .spell-name-input{display:block!important;min-width:0;width:100%;padding:.18rem .12rem;border:0;border-bottom:1px solid var(--line);background:transparent;color:var(--ink);font:inherit}
+.spell-line .spell-name-input:focus{border-color:var(--purple);box-shadow:0 2px 0 #6b557f1c}
+
+
+/* 本地角色立绘 */
+.portrait{position:relative;overflow:hidden;min-height:355px;padding:2.8rem 1rem 3.2rem;cursor:pointer}
+.portrait-placeholder{pointer-events:none}
+.portrait-placeholder span{display:block;font-size:3.2rem;opacity:.35}
+#portrait-image{display:block;max-width:100%;max-height:520px;width:auto;height:auto;object-fit:contain;grid-area:1/1;z-index:1;filter:drop-shadow(0 5px 12px #40304720)}
+#portrait-image[hidden]{display:none}
+.portrait-controls{position:absolute;z-index:2;bottom:.65rem;left:50%;transform:translateX(-50%);display:flex;gap:.45rem;opacity:.9}
+.portrait-controls button{white-space:nowrap;border:1px solid #6b557f55;border-radius:8px;background:var(--purple);color:#fff;padding:.42rem .72rem;font:700 .7rem/1 system-ui,sans-serif;cursor:pointer}
+.portrait-controls button.secondary{background:#fffdf6;color:var(--deep)}
+.portrait.has-image{background:radial-gradient(ellipse,#b8a1d324,transparent 75%)}
+.portrait.has-image .portrait-placeholder{display:none}
+@media(max-width:700px){.portrait{min-height:280px}}
+@media print{.portrait-controls{display:none}.portrait{break-inside:avoid}}
+
+@media(max-width:900px){.rail{left:auto;right:.6rem;top:auto;bottom:.7rem;transform:none;grid-auto-flow:column}.rail a{width:1.9rem;height:1.9rem}.toolbar{left:.6rem;right:auto;top:.6rem}.sheet{width:min(100% - 1rem,760px);margin-top:.5rem;border-radius:24px}.hero{padding:4rem 2rem 2.5rem;grid-template-columns:1fr;text-align:center}.dragon{margin:auto;width:105px;font-size:3.7rem}.content{padding:3.2rem 1.25rem}.identity,.inventory,.skills-layout,.spell-summary{grid-template-columns:repeat(2,1fr)}.feature-grid{grid-template-columns:1fr}.combat{grid-template-columns:repeat(5,1fr)}.ability-showcase{grid-template-columns:1fr}.abilities{grid-template-columns:repeat(3,1fr)}.radar-wrap{height:320px}.portrait-layout{grid-template-columns:1fr}}
+@media(max-width:560px){.hero{padding:4rem 1.2rem 2.2rem}.hero-note{line-height:1.6}.content{padding-inline:.85rem}.identity,.feature-grid,.inventory,.skills-layout,.spell-summary,.two,.three,.traits{grid-template-columns:1fr}.combat{grid-template-columns:repeat(3,1fr)}.abilities{grid-template-columns:repeat(2,1fr)}.radar-wrap{height:285px}.chapter-head{gap:.55rem}.chapter-head h2{font-size:1.28rem}.subtitle{margin-left:0;line-height:1.6}.spell-level{grid-template-columns:1fr}.level-badge{min-height:4.6rem;border-radius:16px}.level-badge b{font-size:1.65rem}.spell-lines{grid-template-columns:1fr}.rail a{font-size:.6rem}.toolbar button{padding:.52rem .62rem;font-size:.68rem}.modifier-drawer{width:min(310px,calc(100vw - .5rem))}}
+@media print{body{background:#fff}.rail,.toolbar,.modifier-drawer,.toast,.footer{display:none}.sheet{width:100%;margin:0;box-shadow:none;border:0;border-radius:0}.content{padding:1.3rem 1.4rem 2rem}.chapter{margin-top:1.1rem;break-inside:auto}.chapter:first-child{margin-top:0}.identity{grid-template-columns:repeat(4,1fr)}.feature-grid{grid-template-columns:repeat(3,1fr)}.inventory{grid-template-columns:1.15fr 1.5fr .7fr}.skills-layout{grid-template-columns:.9fr 1.25fr}.spell-summary{grid-template-columns:1.3fr repeat(3,1fr)}.combat{grid-template-columns:repeat(5,1fr)}.abilities{grid-template-columns:repeat(6,1fr)}.ability-showcase{grid-template-columns:1.15fr .85fr}.portrait-layout{grid-template-columns:1fr 1.15fr}.traits,.two,.three{grid-template-columns:repeat(2,1fr)}.spell-level{grid-template-columns:5.2rem 1fr;gap:.6rem}.spell-level.empty{display:none}.level-badge{min-height:3.6rem;border-radius:14px}.level-badge b{font-size:1.4rem}.slots i{width:.5rem;height:.5rem}.spell-lines{grid-template-columns:repeat(2,1fr);padding:.45rem .7rem;gap:.15rem .8rem}.spell-line{grid-template-columns:.9rem 1fr}.panel{padding:.75rem .9rem;margin-bottom:.4rem}.panel:last-child{margin-bottom:0}textarea{min-height:0!important;height:auto!important}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+@page{size:A4;margin:11mm}
+.toolbar-tip{align-self:center;max-width:9rem;color:var(--muted);font:600 .64rem/1.3 system-ui,sans-serif;letter-spacing:.02em}@media(max-width:560px){.toolbar-tip{display:none}}
+
+/* PDF / print layout for the current interactive sheet */
+@page{size:A4;margin:9mm 10mm 10mm}
+@media print{
+  html,body{background:#fff!important}
+  body{font-size:9.5pt;line-height:1.42}
+  .rail,.toolbar,.modifier-drawer,.toast,.footer,.portrait-controls,.summon-addbar,.summon-card-actions{display:none!important}
+  .sheet{width:100%!important;max-width:none!important;margin:0!important;border:0!important;border-radius:0!important;box-shadow:none!important}
+  .hero{min-height:0!important;padding:1.15rem 2rem 1rem!important;gap:1rem!important;break-inside:avoid!important;page-break-inside:avoid!important}
+  .hero:after{bottom:-12px;height:18px}
+  .hero h1{font-size:2.15rem!important}
+  .hero .eyebrow{font-size:.58rem;margin-bottom:.35rem}
+  .hero .hero-note{font-size:.72rem;margin-top:.4rem}
+  .dragon{font-size:3.1rem!important;width:auto!important}
+  .content{padding:.75rem .85rem 1rem!important}
+  .chapter{margin-top:.95rem!important;break-inside:auto}
+  .chapter:first-child{margin-top:0!important}
+  .chapter-head{margin-bottom:.55rem!important;break-after:avoid-page;page-break-after:avoid}
+  .chapter-head h2{font-size:1.25rem!important}
+  .mark{width:1.8rem;height:1.8rem}
+  .subtitle{margin:-.25rem 0 .7rem 3.3rem!important;font-size:.68rem!important}
+  /* Core page fix: keep the six ability cards in a 3×2 grid and give the radar chart real width. */
+  .ability-showcase{grid-template-columns:minmax(0,1.45fr) minmax(0,.85fr)!important;gap:.65rem!important;margin-top:.65rem!important;align-items:stretch}
+  .abilities{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:.45rem!important}
+  .ability{padding:.48rem .3rem .42rem!important;border-radius:24px 24px 14px 14px!important;break-inside:avoid!important;page-break-inside:avoid!important}
+  .ability h3{font-size:.67rem!important}
+  .ability .score{width:2.7rem!important;font-size:1.35rem!important;margin:.2rem auto!important}
+  .modifier{width:2.25rem!important;height:1.8rem!important;font-size:.78rem}
+  .radar-panel{min-height:0!important;padding:.55rem!important;grid-template-rows:auto 1fr auto}
+  .radar-panel .panel-title{font-size:.78rem!important;margin-bottom:.15rem!important}
+  .radar-wrap{height:185px!important;min-width:0}
+  .radar-summary{font-size:.56rem!important;line-height:1.35}
+  /* Follow the current page layout rather than reverting feature cards to three columns. */
+  .feature-grid{grid-template-columns:1fr!important;gap:.55rem!important}
+  .feature-grid>.panel{padding:.65rem .8rem!important}
+  .identity{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+  .inventory{grid-template-columns:1.15fr 1.5fr .7fr!important}
+  .skills-layout{grid-template-columns:.9fr 1.25fr!important}
+  .spell-summary{grid-template-columns:1.3fr repeat(3,minmax(0,1fr))!important}
+  .combat{grid-template-columns:repeat(5,minmax(0,1fr))!important}
+  .portrait-layout{grid-template-columns:1fr 1.15fr!important}
+  .portrait{min-height:0!important;max-height:none!important;overflow:visible!important;padding:1rem .65rem 2rem!important;break-inside:avoid!important;page-break-inside:avoid!important}
+  #portrait-image{max-width:100%!important;max-height:220mm!important;object-fit:contain}
+  .traits,.two,.three{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .spell-level{grid-template-columns:5.2rem minmax(0,1fr)!important;gap:.55rem!important;break-inside:avoid!important;page-break-inside:avoid!important}
+  .spell-level.empty{display:none!important}
+  .level-badge{min-height:3.6rem!important;border-radius:14px!important}
+  .level-badge b{font-size:1.35rem!important}
+  .slots i{width:.5rem;height:.5rem}
+  .slot-tracker{gap:.18rem}
+  .slot-pips{gap:.16rem}
+  .slot-pip{width:.55rem;height:.55rem;print-color-adjust:exact;-webkit-print-color-adjust:exact}
+  .slot-count{height:1.1rem!important;width:1.8rem!important;font-size:.62rem!important}
+  .spell-lines{grid-template-columns:repeat(2,minmax(0,1fr))!important;padding:.4rem .6rem!important;gap:.12rem .65rem!important}
+  .spell-line{grid-template-columns:.85rem minmax(0,1fr)!important}
+  .panel{padding:.7rem .8rem!important;margin-bottom:.3rem!important;break-inside:avoid!important;page-break-inside:avoid!important}
+  .panel:before{display:none}
+  .panel-title{break-after:avoid-page;page-break-after:avoid}
+  .stat,.summon-card,.summon-card summary,.summon-card .summon-body{break-inside:avoid!important;page-break-inside:avoid!important}
+  .summon-card:not([open])>.summon-body,.summon-card .summon-body{display:grid!important}
+  .summon-card summary{padding:.45rem .7rem!important}
+  .summon-card summary:before{display:none!important}
+  .summon-list{gap:.5rem!important}
+  .rich-editor{min-height:0!important;height:auto!important;overflow:visible!important;resize:none!important;border-bottom-color:#d8cbb8!important;box-shadow:none!important}
+  textarea{min-height:0!important;height:auto!important}
+  .feature-grid textarea.rich-source+.rich-editor,.traits textarea.rich-source+.rich-editor,.story textarea.rich-source+.rich-editor,.summon-fields textarea.rich-source+.rich-editor,.summon-fields .field.large textarea.rich-source+.rich-editor{min-height:0!important}
+  .rich-editor:empty:before{content:""}
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+}
+
+
+/* 可重复添加的种族、职业、专长条目 */
+.feature-legacy-fields{display:none!important}
+.feature-collections{display:grid;grid-template-columns:1fr;gap:.8rem;margin-top:.25rem}
+.feature-category{padding:.85rem 1rem!important}
+.feature-category-head{display:flex;align-items:center;justify-content:space-between;gap:.8rem;margin-bottom:.6rem}
+.feature-category-head h3{margin:0;color:var(--deep);font-size:1rem;letter-spacing:.08em}
+.feature-add{flex:none;border:1px solid #6b557f55;border-radius:8px;background:var(--purple);color:#fff;padding:.42rem .7rem;font:700 .68rem/1 system-ui,sans-serif;cursor:pointer}
+.feature-add:hover{background:var(--deep)}
+.feature-entry-list{display:grid;gap:.45rem}
+.feature-entry{overflow:hidden;border:1px solid #6f58855c;border-radius:11px;background:#fffef9d9}
+.feature-entry summary{display:flex;align-items:center;gap:.35rem;min-height:2.65rem;padding:.42rem .65rem;cursor:pointer;list-style:none;color:var(--deep)}
+.feature-entry summary::-webkit-details-marker{display:none}
+.feature-entry-name{flex:0 0 50%;width:50%;max-width:50%;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.82rem;font-weight:750}
+.feature-entry-slots{flex:0 0 50%;width:50%;max-width:50%;min-width:0;display:flex;align-items:center;justify-content:flex-end;flex-wrap:nowrap;gap:.24rem;overflow-x:auto;overflow-y:hidden;white-space:nowrap;scrollbar-width:none;padding:.12rem 0}
+.feature-entry-slots::-webkit-scrollbar{display:none}
+.feature-entry[open] .feature-entry-slots{visibility:hidden}
+/* 特性次数：默认实心表示可用，.used 空心表示已消耗 */
+.feature-use-pip{width:.62rem;height:.62rem;flex:0 0 .62rem;padding:0;border:1px solid #8c739f;border-radius:50%;background:#8c739f;cursor:pointer}
+.feature-use-pip.used{background:transparent;box-shadow:none}
+.feature-entry-body{display:grid;gap:.55rem;padding:.15rem .75rem .75rem}
+.feature-entry-meta{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,1fr);gap:.65rem;align-items:end}
+.feature-entry-meta .field{min-width:0}
+.feature-entry-meta .field label{display:block;color:var(--muted);font:700 .65rem/1.2 system-ui,sans-serif;letter-spacing:.08em}
+.feature-entry-meta input{width:100%;min-width:0;min-height:2rem;padding:.3rem .45rem}
+.feature-entry-meta [data-feature-field="maxUses"]{text-align:center;font-variant-numeric:tabular-nums}
+.feature-entry-description .rich-editor{min-height:4.2rem!important;padding:.35rem .25rem}
+.feature-entry-actions{display:flex;justify-content:flex-end}
+.feature-delete{border:1px solid #c9849370;border-radius:8px;background:#fff7f5;color:#984e60;padding:.34rem .65rem;font:700 .66rem/1 system-ui,sans-serif;cursor:pointer}
+@media(max-width:560px){
+  .feature-category{padding:.7rem .65rem!important}
+  .feature-category-head h3{font-size:.9rem}
+  .feature-entry-meta{grid-template-columns:minmax(0,4fr) minmax(0,1fr);gap:.4rem}
+  .feature-entry summary{padding-inline:.5rem}
+  .feature-use-pip{width:.55rem;height:.55rem;flex-basis:.55rem}
+}
+@media print{
+  .feature-category{break-inside:auto!important;page-break-inside:auto!important;padding:.55rem .65rem!important;margin-bottom:.45rem!important}
+  .feature-category-head{margin-bottom:.35rem}
+  .feature-add,.feature-entry-actions{display:none!important}
+  .feature-entry{break-inside:avoid!important;page-break-inside:avoid!important}
+  .feature-entry summary{min-height:1.1rem;padding:.08rem .35rem .12rem;justify-content:flex-end;cursor:default}
+  .feature-entry[open] .feature-entry-name{display:none}
+  .feature-entry[open] .feature-entry-slots{visibility:visible;flex:0 0 100%;width:100%;max-width:100%}
+  .feature-entry-body{padding:.1rem .5rem .5rem;gap:.35rem}
+  .feature-entry-description .rich-editor{min-height:0!important}
+}
+
+
+/* 特性条目交互尺寸与类别操作栏 */
+.feature-category{box-sizing:border-box;width:100%}
+.feature-category-head{margin-bottom:.55rem}
+.feature-entry-list{width:100%;min-width:0;display:grid;gap:.5rem}
+.feature-entry{display:block;width:100%;min-width:0;box-sizing:border-box}
+.feature-entry summary{
+  display:flex;width:100%;box-sizing:border-box;
+  min-height:3.05rem;padding:.48rem .8rem;gap:.45rem;
+}
+.feature-entry-name{
+  flex:0 0 50%;width:50%;max-width:50%;min-width:0;
+  font-size:.98rem;font-weight:800;line-height:1.35;
+}
+.feature-entry-slots{
+  flex:0 0 50%;width:50%;max-width:50%;min-width:0;
+  min-height:2rem;gap:.32rem;padding:.2rem .08rem;
+  justify-content:flex-end;overflow-x:auto;overflow-y:hidden;
+}
+/* .prof provides the same 1.15rem circular control used by skills and saves.
+   No data-rank is applied, so this remains a simple two-state toggle. */
+.feature-entry .feature-use-pip{
+  appearance:none;-webkit-appearance:none;
+  width:1.15rem;height:1.15rem;flex:0 0 1.15rem;
+  min-width:1.15rem;min-height:1.15rem;
+  border:1px solid var(--purple);border-radius:50%;
+  padding:0;position:relative;cursor:pointer;
+  /* 默认实心：该次数尚可使用 */
+  background:radial-gradient(circle,var(--purple) 0 44%,transparent 49%);
+  box-shadow:none;
+}
+.feature-entry .feature-use-pip.used{
+  /* 空心：该次数已经使用 */
+  background:transparent;
+  box-shadow:none;
+}
+.feature-category-footer{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:.6rem;margin-top:.7rem;padding-top:.6rem;
+  border-top:1px solid #6f58852b;
+}
+.feature-category-footer button{
+  min-height:2.15rem;padding:.48rem .85rem;
+  border-radius:8px;font:700 .7rem/1 system-ui,sans-serif;cursor:pointer;
+}
+.feature-category-footer .feature-restore{
+  border:1px solid #8c739f70;background:#fffdf8;color:var(--deep);
+}
+.feature-category-footer .feature-restore:hover{background:#f0eaf4}
+.feature-category-footer .feature-add{margin-left:auto}
+@media(max-width:560px){
+  .feature-entry summary{min-height:2.9rem;padding:.42rem .55rem}
+  .feature-entry-name{font-size:.9rem}
+  .feature-entry-slots{gap:.22rem}
+  .feature-entry .feature-use-pip{
+    width:1.05rem;height:1.05rem;flex-basis:1.05rem;min-width:1.05rem;min-height:1.05rem;
+  }
+  .feature-category-footer button{padding:.42rem .62rem;font-size:.66rem}
+}
+@media print{
+  .feature-category-footer{display:none!important}
+}
+
+
+/* Foundry VTT export toolbar action */
+.toolbar{flex-wrap:wrap;max-width:calc(100vw - 2rem)}
+#export-fvtt-json{border-color:#8b739d;background:#f8f2fc;color:#5c456f}
+#export-fvtt-json:hover{background:#eee4f5}
+
+/* 新增自动卡及修正输入框 */
+.modifier-content{max-height:88dvh;overflow-y:auto}.modifier-numeric-section{margin-top:.9rem;border-top:1px solid #6f58854a;padding-top:.7rem}
+.modifier-numeric-section h3{font-size:.86rem;color:var(--deep);margin:.2rem 0}
+.modifier-numeric-section p{font-size:.7rem;color:var(--muted);line-height:1.5}
+.modifier-numeric-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+.modifier-numeric-grid label{font:600 .68rem/1.4 system-ui,sans-serif;color:var(--deep)}
+.modifier-numeric-grid input{margin-top:.2rem;padding:.3rem .25rem;min-height:1.9rem;font:700 .86rem/1.2 system-ui,sans-serif}
+.feature-entry-uses{display:grid;grid-template-columns:1fr 1fr;gap:.35rem;min-width:0}
+.feature-entry-uses .field{min-width:0}
+.feature-entry-uses input{width:100%;min-width:0}
+.feature-entry-uses label{font-size:.6rem}
+#spell-ability,#spell-save-dc,#spell-attack-bonus{transition:background .15s}
+@media(max-width:560px){.feature-entry-uses{gap:.15rem}.feature-entry-uses input{padding:.3rem 0}}
+</style>
+</head>
+<body>
+<div class="toolbar" aria-label="角色卡数据工具"><button type="button" id="export-json" title="导出语义化 Character JSON v9">导出 JSON</button><button type="button" class="secondary" id="import-json">读取 JSON</button><button type="button" class="secondary" id="export-fvtt-json" title="导出 Foundry VTT / D&D 5e 可导入的 Actor JSON">导出 FVTT</button><button type="button" id="export-html">导出静态 HTML</button><button type="button" class="secondary" id="export-pdf">导出 PDF</button><input type="file" id="json-file" accept="application/json,.json" hidden></div><div class="toast" id="toast" role="status" aria-live="polite"></div>
+<aside class="modifier-drawer" id="modifier-drawer" aria-label="自动计算修正"><button type="button" class="modifier-tab" id="modifier-toggle" aria-expanded="false" aria-controls="modifier-content">修正</button><div class="modifier-content" id="modifier-content"><h2>自动计算修正</h2><p class="modifier-intro">启用常见特性后，它们会参与派生数值计算；手动覆写仍然拥有最高优先级。</p><div class="modifier-list"><label class="modifier-option"><input type="checkbox" data-modifier="tough" data-save-skip><span><strong>健壮</strong><small>每个角色等级额外增加 2 点最大生命值。</small></span></label><label class="modifier-option"><input type="checkbox" data-modifier="jack-of-all-trades" data-save-skip><span><strong>万事通</strong><small>所有技能鉴定额外增加熟练加值的一半，结果向下取整。</small></span></label></div><div class="modifier-numeric-section"><h3>检定与施法修正</h3><p>这些数值只参与自动计算，留空视为 0。</p><div class="modifier-numeric-grid">
+<label>技能检定加值<input type="number" step="1" data-modifier-value="skillBonus" data-save-skip placeholder="+0"></label>
+<label>豁免检定加值<input type="number" step="1" data-modifier-value="saveBonus" data-save-skip placeholder="+0"></label>
+<label>法术豁免 DC 加值<input type="number" step="1" data-modifier-value="spellDCBonus" data-save-skip placeholder="+0"></label>
+<label>法术攻击加值<input type="number" step="1" data-modifier-value="spellAttackBonus" data-save-skip placeholder="+0"></label>
+</div></div></div></aside>
+<nav class="rail" aria-label="章节导航"><a href="#core">核心</a><a href="#combat">战斗</a><a href="#features">特性</a><a href="#profile">档案</a><a href="#spells">法术</a></nav>
+<main class="sheet">
+<header class="hero"><div><p class="eyebrow">FIFTH EDITION · CHARACTER RECORD</p><h1>冒险者角色卡</h1><p class="hero-note">记录属性、旅途与故事，陪伴角色走过每一次冒险。</p></div><div class="dragon" aria-label="龙形装饰">🐉</div></header>
+<div class="content">
+<section class="chapter" id="core"><div class="chapter-head"><span class="mark">Ⅰ</span><h2>角色核心</h2></div><p class="subtitle"></p>
+<div class="panel grid identity"><div class="field"><label>角色名称</label><input placeholder="在此写下名字" data-field="identity.name"></div><div class="field"><label>职业与等级</label><input id="class-level" placeholder="例如：战士 5级" data-field="identity.classText"></div><div class="field"><label>种族</label><input data-field="identity.race"></div><div class="field"><label>背景</label><input data-field="identity.background"></div><div class="field"><label>玩家名称</label><input data-field="identity.playerName"></div><div class="field"><label>阵营</label><input data-field="identity.alignment"></div><div class="field"><label>经验值</label><input data-field="identity.experience"></div><div class="field"><label>激励</label><input data-field="identity.inspiration"></div></div>
+<div class="ability-showcase"><div class="grid abilities">
+<article class="ability"><h3>力量 STR</h3><input class="score" data-ability="str" inputmode="numeric" aria-label="力量值" data-field="abilities.str"><output class="modifier" data-mod="str">—</output></article><article class="ability"><h3>敏捷 DEX</h3><input class="score" data-ability="dex" inputmode="numeric" aria-label="敏捷值" data-field="abilities.dex"><output class="modifier" data-mod="dex">—</output></article><article class="ability"><h3>体质 CON</h3><input class="score" data-ability="con" inputmode="numeric" aria-label="体质值" data-field="abilities.con"><output class="modifier" data-mod="con">—</output></article><article class="ability"><h3>智力 INT</h3><input class="score" data-ability="int" inputmode="numeric" aria-label="智力值" data-field="abilities.int"><output class="modifier" data-mod="int">—</output></article><article class="ability"><h3>感知 WIS</h3><input class="score" data-ability="wis" inputmode="numeric" aria-label="感知值" data-field="abilities.wis"><output class="modifier" data-mod="wis">—</output></article><article class="ability"><h3>魅力 CHA</h3><input class="score" data-ability="cha" inputmode="numeric" aria-label="魅力值" data-field="abilities.cha"><output class="modifier" data-mod="cha">—</output></article>
+</div><div class="panel radar-panel"><h3 class="panel-title">六维能力概览</h3><div class="radar-wrap"><canvas id="ability-radar" role="img" aria-label="六维属性雷达图"></canvas></div><p class="radar-summary" id="radar-summary">填写属性后实时生成能力轮廓</p></div></div></section>
+
+<section class="chapter" id="combat"><div class="chapter-head"><span class="mark">Ⅱ</span><h2>战斗与检定</h2></div><p class="subtitle"></p>
+<div class="grid combat"><div class="panel stat"><strong>护甲等级 AC</strong><input aria-label="护甲等级" inputmode="numeric" data-field="combat.armorClass"></div><div class="panel stat"><strong>先攻</strong><input class="auto-field" id="initiative" data-auto="initiative" data-auto-skip aria-label="先攻" inputmode="numeric" data-field="combat.initiative"></div><div class="panel stat"><strong>速度</strong><input aria-label="速度" data-field="combat.speed"></div><div class="panel stat"><strong>熟练加值</strong><input class="auto-field" data-auto="proficiency-bonus" id="proficiency-bonus" aria-label="熟练加值" inputmode="numeric" value="2" data-field="combat.proficiencyBonus"></div><div class="panel stat"><strong>被动察觉</strong><input class="auto-field" id="passive-perception" data-auto="passive-perception" data-auto-skip aria-label="被动察觉" inputmode="numeric" data-field="combat.passivePerception"></div></div>
+<div class="grid three" style="margin-top:1rem"><div class="panel field"><h3 class="panel-title">生命值</h3><label>上限</label><input class="auto-field" id="hp-max" data-auto="hp-max" inputmode="numeric" data-field="combat.hitPoints.maximum"><label>当前</label><input id="hp-current" inputmode="numeric" data-field="combat.hitPoints.current"><label>临时</label><input id="hp-temp" inputmode="numeric" data-field="combat.hitPoints.temporary"><div class="hp-bar" id="hp-bar" aria-label="生命值比例"><div class="hp-fill" id="hp-fill"></div></div><p class="hp-label" id="hp-label">尚未填写生命值</p></div><div class="panel field"><h3 class="panel-title">生命骰</h3><label>总数</label><input class="auto-field" id="hit-dice-count" data-auto="hit-dice-count" inputmode="numeric" data-field="combat.hitDice.total"><label>类型</label><input class="auto-field" id="hit-die-type" data-auto="hit-die-type" placeholder="例如 d8" data-field="combat.hitDice.denomination"><p class="auto-hint">匹配单一职业与等级后自动填写；手动输入可覆盖，清空可恢复自动计算。</p></div><div class="panel field"><h3 class="panel-title">死亡豁免</h3><label>成功　○　○　○</label><input data-field="combat.deathSaves.successes"><label>失败　○　○　○</label><input data-field="combat.deathSaves.failures"><label>状态与备注</label><input data-field="combat.deathSaves.notes"></div></div>
+<div class="grid skills-layout" style="margin-top:1rem"><div class="skill-side"><div class="panel"><h3 class="panel-title">豁免检定</h3><div class="checks" id="saves"></div><p class="legend"><i></i> 未熟练　<i class="p"></i> 熟练　<i class="e"></i> 精通；连续点击标记切换</p></div><div class="panel field"><h3 class="panel-title">其他熟练与感知</h3><label>工具熟练</label><textarea data-field="combat.otherProficiencies.tools"></textarea><label>护甲与武器熟练</label><textarea data-field="combat.otherProficiencies.armorAndWeapons"></textarea><label>被动调查 / 洞悉</label><input data-field="combat.passiveInvestigationInsight"></div></div><div class="panel"><h3 class="panel-title">技能</h3><div class="checks" id="skills"></div><p class="legend"><i></i> 未熟练　<i class="p"></i> 熟练　<i class="e"></i> 精通（双倍熟练加值）</p></div></div>
+<div class="panel" style="margin-top:1rem"><h3 class="panel-title">攻击与施法</h3><table><thead><tr><th>名称</th><th>攻击加值</th><th>伤害 / 类型</th><th>射程 / 备注</th></tr></thead><tbody id="attacks"></tbody></table></div>
+</section>
+
+<section class="chapter" id="features"><div class="chapter-head"><span class="mark">Ⅲ</span><h2>特性与资源</h2></div><p class="subtitle"></p>
+<div class="feature-legacy-fields" aria-hidden="true">
+  <textarea data-feature-legacy="race" data-rich-skip="1"></textarea>
+  <textarea data-feature-legacy="classFeatures" data-rich-skip="1"></textarea>
+  <textarea data-feature-legacy="other" data-rich-skip="1"></textarea>
+</div>
+<div class="feature-collections">
+  <section class="panel feature-category" data-feature-category="race">
+    <div class="feature-category-head"><h3>种族特质</h3></div>
+    <div class="feature-entry-list" id="feature-list-race"></div>
+    <div class="feature-category-footer">
+      <button type="button" class="feature-restore" data-feature-restore="race">恢复所有使用次数</button>
+      <button type="button" class="feature-add" data-feature-add="race">＋ 添加条目</button>
+    </div>
+  </section>
+  <section class="panel feature-category" data-feature-category="classFeatures">
+    <div class="feature-category-head"><h3>职业特性</h3></div>
+    <div class="feature-entry-list" id="feature-list-classFeatures"></div>
+    <div class="feature-category-footer">
+      <button type="button" class="feature-restore" data-feature-restore="classFeatures">恢复所有使用次数</button>
+      <button type="button" class="feature-add" data-feature-add="classFeatures">＋ 添加条目</button>
+    </div>
+  </section>
+  <section class="panel feature-category" data-feature-category="other">
+    <div class="feature-category-head"><h3>专长与其他特性</h3></div>
+    <div class="feature-entry-list" id="feature-list-other"></div>
+    <div class="feature-category-footer">
+      <button type="button" class="feature-restore" data-feature-restore="other">恢复所有使用次数</button>
+      <button type="button" class="feature-add" data-feature-add="other">＋ 添加条目</button>
+    </div>
+  </section>
+</div>
+
+<div class="summon-section">
+  <div class="summon-addbar">
+    <p>魔宠与召唤物</p>
+    <button type="button" class="summon-add" id="add-summon">＋ 增加</button>
+  </div>
+  <div class="summon-list" id="summon-list" aria-live="polite"></div>
+</div>
+<div class="grid inventory" style="margin-top:1rem"><div class="panel field"><h3 class="panel-title">熟练与语言</h3><textarea data-field="resources.languagesAndProficiencies"></textarea></div><div class="panel field"><h3 class="panel-title">装备与背包</h3><textarea data-field="resources.equipment"></textarea></div><div class="panel"><h3 class="panel-title">金钱</h3><div class="coins"><div class="coin"><label>CP</label><input data-field="resources.currency.cp"></div><div class="coin"><label>SP</label><input data-field="resources.currency.sp"></div><div class="coin"><label>EP</label><input data-field="resources.currency.ep"></div><div class="coin"><label>GP</label><input data-field="resources.currency.gp"></div><div class="coin"><label>PP</label><input data-field="resources.currency.pp"></div><div class="coin"><label>负重</label><input data-field="resources.encumbrance"></div></div></div></div>
+</section>
+
+<section class="chapter" id="profile"><div class="chapter-head"><span class="mark">Ⅳ</span><h2>人物档案</h2></div><p class="subtitle">离开数字与骰声，记录这个角色如何被人看见，又为何踏上冒险。</p>
+<div class="grid portrait-layout"><div class="portrait" id="portrait-box"><div class="portrait-placeholder"><span>♕</span>角色肖像区域<br><small>点击上传或将图片拖拽至此</small></div><img id="portrait-image" alt="角色立绘预览" hidden><div class="portrait-controls"><button type="button" id="portrait-upload">上传立绘</button><button type="button" id="portrait-remove" class="secondary" hidden>移除</button></div><input type="file" id="portrait-file" accept="image/png,image/jpeg,image/webp,image/gif" hidden></div><div class="panel grid two"><div class="field"><label>年龄</label><input data-field="profile.age"></div><div class="field"><label>身高</label><input data-field="profile.height"></div><div class="field"><label>体重</label><input data-field="profile.weight"></div><div class="field"><label>体型</label><input data-field="profile.build"></div><div class="field"><label>眼睛</label><input data-field="profile.eyes"></div><div class="field"><label>肤色</label><input data-field="profile.skin"></div><div class="field"><label>发色</label><input data-field="profile.hair"></div><div class="field"><label>信仰</label><input data-field="profile.faith"></div><div class="field" style="grid-column:1/-1"><label>外貌与标志性特征</label><textarea style="min-height:10rem" data-field="profile.appearance"></textarea></div></div></div>
+<div class="grid traits" style="margin-top:1rem"><div class="panel field"><h3 class="panel-title">个性特点</h3><textarea data-field="profile.personality"></textarea></div><div class="panel field"><h3 class="panel-title">理想</h3><textarea data-field="profile.ideal"></textarea></div><div class="panel field"><h3 class="panel-title">羁绊</h3><textarea data-field="profile.bond"></textarea></div><div class="panel field"><h3 class="panel-title">缺点</h3><textarea data-field="profile.flaw"></textarea></div></div>
+<div class="panel field story" style="margin-top:1rem"><h3 class="panel-title">背景故事</h3><textarea placeholder="从故乡、重要人物、冒险动机或一段难忘的往事开始……" data-field="profile.backstory"></textarea></div><div class="grid two" style="margin-top:1rem"><div class="panel field"><h3 class="panel-title">盟友、组织与关系</h3><textarea data-field="profile.alliesAndOrganizations"></textarea></div><div class="panel field"><h3 class="panel-title">宝物、额外特性与备注</h3><textarea data-field="profile.treasuresAndNotes"></textarea></div></div>
+</section>
+
+<section class="chapter" id="spells"><div class="chapter-head"><span class="mark">Ⅴ</span><h2>法术书</h2></div><p class="subtitle">从戏法到九环，把法术位与已知法术收进长卷的最后一章。</p>
+<div class="panel grid spell-summary"><div class="field"><label>施法职业</label><input id="spell-class" data-field="spellbook.casting.className" data-rich-skip="1" placeholder="如：法师（可选）"></div><div class="field"><label>施法属性</label><input id="spell-ability" data-field="spellbook.casting.ability" class="auto-field" data-auto="spell-ability" placeholder="自动识别，可手动修改"></div><div class="field"><label>法术豁免 DC</label><input id="spell-save-dc" data-field="spellbook.casting.saveDC" class="auto-field" data-auto="spell-save-dc" inputmode="numeric"></div><div class="field"><label>法术攻击加值</label><input id="spell-attack-bonus" data-field="spellbook.casting.attackBonus" class="auto-field" data-auto="spell-attack-bonus" inputmode="numeric"></div></div><div class="spellbook" id="spellbook" style="margin-top:1.2rem"></div>
+</section>
+</div><footer class="footer"><strong>✦ EVERY ROLL WRITES A NEW STORY ✦</strong><br><small>DND 5E 童话风 · 智能长卷角色卡</small></footer>
+</main>
+<script>
+const __HEAD_HTML=document.head.outerHTML;
+const __BODY_HTML=(()=>{const c=document.body.cloneNode(true);c.querySelectorAll('script').forEach(s=>s.remove());return c.outerHTML})();
+const __SCRIPT_SOURCE=document.currentScript?document.currentScript.textContent:'';
+let __sheetId=null;
+const ensureSheetId=()=>{if(__sheetId)return __sheetId;try{if(window.crypto&&crypto.randomUUID){__sheetId=crypto.randomUUID();return __sheetId}}catch(e){}__sheetId='sheet-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,10);return __sheetId};
+const saveDefs=[['力量','str'],['敏捷','dex'],['体质','con'],['智力','int'],['感知','wis'],['魅力','cha']];
+const skillDefs=[['体操 DEX','dex','acrobatics'],['驯兽 WIS','wis','animal-handling'],['奥秘 INT','int','arcana'],['运动 STR','str','athletics'],['欺瞒 CHA','cha','deception'],['历史 INT','int','history'],['洞悉 WIS','wis','insight'],['威吓 CHA','cha','intimidation'],['调查 INT','int','investigation'],['医药 WIS','wis','medicine'],['自然 INT','int','nature'],['察觉 WIS','wis','perception'],['表演 CHA','cha','performance'],['游说 CHA','cha','persuasion'],['宗教 INT','int','religion'],['巧手 DEX','dex','sleight-of-hand'],['隐匿 DEX','dex','stealth'],['生存 WIS','wis','survival']];
+const rankName=['未熟练','熟练','精通'];
+const bonus=n=>n>=0?`+${n}`:`${n}`;
+const row=(label,ability,key,type)=>`<div class="check" data-ability-row="${ability}" data-key="${type}-${key}"><button type="button" class="prof" data-rank="0" aria-label="${label}：未熟练" title="点击切换熟练等级"></button><span>${label}</span><input class="derived auto-field" data-auto="${type}-${key}" data-auto-skip aria-label="${label}加值" inputmode="numeric"></div>`;
+document.querySelector('#saves').innerHTML=saveDefs.map(([label,ability])=>row(label,ability,ability,'save')).join('');
+document.querySelector('#skills').innerHTML=skillDefs.map(([label,ability,key])=>row(label,ability,key,'skill')).join('');
+document.querySelector('#attacks').innerHTML=Array.from({length:4},(_,i)=>`<tr data-attack-row="${i}"><td><input data-field="attacks.${i}.name"></td><td><input data-field="attacks.${i}.attackBonus"></td><td><input data-field="attacks.${i}.damageAndType"></td><td><input data-field="attacks.${i}.rangeAndNotes"></td></tr>`).join('');
+const book=document.querySelector('#spellbook');
+for(let level=0;level<=9;level++){
+  const count=level===0?6:level<=3?10:level<=6?8:6;
+  const lines=Array.from({length:count},(_,i)=>`<label class="spell-line"><input type="checkbox" data-field="spellbook.spells.${level}.${i}.prepared" data-spell-prepared="${level}:${i}" aria-label="${level}环第${i+1}项已准备"><input class="spell-name-input" type="text" data-field="spellbook.spells.${level}.${i}.name" data-spell-name="${level}:${i}" aria-label="${level}环第${i+1}项法术名称"></label>`).join('');
+  const slots=level?`<div class="slot-tracker" data-slot-level="${level}"><label class="slot-count-label" for="slot-count-${level}">法术位数量</label><input class="slot-count" id="slot-count-${level}" data-save-skip data-slot-count="${level}" type="number" min="0" max="20" step="1" inputmode="numeric" aria-label="${level}环法术位数量" placeholder="数量"><div class="slot-pips" data-slot-pips="${level}" aria-label="${level}环法术位使用状态"></div></div>`:'';
+  book.insertAdjacentHTML('beforeend',`<div class="spell-level" data-spell-level="${level}"><div class="level-badge"><b>${level}</b><span>${level===0?'戏法':level+' 环法术'}</span>${slots}</div><div class="panel spell-lines">${lines}</div></div>`);
+}
+
+
+function renderSpellSlotPips(level,preserve=true,usedStates=null){
+  const countInput=document.querySelector(`[data-slot-count="${level}"]`);
+  const pips=document.querySelector(`[data-slot-pips="${level}"]`);
+  if(!countInput||!pips)return;
+  const raw=countInput.value.trim();
+  const count=raw!==''&&Number.isInteger(Number(raw))?Math.max(0,Math.min(20,Number(raw))):0;
+  const old=preserve?[...pips.querySelectorAll('.slot-pip')].map(btn=>btn.classList.contains('used')):[];
+  const states=Array.isArray(usedStates)?usedStates:old;
+  pips.innerHTML='';
+  for(let i=0;i<count;i++){
+    const pip=document.createElement('button');
+    pip.type='button';
+    pip.className='slot-pip'+(states[i]?' used':'');
+    pip.setAttribute('aria-label',`${level}环法术位 ${i+1}${states[i]?'已使用':'未使用'}`);
+    pip.setAttribute('aria-pressed',String(Boolean(states[i])));
+    pip.title=`${level}环法术位 ${i+1}：${states[i]?'已使用':'未使用'}`;
+    pip.addEventListener('click',()=>{
+      pip.classList.toggle('used');
+      const used=pip.classList.contains('used');
+      pip.setAttribute('aria-pressed',String(used));
+      pip.setAttribute('aria-label',`${level}环法术位 ${i+1}${used?'已使用':'未使用'}`);
+      pip.title=`${level}环法术位 ${i+1}：${used?'已使用':'未使用'}`;
+      scheduleStaticSave();
+    });
+    pips.appendChild(pip);
+  }
+}
+function scheduleStaticSave(){
+  document.dispatchEvent(new Event('change',{bubbles:true}));
+}
+function collectSpellSlots(){
+  const slots={};
+  for(let level=1;level<=9;level++){
+    const input=document.querySelector(`[data-slot-count="${level}"]`);
+    const pips=document.querySelector(`[data-slot-pips="${level}"]`);
+    slots[level]={count:input?.value??'',used:pips?[...pips.querySelectorAll('.slot-pip')].map(btn=>btn.classList.contains('used')):[]};
+  }
+  return slots;
+}
+function restoreSpellSlots(saved={}){
+  for(let level=1;level<=9;level++){
+    const input=document.querySelector(`[data-slot-count="${level}"]`);
+    const item=saved?.[level]??saved?.[String(level)];
+    if(input&&item){
+      input.value=item.count??'';
+      renderSpellSlotPips(level,false,Array.isArray(item.used)?item.used:[]);
+    }else if(input){
+      input.value='';
+      renderSpellSlotPips(level,false,[]);
+    }
+  }
+}
+document.querySelectorAll('[data-slot-count]').forEach(input=>{
+  input.addEventListener('input',()=>renderSpellSlotPips(Number(input.dataset.slotCount),true));
+  input.addEventListener('change',()=>renderSpellSlotPips(Number(input.dataset.slotCount),true));
+});
+
+function markEmptySpells(){document.querySelectorAll('.spell-level').forEach(el=>{const t=[...el.querySelectorAll('input[type=text]')].some(i=>i.value.trim());const c=[...el.querySelectorAll('input[type=checkbox]')].some(i=>i.checked);el.classList.toggle('empty',!t&&!c)})}
+let __printSummonOpenStates=null;
+let __printFeatureOpenStates=null;
+window.addEventListener('beforeprint',()=>{
+  markEmptySpells();
+  updateDerived();
+  updateRadar();
+  __printSummonOpenStates=[...document.querySelectorAll('.summon-card')].map(card=>card.open);
+  document.querySelectorAll('.summon-card').forEach(card=>{card.open=true});
+  __printFeatureOpenStates=[...document.querySelectorAll('.feature-entry')].map(card=>card.open);
+  document.querySelectorAll('.feature-entry').forEach(card=>{card.open=true});
+});
+window.addEventListener('afterprint',()=>{
+  if(__printSummonOpenStates){
+    document.querySelectorAll('.summon-card').forEach((card,index)=>{card.open=Boolean(__printSummonOpenStates[index])});
+    __printSummonOpenStates=null;
+  }
+  if(__printFeatureOpenStates){
+    document.querySelectorAll('.feature-entry').forEach((card,index)=>{card.open=Boolean(__printFeatureOpenStates[index])});
+    __printFeatureOpenStates=null;
+  }
+});
+const abilityMod=ability=>{const el=document.querySelector(`[data-ability="${ability}"]`);if(!el||el.value.trim()==='')return null;const score=Number(el.value);return Number.isFinite(score)?Math.floor((score-10)/2):null};
+const proficiencyBonus=()=>{const value=Number(document.querySelector('#proficiency-bonus').value);return Number.isFinite(value)?value:0};
+const modifierInputs=()=>[...document.querySelectorAll('[data-modifier]')];
+const modifierEnabled=key=>Boolean(document.querySelector(`[data-modifier="${key}"]`)?.checked);
+const modifierNumeric=key=>{const raw=document.querySelector(`[data-modifier-value="${key}"]`)?.value?.trim();const n=raw?Number(raw):0;return Number.isFinite(n)?n:0};
+function saveModifierNumeric(){const result={};document.querySelectorAll('[data-modifier-value]').forEach(input=>{result[input.dataset.modifierValue]=input.value});return result}
+function restoreModifierNumeric(data={}){document.querySelectorAll('[data-modifier-value]').forEach(input=>input.value=data?.[input.dataset.modifierValue]??'')}
+
+const autoFields=()=>[...document.querySelectorAll('[data-auto]')];
+const applyAuto=(key,value)=>{const el=document.querySelector(`[data-auto="${key}"]`);if(!el||el.dataset.overridden==='1')return;el.value=value===null||value===undefined?'':String(value)};
+const classRules=[
+  {name:'野蛮人',die:12,patterns:[/野蛮人/i,/\bbarbarian\b/i]},
+  {name:'战士',die:10,patterns:[/战士/i,/\bfighter\b/i]},
+  {name:'圣武士',die:10,patterns:[/圣武士/i,/\bpaladin\b/i]},
+  {name:'游侠',die:10,patterns:[/游侠/i,/\branger\b/i]},
+  {name:'吟游诗人',die:8,patterns:[/吟游诗人/i,/\bbard\b/i]},
+  {name:'牧师',die:8,patterns:[/牧师/i,/\bcleric\b/i]},
+  {name:'德鲁伊',die:8,patterns:[/德鲁伊/i,/\bdruid\b/i]},
+  {name:'武僧',die:8,patterns:[/武僧/i,/\bmonk\b/i]},
+  {name:'游荡者',die:8,patterns:[/游荡者/i,/\brogue\b/i]},
+  {name:'邪术师',die:8,patterns:[/邪术师/i,/魔契师/i,/契术师/i,/\bwarlock\b/i]},
+  {name:'奇械师',die:8,patterns:[/奇械师/i,/人工造物师/i,/\bartificer\b/i]},
+  {name:'术士',die:6,patterns:[/(^|[^邪契魔])术士/i,/\bsorcerer\b/i]},
+  {name:'法师',die:6,patterns:[/法师/i,/\bwizard\b/i]}
+];
+const matchClass=text=>{const matches=classRules.filter(rule=>rule.patterns.some(pattern=>pattern.test(text)));return matches.length===1?matches[0]:null};
+const chineseNumber=text=>{const digits={一:1,二:2,三:3,四:4,五:5,六:6,七:7,八:8,九:9};if(text==='十')return 10;if(text.startsWith('十'))return 10+(digits[text[1]]||0);if(text.endsWith('十'))return (digits[text[0]]||0)*10;return digits[text]||null};
+const parseLevel=text=>{const arabic=text.match(/(\d{1,2})\s*级/i)||text.match(/(?:level|lv\.?)[\s:]*(\d{1,2})/i)||text.match(/\b(\d{1,2})\b/);let level=arabic?Number(arabic[1]):null;if(level===null){const chinese=text.match(/([一二三四五六七八九十]{1,3})\s*级/);level=chinese?chineseNumber(chinese[1]):null}return Number.isInteger(level)&&level>=1&&level<=20?level:null};
+const spellcastingClasses=[
+  {ability:'魅力',patterns:[/吟游诗人/i,/\bbard\b/i,/圣武士/i,/圣骑士/i,/\bpaladin\b/i,/邪术师/i,/契术师/i,/魔契师/i,/\bwarlock\b/i,/术士/i,/\bsorcerer\b/i]},
+  {ability:'感知',patterns:[/牧师/i,/\bcleric\b/i,/德鲁伊/i,/\bdruid\b/i,/游侠/i,/\branger\b/i]},
+  {ability:'智力',patterns:[/奇械师/i,/人工造物师/i,/\bartificer\b/i,/法师/i,/巫师/i,/\bwizard\b/i]}
+];
+function matchSpellAbility(text){
+  if(!String(text||'').trim())return '';
+  const hits=spellcastingClasses.filter(def=>def.patterns.some(pattern=>pattern.test(text)));
+  return hits.length===1?hits[0].ability:'';
+}
+const normalizedAbilityKey=value=>{
+ const text=String(value||'').trim().toLowerCase().replace(/\s+/g,'');
+ const keys={力量:'str',str:'str',strength:'str',敏捷:'dex',dex:'dex',dexterity:'dex',体质:'con',con:'con',constitution:'con',智力:'int',int:'int',intelligence:'int',感知:'wis',wis:'wis',wisdom:'wis',魅力:'cha',cha:'cha',charisma:'cha'};
+ return keys[text]||null;
+};
+function classTotalLevel(text){
+  const parts=String(text||'').split(/[、,，;；/+＋]/).map(v=>v.trim()).filter(Boolean);
+  if(parts.length===1)return parseLevel(parts[0]);
+  if(!parts.length)return null;
+  const levels=parts.map(parseLevel);
+  if(levels.some(v=>v===null))return null;
+  const total=levels.reduce((a,b)=>a+b,0);
+  return total>=1&&total<=20?total:null;
+}
+function updateProficiencyBonus(){
+  const level=classTotalLevel(document.querySelector('#class-level')?.value);
+  const pb=level===null?2:2+Math.floor((level-1)/4);
+  applyAuto('proficiency-bonus',pb);
+}
+function updateSpellAuto(){
+  const classText=document.querySelector('#spell-class')?.value.trim()||document.querySelector('#class-level')?.value.trim()||'';
+  applyAuto('spell-ability',matchSpellAbility(classText));
+  const ability=normalizedAbilityKey(document.querySelector('#spell-ability')?.value);
+  const mod=ability?abilityMod(ability):null;
+  const pb=proficiencyBonus();
+  applyAuto('spell-save-dc',mod===null?'':8+mod+pb+modifierNumeric('spellDCBonus'));
+  applyAuto('spell-attack-bonus',mod===null?'':bonus(mod+pb+modifierNumeric('spellAttackBonus')));
+}
+
+function updateClassAndHealth(){
+  const text=document.querySelector('#class-level').value.trim(),matched=matchClass(text),level=parseLevel(text),con=abilityMod('con');
+  applyAuto('hit-die-type',matched?`d${matched.die}`:'');
+  applyAuto('hit-dice-count',matched&&level!==null?level:'');
+  if(matched&&level!==null&&con!==null){const first=matched.die+con,later=Math.floor(matched.die/2)+1+con,tough=modifierEnabled('tough')?level*2:0;applyAuto('hp-max',first+(level-1)*later+tough)}else applyAuto('hp-max','');
+}
+function updateHpVisual(){
+  const maxEl=document.querySelector('#hp-max'),currentEl=document.querySelector('#hp-current'),bar=document.querySelector('#hp-bar'),fill=document.querySelector('#hp-fill'),label=document.querySelector('#hp-label'),sheet=document.querySelector('.sheet');
+  const hasMax=maxEl.value.trim()!==''&&Number.isFinite(Number(maxEl.value))&&Number(maxEl.value)>0,hasCurrent=currentEl.value.trim()!==''&&Number.isFinite(Number(currentEl.value));
+  if(!hasMax||!hasCurrent){fill.style.width='0%';bar.classList.remove('low','zero');sheet.classList.remove('hp-low','hp-zero');label.textContent='填写当前与最大生命值后显示血量';bar.setAttribute('aria-label','生命值尚未完整填写');return}
+  const max=Number(maxEl.value),current=Number(currentEl.value),ratio=Math.max(0,Math.min(1,current/max)),zero=current<=0,low=!zero&&ratio<.5;
+  fill.style.width=`${ratio*100}%`;bar.classList.toggle('low',low);bar.classList.toggle('zero',zero);sheet.classList.toggle('hp-low',low);sheet.classList.toggle('hp-zero',zero);label.textContent=`${current} / ${max}（${Math.round(ratio*100)}%）`;bar.setAttribute('aria-label',`当前生命值 ${current}，最大生命值 ${max}，剩余 ${Math.round(ratio*100)}%`);
+}
+function updateRadar(){
+  const canvas=document.querySelector('#ability-radar'),wrap=canvas.parentElement,ctx=canvas.getContext('2d');
+  const dpr=Math.min(window.devicePixelRatio||1,2),width=Math.max(260,wrap.clientWidth),height=Math.max(240,wrap.clientHeight);
+  canvas.width=Math.round(width*dpr);canvas.height=Math.round(height*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,width,height);
+  const defs=[['力量','str'],['敏捷','dex'],['体质','con'],['智力','int'],['感知','wis'],['魅力','cha']];
+  const raw=defs.map(([,key])=>{const input=document.querySelector(`[data-ability="${key}"]`);const value=Number(input.value);return input.value.trim()!==''&&Number.isFinite(value)?Math.max(0,value):0});
+  const max=Math.max(20,Math.ceil(Math.max(...raw)/5)*5),cx=width/2,cy=height/2+4,radius=Math.min(width*.31,height*.34),angle=i=>-Math.PI/2+i*Math.PI/3;
+  const point=(value,i)=>[cx+Math.cos(angle(i))*radius*(value/max),cy+Math.sin(angle(i))*radius*(value/max)];
+  ctx.lineJoin='round';ctx.textAlign='center';ctx.textBaseline='middle';
+  for(let ring=1;ring<=4;ring++){ctx.beginPath();for(let i=0;i<6;i++){const [x,y]=point(max*ring/4,i);i?ctx.lineTo(x,y):ctx.moveTo(x,y)}ctx.closePath();ctx.strokeStyle=ring===4?'rgba(107,85,127,.42)':'rgba(107,85,127,.18)';ctx.lineWidth=ring===4?1.2:1;ctx.stroke()}
+  for(let i=0;i<6;i++){const [x,y]=point(max,i);ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(x,y);ctx.strokeStyle='rgba(107,85,127,.2)';ctx.lineWidth=1;ctx.stroke()}
+  ctx.beginPath();raw.forEach((value,i)=>{const [x,y]=point(Math.min(value,max),i);i?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.closePath();ctx.fillStyle='rgba(111,88,133,.28)';ctx.fill();ctx.strokeStyle='#6f5885';ctx.lineWidth=2.4;ctx.stroke();
+  raw.forEach((value,i)=>{const [x,y]=point(Math.min(value,max),i);ctx.beginPath();ctx.arc(x,y,3.5,0,Math.PI*2);ctx.fillStyle='#c99f50';ctx.fill();ctx.strokeStyle='#fff9ea';ctx.lineWidth=1.5;ctx.stroke()});
+  ctx.font='700 12px system-ui,sans-serif';ctx.fillStyle='#493a5d';defs.forEach(([label],i)=>{const labelRadius=radius+25;const x=cx+Math.cos(angle(i))*labelRadius,y=cy+Math.sin(angle(i))*labelRadius;ctx.fillText(`${label} ${raw[i]||'—'}`,x,y)});
+  ctx.font='600 10px system-ui,sans-serif';ctx.fillStyle='rgba(73,58,93,.58)';for(let ring=1;ring<=4;ring++){const value=Math.round(max*ring/4);ctx.fillText(String(value),cx+4,cy-radius*ring/4+7)}
+  const summary=defs.map(([label],i)=>`${label} ${raw[i]||'未填写'}`).join(' · ');canvas.setAttribute('aria-label',`六维属性雷达图：${summary}`);document.querySelector('#radar-summary').textContent=raw.some(Boolean)?summary:`填写属性后实时生成能力轮廓（当前刻度上限 ${max}）`;
+}
+function updateDerived(){
+  updateProficiencyBonus();
+  document.querySelectorAll('[data-mod]').forEach(el=>{const value=abilityMod(el.dataset.mod);el.textContent=value===null?'—':bonus(value)});
+  document.querySelectorAll('[data-ability-row]').forEach(el=>{
+    const mod=abilityMod(el.dataset.abilityRow),rank=Number(el.querySelector('.prof').dataset.rank);
+    const isSkill=el.dataset.key.startsWith('skill-');
+    const jack=isSkill&&rank===0&&modifierEnabled('jack-of-all-trades')?Math.floor(proficiencyBonus()/2):0;
+    const extra=modifierNumeric(isSkill?'skillBonus':'saveBonus');
+    applyAuto(el.dataset.key,mod===null?'':bonus(mod+rank*proficiencyBonus()+jack+extra));
+  });
+  const dex=abilityMod('dex');applyAuto('initiative',dex===null?'':bonus(dex));
+  const perception=document.querySelector('[data-key="skill-perception"] .derived'),perceptionValue=perception.value.trim()===''?null:Number(perception.value);applyAuto('passive-perception',Number.isFinite(perceptionValue)?10+perceptionValue:'');
+  updateClassAndHealth();
+  updateSpellAuto();
+  updateHpVisual();
+  updateRadar();
+}
+document.querySelectorAll('.prof').forEach(button=>button.addEventListener('click',()=>{const rank=(Number(button.dataset.rank)+1)%3;button.dataset.rank=String(rank);const label=button.parentElement.querySelector('span').textContent;button.setAttribute('aria-label',`${label}：${rankName[rank]}`);updateDerived()}));
+modifierInputs().forEach(input=>input.addEventListener('change',updateDerived));
+autoFields().forEach(el=>{el.dataset.overridden='0';el.addEventListener('input',()=>{el.dataset.overridden=el.value.trim()===''?'0':'1';updateDerived()})});
+document.querySelectorAll('[data-ability],#class-level,#spell-class').forEach(input=>input.addEventListener('input',updateDerived));
+document.querySelectorAll('[data-modifier-value]').forEach(input=>input.addEventListener('input',()=>{updateDerived();scheduleStaticSave()}));
+document.querySelector('#hp-current').addEventListener('input',updateHpVisual);
+
+const drawer=document.querySelector('#modifier-drawer'),drawerToggle=document.querySelector('#modifier-toggle');
+const setDrawer=open=>{drawer.classList.toggle('open',open);drawerToggle.setAttribute('aria-expanded',String(open))};
+drawerToggle.addEventListener('click',()=>setDrawer(!drawer.classList.contains('open')));
+document.addEventListener('keydown',event=>{if(event.key==='Escape')setDrawer(false)});
+
+
+function richPlainText(html){
+  const box=document.createElement('div');box.innerHTML=html;
+  const blockTags=new Set(['DIV','P','LI']);
+  const walk=node=>{
+    let out='';
+    [...node.childNodes].forEach(child=>{
+      if(child.nodeType===Node.TEXT_NODE){out+=child.nodeValue||'';return}
+      if(child.nodeType!==Node.ELEMENT_NODE)return;
+      if(child.tagName==='BR'){out+='\n';return}
+      const part=walk(child);
+      if(blockTags.has(child.tagName)){
+        if(out&&!out.endsWith('\n'))out+='\n';
+        out+=part;
+        if(part&&!out.endsWith('\n'))out+='\n';
+      }else out+=part;
+    });
+    return out;
+  };
+  return walk(box).replace(/\u00a0/g,' ').replace(/\r\n?/g,'\n').replace(/\n+$/,'');
+}
+function safeRichHTML(html){
+  const template=document.createElement('template');template.innerHTML=String(html??'');
+  const allowed=new Set(['B','STRONG','I','EM','U','BR','DIV','P','UL','OL','LI']);
+  const clean=node=>{
+    [...node.childNodes].forEach(child=>{
+      if(child.nodeType===Node.ELEMENT_NODE){
+        if(!allowed.has(child.tagName)){child.replaceWith(document.createTextNode(child.textContent||''));return}
+        [...child.attributes].forEach(attr=>child.removeAttribute(attr.name));
+        clean(child);
+      }else if(child.nodeType!==Node.TEXT_NODE){child.remove()}
+    });
+  };
+  clean(template.content);
+  return template.innerHTML;
+}
+function plainTextToRichHTML(text){
+  return String(text??'').replace(/\r\n?/g,'\n').replace(/\u00a0/g,' ')
+    .replace(/[&<>]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[ch]))
+    .split('\n').join('<br>');
+}
+function attachRichEditor(root=document){
+  root.querySelectorAll('input:not([type="file"]):not([type="checkbox"]):not([type="radio"]):not([readonly]):not([data-auto]):not([data-save-skip]):not([data-rich-skip]):not(.spell-name-input):not([inputmode="numeric"]),textarea:not([data-rich-skip])').forEach(control=>{
+    if(control.dataset.richReady==='1')return;
+    control.dataset.richReady='1';
+    control.classList.add('rich-source');
+    const editor=document.createElement('div');
+    editor.className='rich-editor';
+    editor.contentEditable='true';
+    editor.setAttribute('role','textbox');
+    editor.setAttribute('aria-multiline',String(control.tagName==='TEXTAREA'));
+    editor.dataset.placeholder=control.getAttribute('placeholder')||'';
+    editor.innerHTML=safeRichHTML(control.dataset.richHtml||control.value||'');
+    control.insertAdjacentElement('afterend',editor);
+    control._richEditor=editor;
+    editor.addEventListener('input',()=>{
+      const html=safeRichHTML(editor.innerHTML);
+      control.dataset.richHtml=html;
+      control.value=richPlainText(editor.innerHTML);
+      control.dispatchEvent(new Event('input',{bubbles:true}));
+      editor.style.height='auto';
+    });
+    editor.addEventListener('keydown',event=>{
+      if((event.ctrlKey||event.metaKey)&&event.key.toLowerCase()==='b'){
+        event.preventDefault();document.execCommand('bold',false);editor.dispatchEvent(new Event('input',{bubbles:true}));
+      }
+      if(control.tagName==='INPUT'&&event.key==='Enter')event.preventDefault();
+    });
+    editor.addEventListener('paste',event=>{
+      event.preventDefault();
+      const plain=event.clipboardData?.getData('text/plain')||'';
+      // Paste as plain text to avoid hidden paragraph/list wrappers from Word, web pages, etc.
+      // Keep intentional line breaks, but collapse runs of blank lines to a single paragraph break.
+      const normalized=plain.replace(/\r\n?/g,'\n').replace(/\u00a0/g,' ')
+        .replace(/[ \t]+\n/g,'\n').replace(/\n{3,}/g,'\n\n');
+      document.execCommand('insertHTML',false,plainTextToRichHTML(normalized));
+      editor.dispatchEvent(new Event('input',{bubbles:true}));
+    });
+  });
+}
+function restoreRichEditor(control,html){
+  if(!control?._richEditor)return;
+  const safe=html==null?String(control.value??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>'):safeRichHTML(html);
+  control._richEditor.innerHTML=safe;
+  control.dataset.richHtml=safe;
+  control.value=richPlainText(safe);
+}
+attachRichEditor();
+
+const editable=()=>[...document.querySelectorAll('input:not([type="file"]):not([data-auto-skip]):not([data-save-skip]),textarea')].filter(el=>!el.closest('.summon-card')&&!el.closest('.feature-entry'));
+editable().forEach((el,index)=>el.dataset.saveId=`field-${String(index+1).padStart(3,'0')}`);
+const toast=message=>{const el=document.querySelector('#toast');el.textContent=message;el.classList.add('show');clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>el.classList.remove('show'),2200)};
+
+const summonAbilityDefs=[['力量','STR'],['敏捷','DEX'],['体质','CON'],['智力','INT'],['感知','WIS'],['魅力','CHA']];
+let summonSequence=0;
+function createSummonCard(data={}){
+  const id=String(++summonSequence);
+  const details=document.createElement('details');
+  details.className='summon-card';
+  details.dataset.summonId=id;
+  details.open=data.open!==false;
+  const abilities=summonAbilityDefs.map(([name,key])=>{
+    const a=data.abilities?.[key]||{};
+    return `<div class="summon-ability"><label>${name} ${key}</label><input class="summon-score" data-summon-ability="${key}" inputmode="numeric" placeholder="属性值" value="${escapeSummon(a.score??'')}"><input class="summon-mod" data-summon-mod="${key}" aria-label="${name}调整值" placeholder="调整值" value="${escapeSummon(a.mod??'')}" readonly></div>`;
+  }).join('');
+  details.innerHTML=`
+    <summary><span class="summon-summary-name">未命名召唤物</span><span class="summon-summary-hp">生命值：— / —</span></summary>
+    <div class="summon-body">
+      <div class="summon-top">
+        <div class="field"><label>名字</label><input data-summon-field="name" placeholder="召唤物名称" value="${escapeSummon(data.name??'')}"></div>
+        <div class="field"><label>当前生命值</label><input data-summon-field="hpCurrent" inputmode="numeric" value="${escapeSummon(data.hpCurrent??'')}"></div>
+        <div class="field"><label>最大生命值</label><input data-summon-field="hpMax" inputmode="numeric" value="${escapeSummon(data.hpMax??'')}"></div>
+        <div class="field"><label>护甲等级</label><input data-summon-field="ac" inputmode="numeric" value="${escapeSummon(data.ac??'')}"></div>
+        <div class="field"><label>速度</label><input data-summon-field="speed" value="${escapeSummon(data.speed??'')}" placeholder="例如 30 尺"></div>
+      </div>
+      <div><h4 class="panel-title">六维属性与调整值</h4><div class="summon-abilities">${abilities}</div></div>
+      <div class="summon-fields">
+        <div class="field"><label>技能</label><textarea data-summon-field="skills" placeholder="自行填写技能与加值，无需枚举全部技能">${escapeSummon(data.skills??'')}</textarea></div>
+        <div class="field"><label>感官</label><textarea data-summon-field="senses" placeholder="例如：黑暗视觉 60 尺，被动察觉 13">${escapeSummon(data.senses??'')}</textarea></div>
+        <div class="field"><label>伤害免疫</label><textarea data-summon-field="damageImmunities">${escapeSummon(data.damageImmunities??'')}</textarea></div>
+        <div class="field"><label>状态免疫</label><textarea data-summon-field="conditionImmunities">${escapeSummon(data.conditionImmunities??'')}</textarea></div>
+        <div class="field"><label>语言</label><textarea data-summon-field="languages">${escapeSummon(data.languages??'')}</textarea></div>
+        <div class="field"><label>熟练加值</label><input data-summon-field="proficiency" value="${escapeSummon(data.proficiency??'')}" placeholder="例如 +2"></div>
+        <div class="field large"><label>能力</label><textarea data-summon-field="features" placeholder="填写召唤物的被动能力、特殊规则与使用限制"></textarea></div>
+        <div class="field large"><label>动作</label><textarea data-summon-field="actions" placeholder="填写动作、攻击方式、伤害与附加效果"></textarea></div>
+      </div>
+      <div class="summon-card-actions"><button type="button" class="summon-delete">删除此召唤物</button></div>
+    </div>`;
+  details.querySelector('[data-summon-field="features"]').value=data.features??'';
+  details.querySelector('[data-summon-field="actions"]').value=data.actions??'';
+  details.querySelector('.summon-delete').addEventListener('click',()=>{details.remove();});
+  details.querySelectorAll('input,textarea').forEach(input=>input.addEventListener('input',()=>updateSummonSummary(details)));
+  details.querySelector('summary').addEventListener('click',()=>{});
+  document.querySelector('#summon-list').appendChild(details);
+  attachRichEditor(details);
+  Object.entries(data.rich||{}).forEach(([key,html])=>{const control=details.querySelector(`[data-summon-field="${key}"]`);if(control)restoreRichEditor(control,html)});
+  updateSummonSummary(details);
+  return details;
+}
+function escapeSummon(value){
+  return String(value).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+}
+function updateSummonSummary(card){
+  const name=card.querySelector('[data-summon-field="name"]').value.trim()||'未命名召唤物';
+  const current=card.querySelector('[data-summon-field="hpCurrent"]').value.trim();
+  const max=card.querySelector('[data-summon-field="hpMax"]').value.trim();
+  card.querySelector('.summon-summary-name').textContent=name;
+  card.querySelector('.summon-summary-hp').textContent=`生命值：${current||'—'} / ${max||'—'}`;
+  card.querySelectorAll('[data-summon-ability]').forEach(scoreInput=>{
+    const key=scoreInput.dataset.summonAbility;
+    const modInput=card.querySelector(`[data-summon-mod="${key}"]`);
+    const raw=scoreInput.value.trim();
+    if(raw===''||!Number.isFinite(Number(raw))){
+      modInput.value='';
+    }else{
+      const mod=Math.floor((Number(raw)-10)/2);
+      modInput.value=mod>=0?`+${mod}`:String(mod);
+    }
+  });
+}
+function collectSummons(){
+  return [...document.querySelectorAll('.summon-card')].map(card=>{
+    const get=key=>card.querySelector(`[data-summon-field="${key}"]`)?.value??'';
+    const abilities={};
+    summonAbilityDefs.forEach(([,key])=>{abilities[key]={score:card.querySelector(`[data-summon-ability="${key}"]`)?.value??'',mod:card.querySelector(`[data-summon-mod="${key}"]`)?.value??''}});
+    const rich={};card.querySelectorAll('[data-summon-field]').forEach(el=>{if(el._richEditor)rich[el.dataset.summonField]=el.dataset.richHtml??null});
+    return {name:get('name'),hpCurrent:get('hpCurrent'),hpMax:get('hpMax'),ac:get('ac'),speed:get('speed'),abilities,skills:get('skills'),damageImmunities:get('damageImmunities'),conditionImmunities:get('conditionImmunities'),senses:get('senses'),languages:get('languages'),proficiency:get('proficiency'),features:get('features'),actions:get('actions'),rich,open:card.open};
+  });
+}
+function restoreSummons(items=[]){
+  document.querySelector('#summon-list').innerHTML='';
+  summonSequence=0;
+  (Array.isArray(items)?items:[]).forEach(createSummonCard);
+}
+
+const featureCategoryDefs=[
+  {key:'race',title:'种族特质',placeholder:'填写种族能力、触发条件与恢复方式'},
+  {key:'classFeatures',title:'职业特性',placeholder:'填写职业与子职业能力、触发条件与规则'},
+  {key:'other',title:'专长与其他特性',placeholder:'填写专长、祝福、诅咒或特殊奖励'}
+];
+function updateFeatureEntrySummary(card){
+  const name=card.querySelector('[data-feature-field="name"]')?.value.trim()||'未命名特性';
+  const summary=card.querySelector('.feature-entry-name');
+  if(summary)summary.textContent=name;
+}
+function featureMaxUses(card){const raw=card.querySelector('[data-feature-field="maxUses"]')?.value.trim()||'';return raw!==''&&Number.isFinite(Number(raw))?Math.max(0,Math.min(99,Math.floor(Number(raw)))):0}
+function featureUsedFlags(card){return [...card.querySelectorAll('.feature-use-pip')].map(pip=>pip.classList.contains('used'))}
+function syncFeatureCurrentUses(card){
+ const max=featureMaxUses(card),used=featureUsedFlags(card).filter(Boolean).length;
+ const current=card.querySelector('[data-feature-field="currentUses"]');
+ if(current)current.value=max?String(max-used):'';
+}
+function updateFeaturePip(pip,used,index){
+ pip.classList.toggle('used',used);pip.setAttribute('aria-pressed',String(used));
+ pip.setAttribute('aria-label',`第 ${index+1} 次使用${used?'已消耗':'可用'}`);
+ pip.title=`第 ${index+1} 次使用：${used?'已消耗':'可用'}`;
+}
+function renderFeatureEntryPips(card,preserve=true,usedStates=null){
+ const holder=card.querySelector('.feature-entry-slots');if(!holder)return;
+ const count=featureMaxUses(card),previous=preserve?featureUsedFlags(card):[];
+ const states=Array.isArray(usedStates)?usedStates:previous;
+ holder.replaceChildren();
+ for(let index=0;index<count;index++){
+   const pip=document.createElement('button');pip.type='button';pip.className='prof feature-use-pip';
+   updateFeaturePip(pip,Boolean(states[index]),index);
+   pip.addEventListener('click',event=>{event.preventDefault();event.stopPropagation();updateFeaturePip(pip,!pip.classList.contains('used'),index);syncFeatureCurrentUses(card);scheduleStaticSave()});
+   holder.appendChild(pip);
+ }
+ syncFeatureCurrentUses(card);
+}
+function setFeatureCurrentUses(card,value){
+ const max=featureMaxUses(card),parsed=Number(value);
+ const current=Math.max(0,Math.min(max,Number.isFinite(parsed)?Math.floor(parsed):max));
+ const spent=max-current;
+ card.querySelectorAll('.feature-use-pip').forEach((pip,index)=>updateFeaturePip(pip,index<spent,index));
+ syncFeatureCurrentUses(card);
+}
+function createFeatureEntry(category,data={}){
+  const list=document.querySelector(`#feature-list-${category}`);
+  if(!list)return null;
+  const details=document.createElement('details');
+  details.className='feature-entry';
+  details.dataset.featureCategory=category;
+  details.open=data.open!==false;
+  details.innerHTML=`
+    <summary>
+      <span class="feature-entry-name">未命名特性</span>
+      <span class="feature-entry-slots" aria-label="特性可用次数"></span>
+    </summary>
+    <div class="feature-entry-body">
+      <div class="feature-entry-meta">
+        <div class="field"><label>名称</label><input type="text" data-rich-skip="1" data-feature-field="name" placeholder="特性名称" value="${escapeSummon(data.name??'')}"></div>
+        <div class="feature-entry-uses"><div class="field"><label>可用</label><input type="number" min="0" max="99" step="1" inputmode="numeric" data-rich-skip="1" data-feature-field="currentUses" placeholder="剩余"></div><div class="field"><label>最大</label><input type="number" min="0" max="99" step="1" inputmode="numeric" data-rich-skip="1" data-feature-field="maxUses" placeholder="次数" value="${escapeSummon(data.maxUses??data.uses??'')}"></div></div>
+      </div>
+      <div class="field feature-entry-description"><label>描述</label><textarea data-feature-field="description" placeholder="${escapeSummon(data.placeholder??'填写特性的效果、触发条件与恢复方式')}"></textarea></div>
+      <div class="feature-entry-actions"><button type="button" class="feature-delete">删除条目</button></div>
+    </div>`;
+  const nameInput=details.querySelector('[data-feature-field="name"]');
+  const usesInput=details.querySelector('[data-feature-field="maxUses"]');
+  const currentUsesInput=details.querySelector('[data-feature-field="currentUses"]');
+  const description=details.querySelector('[data-feature-field="description"]');
+  description.value=data.description??'';
+  nameInput.addEventListener('input',()=>updateFeatureEntrySummary(details));
+  usesInput.addEventListener('input',()=>renderFeatureEntryPips(details,true));
+  currentUsesInput.addEventListener('input',()=>{if(currentUsesInput.value.trim()!=='')setFeatureCurrentUses(details,currentUsesInput.value)});
+  currentUsesInput.addEventListener('change',()=>setFeatureCurrentUses(details,currentUsesInput.value));
+  usesInput.addEventListener('change',()=>renderFeatureEntryPips(details,true));
+  details.querySelector('summary').addEventListener('click',event=>{
+    if(event.target.closest('.feature-entry-slots')){
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  });
+  details.querySelector('.feature-delete').addEventListener('click',()=>{
+    details.remove();
+    scheduleStaticSave();
+  });
+  list.appendChild(details);
+  attachRichEditor(details);
+  if(data.richHTML!==undefined&&data.richHTML!==null)restoreRichEditor(description,data.richHTML);
+  renderFeatureEntryPips(details,false,Array.isArray(data.used)?data.used:[]);
+  if(!Array.isArray(data.used)&&data.currentUses!==undefined&&data.currentUses!=='')setFeatureCurrentUses(details,data.currentUses);
+  updateFeatureEntrySummary(details);
+  return details;
+}
+function collectFeatureEntries(){
+  const result={race:[],classFeatures:[],other:[]};
+  featureCategoryDefs.forEach(({key})=>{
+    const list=document.querySelector(`#feature-list-${key}`);
+    result[key]=list?[...list.querySelectorAll(':scope > .feature-entry')].map(card=>{
+      const get=field=>card.querySelector(`[data-feature-field="${field}"]`)?.value??'';
+      const description=card.querySelector('[data-feature-field="description"]');
+      return {
+        name:get('name'),
+        maxUses:get('maxUses'),
+        currentUses:get('currentUses'),
+        used:[...card.querySelectorAll('.feature-entry-slots .feature-use-pip')].map(pip=>pip.classList.contains('used')),
+        description:get('description'),
+        richHTML:description? (description.dataset.richHtml??description._richEditor?.innerHTML??null):null,
+        open:card.open
+      };
+    }):[];
+  });
+  return result;
+}
+function migrateLegacyFeatureEntries(data){
+  const result={race:[],classFeatures:[],other:[]};
+  featureCategoryDefs.forEach(({key})=>{
+    const legacy=document.querySelector(`[data-feature-legacy="${key}"]`);
+    if(!legacy)return;
+    const saved=data?.fields?.[legacy.dataset.saveId];
+    // Legacy exports store the textarea value in fields[field-NNN].value.
+    // Treat the entire original textbox as one description; do not parse or split it.
+    const description=typeof saved==='string'
+      ? saved
+      : (saved&&Object.prototype.hasOwnProperty.call(saved,'value')?saved.value:(legacy.value??''));
+    const richHTML=(saved&&typeof saved==='object'&&typeof saved.richHTML==='string')
+      ? saved.richHTML
+      : null;
+    const richText=String(richHTML??'').replace(/<[^>]*>/g,'').replace(/&nbsp;/g,' ').trim();
+    if(String(description??'').length>0||richText){
+      result[key].push({
+        name:'',
+        maxUses:'',
+        used:[],
+        description:String(description??''),
+        richHTML,
+        open:true
+      });
+    }
+  });
+  return result;
+}
+function resolveFeatureEntries(data){
+  const saved=data?.featureEntries;
+  if(saved&&typeof saved==='object'&&['race','classFeatures','other'].some(key=>Array.isArray(saved[key]))){
+    return {race:Array.isArray(saved.race)?saved.race:[],classFeatures:Array.isArray(saved.classFeatures)?saved.classFeatures:[],other:Array.isArray(saved.other)?saved.other:[]};
+  }
+  return migrateLegacyFeatureEntries(data);
+}
+function restoreFeatureEntries(saved={}){
+  featureCategoryDefs.forEach(({key})=>{
+    const list=document.querySelector(`#feature-list-${key}`);
+    if(!list)return;
+    list.innerHTML='';
+    const entries=Array.isArray(saved?.[key])?saved[key]:[];
+    entries.forEach(item=>createFeatureEntry(key,item||{}));
+  });
+}
+document.querySelectorAll('[data-feature-add]').forEach(button=>{
+  button.addEventListener('click',()=>{
+    createFeatureEntry(button.dataset.featureAdd,{open:true});
+    scheduleStaticSave();
+  });
+});
+document.querySelectorAll('[data-feature-restore]').forEach(button=>{
+  button.addEventListener('click',()=>{
+    const category=button.dataset.featureRestore;
+    const list=document.querySelector(`#feature-list-${category}`);
+    if(!list)return;
+    list.querySelectorAll('.feature-entry').forEach(card=>{
+      card.querySelectorAll('.feature-use-pip').forEach((pip,index)=>updateFeaturePip(pip,false,index));
+      syncFeatureCurrentUses(card);
+    });
+    scheduleStaticSave();
+    toast('已恢复该类别的所有使用次数');
+  });
+});
+
+document.querySelector('#add-summon').addEventListener('click',()=>createSummonCard());
+
+
+let portraitDataURL='';
+const portraitBox=document.querySelector('#portrait-box');
+const portraitImage=document.querySelector('#portrait-image');
+const portraitFile=document.querySelector('#portrait-file');
+const portraitPlaceholder=portraitBox?.querySelector('.portrait-placeholder');
+const portraitRemove=document.querySelector('#portrait-remove');
+function renderPortrait(dataURL=''){
+  portraitDataURL=typeof dataURL==='string'?dataURL:'';
+  if(portraitImage){
+    if(portraitDataURL){portraitImage.src=portraitDataURL;portraitImage.hidden=false;portraitBox?.classList.add('has-image');if(portraitPlaceholder)portraitPlaceholder.hidden=true;if(portraitRemove)portraitRemove.hidden=false}
+    else{portraitImage.removeAttribute('src');portraitImage.hidden=true;portraitBox?.classList.remove('has-image');if(portraitPlaceholder)portraitPlaceholder.hidden=false;if(portraitRemove)portraitRemove.hidden=true}
+  }
+}
+function compressPortrait(file){
+  return new Promise((resolve,reject)=>{
+    const reader=new FileReader();
+    reader.onerror=()=>reject(new Error('无法读取图片'));
+    reader.onload=()=>{
+      const image=new Image();
+      image.onerror=()=>reject(new Error('图片格式无法解析'));
+      image.onload=()=>{
+        const maxSide=1800,scale=Math.min(1,maxSide/Math.max(image.naturalWidth,image.naturalHeight));
+        const canvas=document.createElement('canvas');
+        canvas.width=Math.max(1,Math.round(image.naturalWidth*scale));
+        canvas.height=Math.max(1,Math.round(image.naturalHeight*scale));
+        const ctx=canvas.getContext('2d');
+        if(!ctx){reject(new Error('浏览器不支持图片处理'));return}
+        ctx.drawImage(image,0,0,canvas.width,canvas.height);
+        // WebP keeps transparency and is considerably smaller; fall back to PNG if unsupported.
+        let result=canvas.toDataURL('image/webp',.86);
+        if(!result.startsWith('data:image/webp'))result=canvas.toDataURL('image/png');
+        resolve(result);
+      };
+      image.src=reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+document.querySelector('#portrait-upload')?.addEventListener('click',event=>{event.stopPropagation();portraitFile?.click()});
+portraitBox?.addEventListener('click',event=>{if(event.target.closest('button'))return;portraitFile?.click()});
+portraitBox?.addEventListener('dragover',event=>{event.preventDefault();portraitBox.classList.add('dragging')});
+portraitBox?.addEventListener('dragleave',()=>portraitBox.classList.remove('dragging'));
+portraitBox?.addEventListener('drop',async event=>{
+  event.preventDefault();portraitBox.classList.remove('dragging');
+  const file=event.dataTransfer?.files?.[0];if(file)await loadPortraitFile(file);
+});
+async function loadPortraitFile(file){
+  if(!file.type.startsWith('image/')){toast('请选择图片文件');return}
+  if(file.size>15*1024*1024){toast('图片原文件请控制在 15 MB 以内');return}
+  try{renderPortrait(await compressPortrait(file));scheduleStaticSave();toast('角色立绘已载入本地角色卡')}
+  catch(error){toast(error.message||'图片载入失败')}
+  if(portraitFile)portraitFile.value='';
+}
+portraitFile?.addEventListener('change',event=>{const file=event.target.files?.[0];if(file)loadPortraitFile(file)});
+portraitRemove?.addEventListener('click',event=>{event.stopPropagation();renderPortrait('');if(portraitFile)portraitFile.value='';scheduleStaticSave();toast('已移除角色立绘')});
+function restorePortrait(dataURL){renderPortrait(typeof dataURL==='string'?dataURL:'')}
+
+// v9: Character JSON is the canonical model, never a position-indexed form snapshot.
+// The legacy data-save-id attributes are read-only migration adapters for v1-v8 files.
+let __characterImportedBase=null;
+const CHARACTER_SCHEMA_VERSION=9;
+const CHARACTER_FIELDS=Array.from(document.querySelectorAll('[data-field]'));
+function characterGetPath(object,path){
+  if(!object||typeof object!=='object')return undefined;
+  return String(path).split('.').reduce((value,key)=>value?.[key],object);
+}
+function characterSetPath(object,path,value){
+  const parts=String(path).split('.');
+  let node=object;
+  for(let i=0;i<parts.length-1;i++){
+    const part=parts[i], next=parts[i+1];
+    if(!Object.hasOwn(node,part))node[part]=/^\d+$/.test(next)?[]:{};
+    node=node[part];
+  }
+  node[parts[parts.length-1]]=value;
+}
+function characterExportField(el){
+  if(el.type==='checkbox')return el.checked;
+  return el.value;
+}
+function characterImportField(el,saved,formatHTML){
+  if(saved===undefined)return;
+  if(el.type==='checkbox'){
+    el.checked=typeof saved==='object'&&saved!==null?Boolean(saved.checked):Boolean(saved);
+    return;
+  }
+  if(saved!==null&&typeof saved==='object'&&!Array.isArray(saved)){
+    const plain=String(saved.text??saved.value??'');
+    el.value=plain;
+    restoreRichEditor(el,formatHTML??saved.html??saved.richHTML??null);
+    el.value=plain;
+  }else{
+    const plain=String(saved??'');
+    el.value=plain;
+    restoreRichEditor(el,formatHTML??null);
+    el.value=plain;
+  }
+}
+function characterMergePreservingUnknown(base,next){
+  if(!base||typeof base!=='object'||Array.isArray(base)||!next||typeof next!=='object'||Array.isArray(next))return next;
+  const merged={};
+  for(const key of Object.keys(base)){
+    if(['__proto__','constructor','prototype'].includes(key))continue;
+    merged[key]=base[key];
+  }
+  for(const [key,value] of Object.entries(next)){
+    if(['__proto__','constructor','prototype'].includes(key))continue;
+    merged[key]=characterMergePreservingUnknown(merged[key],value);
+  }
+  return merged;
+}
+function characterCollectData(){
+  const result={
+    schema:'dnd-character-sheet',version:CHARACTER_SCHEMA_VERSION,
+    exportedAt:new Date().toISOString(),sheetId:ensureSheetId(),
+    identity:{},abilities:{},combat:{},proficiencies:{savingThrows:{},skills:{}},
+    attacks:[],featureEntries:collectFeatureEntries(),
+    resources:{},profile:{},
+    spellbook:{casting:{},spells:{},slots:collectSpellSlots()},
+    summons:collectSummons(),portrait:portraitDataURL,
+    formattedText:{},automation:{overrides:{},modifiers:{}},extensions:{}
+  };
+  CHARACTER_FIELDS.forEach(el=>{
+    const path=el.dataset.field;
+    if(path.startsWith('attacks.')||path.startsWith('spellbook.spells.'))return;
+    characterSetPath(result,path,characterExportField(el));
+    if(el._richEditor)result.formattedText[path]=el.dataset.richHtml??el._richEditor.innerHTML;
+  });
+  document.querySelectorAll('#attacks tr[data-attack-row]').forEach(tr=>{
+    const attack={};
+    tr.querySelectorAll('[data-field]').forEach(el=>attack[el.dataset.field.split('.').at(-1)]=characterExportField(el));
+    result.attacks.push(attack);
+  });
+  document.querySelectorAll('#spellbook [data-spell-level]').forEach(levelEl=>{
+    const level=levelEl.dataset.spellLevel;
+    result.spellbook.spells[level]=[...levelEl.querySelectorAll('.spell-line')].map(row=>({
+      name:row.querySelector('[data-spell-name]')?.value??'',
+      prepared:Boolean(row.querySelector('[data-spell-prepared]')?.checked)
+    }));
+  });
+  document.querySelectorAll('[data-ability-row]').forEach(row=>{
+    const key=row.dataset.key,rank=Number(row.querySelector('.prof')?.dataset.rank??0);
+    if(key.startsWith('save-'))result.proficiencies.savingThrows[key.slice(5)]=rank;
+    else if(key.startsWith('skill-'))result.proficiencies.skills[key.slice(6)]=rank;
+  });
+  autoFields().forEach(el=>result.automation.overrides[el.dataset.auto]={overridden:el.dataset.overridden==='1',value:el.value});
+  modifierInputs().forEach(el=>result.automation.modifiers[el.dataset.modifier]=el.checked);
+  result.automation.modifierValues=saveModifierNumeric();
+  return characterMergePreservingUnknown(__characterImportedBase,result);
+}
+function collectData(){return characterCollectData()}
+function characterApplyData(data){
+  if(!data||data.schema!=='dnd-character-sheet')throw new Error('无效角色卡 JSON');
+  if(data.version>=9&&!data.fields){
+    __characterImportedBase=data;
+    CHARACTER_FIELDS.forEach(el=>characterImportField(el,characterGetPath(data,el.dataset.field),data.formattedText?.[el.dataset.field]));
+    document.querySelectorAll('[data-ability-row]').forEach(row=>{
+      const key=row.dataset.key;
+      const rank=key.startsWith('save-')?data.proficiencies?.savingThrows?.[key.slice(5)]:data.proficiencies?.skills?.[key.slice(6)];
+      const value=Math.max(0,Math.min(2,Number(rank??0)));
+      const button=row.querySelector('.prof');
+      button.dataset.rank=String(value);
+      button.setAttribute('aria-label',`${row.querySelector('span').textContent}：${rankName[value]}`);
+    });
+    autoFields().forEach(el=>{
+      const saved=data.automation?.overrides?.[el.dataset.auto];
+      el.dataset.overridden=saved?.overridden?'1':'0';
+      if(saved?.overridden)el.value=saved.value??'';
+    });
+    modifierInputs().forEach(el=>el.checked=Boolean(data.automation?.modifiers?.[el.dataset.modifier]));
+    restoreModifierNumeric(data.automation?.modifierValues||data.modifierValues||{});
+    restoreFeatureEntries(resolveFeatureEntries(data));
+    restoreSummons(data.summons||[]);
+    restoreSpellSlots(data.spellbook?.slots||{});
+    restorePortrait(data.portrait||'');
+  }else if(data.fields&&typeof data.fields==='object'){
+    __characterImportedBase=null;
+    editable().forEach(el=>{
+      const saved=data.fields[el.dataset.saveId];if(!saved)return;
+      if(el.type==='checkbox')el.checked=Boolean(saved.checked);
+      else{el.value=saved.value??'';restoreRichEditor(el,saved.richHTML)}
+    });
+    document.querySelectorAll('[data-ability-row]').forEach(row=>{
+      const rank=Math.max(0,Math.min(2,Number(data.proficiencies?.[row.dataset.key]??0)));
+      const button=row.querySelector('.prof');button.dataset.rank=String(rank);
+      button.setAttribute('aria-label',`${row.querySelector('span').textContent}：${rankName[rank]}`);
+    });
+    autoFields().forEach(el=>{
+      const saved=data.autoOverrides?.[el.dataset.auto];
+      el.dataset.overridden=saved?.overridden?'1':'0';
+      if(saved?.overridden)el.value=saved.value??'';
+    });
+    modifierInputs().forEach(el=>el.checked=Boolean(data.modifiers?.[el.dataset.modifier]));
+    restoreModifierNumeric(data.modifierValues||{});
+    restoreFeatureEntries(resolveFeatureEntries(data));
+    restoreSummons(data.summons||[]);
+    restoreSpellSlots(data.spellSlots||{});
+    restorePortrait(data.portrait||'');
+  }else throw new Error('无法识别的角色卡版本');
+  if(data.sheetId)__sheetId=data.sheetId;
+  updateDerived();
+  markEmptySpells();
+}
+var _exportJsonBtn=document.querySelector('#export-json');if(_exportJsonBtn)_exportJsonBtn.addEventListener('click',()=>{const data=collectData();const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const link=document.createElement('a');const safe=(data.identity?.name||'dnd-character-sheet').replace(/[\\/:*?"<>|]/g,'-');link.href=url;link.download=`${safe}.json`;link.click();URL.revokeObjectURL(url);toast('角色卡已导出为 JSON')});
+
+const FVTT_CLASS_DEFS=[
+  {id:'barbarian',name:'野蛮人',hd:'d12',aliases:['野蛮人','Barbarian']},
+  {id:'bard',name:'吟游诗人',hd:'d8',aliases:['吟游诗人','诗人','Bard']},
+  {id:'cleric',name:'牧师',hd:'d8',aliases:['牧师','Cleric']},
+  {id:'druid',name:'德鲁伊',hd:'d8',aliases:['德鲁伊','Druid']},
+  {id:'fighter',name:'战士',hd:'d10',aliases:['战士','Fighter']},
+  {id:'monk',name:'武僧',hd:'d8',aliases:['武僧','僧侣','Monk']},
+  {id:'paladin',name:'圣武士',hd:'d10',aliases:['圣武士','圣骑士','Paladin']},
+  {id:'ranger',name:'游侠',hd:'d10',aliases:['游侠','Ranger']},
+  {id:'rogue',name:'游荡者',hd:'d8',aliases:['游荡者','盗贼','Rogue']},
+  {id:'sorcerer',name:'术士',hd:'d6',aliases:['术士','Sorcerer']},
+  {id:'warlock',name:'邪术师',hd:'d8',aliases:['邪术师','契术师','魔契师','Warlock']},
+  {id:'wizard',name:'法师',hd:'d6',aliases:['法师','巫师','Wizard']},
+  {id:'artificer',name:'奇械师',hd:'d8',aliases:['奇械师',' artificer ','Artificer']}
+];
+const FVTT_SKILL_KEYS={
+  acrobatics:'acr','animal-handling':'ani',arcana:'arc',athletics:'ath',
+  deception:'dec',history:'his',insight:'ins',intimidation:'itm',
+  investigation:'inv',medicine:'med',nature:'nat',perception:'prc',
+  performance:'prf',persuasion:'per',religion:'rel',
+  'sleight-of-hand':'slt',stealth:'ste',survival:'sur'
+};
+const FVTT_ABILITY_KEYS=['str','dex','con','int','wis','cha'];
+function fvttRandomId(){
+  const alphabet='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let result='';
+  try{
+    const bytes=new Uint8Array(16);
+    crypto.getRandomValues(bytes);
+    for(const byte of bytes)result+=alphabet[byte%alphabet.length];
+  }catch(error){
+    for(let i=0;i<16;i++)result+=alphabet[Math.floor(Math.random()*alphabet.length)];
+  }
+  return result;
+}
+function fvttNumber(value){
+  if(value===null||value===undefined||String(value).trim()==='')return null;
+  const match=String(value).replace(/,/g,'').match(/-?\d+(?:\.\d+)?/);
+  if(!match)return null;
+  const number=Number(match[0]);
+  return Number.isFinite(number)?number:null;
+}
+function fvttBoolean(value){
+  const text=String(value??'').trim().toLowerCase();
+  return !!text&&!['0','false','no','n','否','无','没有','未激励','未获得'].includes(text);
+}
+function fvttTextHTML(value){
+  return '<p>'+String(value??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\r\n?/g,'\n').split('\n').join('<br>')+'</p>';
+}
+function parseFVTTClasses(raw){
+  const text=String(raw??'').trim();
+  if(!text)return {classes:[],warnings:[]};
+  const aliases=FVTT_CLASS_DEFS.flatMap(def=>def.aliases.map(alias=>({def,alias:alias.trim()})))
+    .sort((a,b)=>b.alias.length-a.alias.length);
+  const segments=text.split(/[、,，;；/+＋]+/).map(part=>part.trim()).filter(Boolean);
+  const classes=[],warnings=[];
+  for(const segment of segments){
+    const lower=segment.toLowerCase();
+    const matched=aliases.find(entry=>lower.includes(entry.alias.toLowerCase()));
+    if(!matched){warnings.push(`无法识别职业名称：「${segment}」`);continue}
+    const levelMatch=segment.match(/(\d+)\s*(?:级|等级|lv\.?|level)?/i);
+    const level=levelMatch?Number(levelMatch[1]):null;
+    if(!Number.isInteger(level)||level<1||level>20){
+      warnings.push(`职业「${matched.def.name}」未识别到有效的 1～20 级等级数字`);
+      continue;
+    }
+    const existing=classes.find(item=>item.id===matched.def.id);
+    if(existing)existing.levels+=level;
+    else classes.push({...matched.def,levels:level});
+  }
+  if(classes.reduce((sum,item)=>sum+item.levels,0)>20){
+    warnings.push('多职业等级总和超过 20 级，导入后请检查职业等级');
+  }
+  return {classes,warnings};
+}
+function makeFVTTItem({name,type,system,img='icons/svg/item-bag.svg',sort=0}){
+  return {
+    _id:fvttRandomId(),name,type,img,system,
+    effects:[],folder:null,sort,ownership:{default:0},flags:{}
+  };
+}
+function buildFVTTActor(snapshot){
+  const warnings=[];
+  const name=String(snapshot.name||'未命名角色').trim()||'未命名角色';
+  const classResult=parseFVTTClasses(snapshot.classText);
+  warnings.push(...classResult.warnings);
+  const items=[];
+  let originalClassId='';
+  classResult.classes.forEach((classDef,index)=>{
+    const id=fvttRandomId();
+    if(!originalClassId)originalClassId=id;
+    items.push({
+      _id:id,
+      name:classDef.name,
+      type:'class',
+      img:'icons/svg/book.svg',
+      system:{
+        identifier:classDef.id,
+        description:{value:'',chat:''},
+        levels:classDef.levels,
+        hd:{denomination:classDef.hd,additional:'',spent:0},
+        hitDice:classDef.hd,
+        hitDiceUsed:0,
+        primaryAbility:{value:[],all:true},
+        properties:[],
+        spellcasting:{progression:'none',ability:''},
+        advancement:{}
+      },
+      effects:[],folder:null,sort:index,ownership:{default:0},flags:{}
+    });
+  });
+
+  let raceId=null;
+  const raceName=String(snapshot.race||'').trim();
+  if(raceName){
+    raceId=fvttRandomId();
+    items.push({
+      _id:raceId,name:raceName,type:'race',img:'icons/svg/angel.svg',
+      system:{
+        identifier:`web-import-race-${raceId.toLowerCase()}`,
+        description:{value:fvttTextHTML('从网页角色卡导入的种族名称记录。请在 FVTT 内补充种族特性、移动速度、感官与其他规则。'),chat:''},
+        type:{value:'humanoid',swarm:false},
+        movement:{units:'ft',speeds:{}},
+        senses:{units:'ft',ranges:{}},
+        advancement:{}
+      },
+      effects:[],folder:null,sort:items.length,ownership:{default:0},flags:{}
+    });
+  }
+  let backgroundId=null;
+  const backgroundName=String(snapshot.background||'').trim();
+  if(backgroundName){
+    backgroundId=fvttRandomId();
+    items.push({
+      _id:backgroundId,name:backgroundName,type:'background',img:'icons/svg/book.svg',
+      system:{
+        identifier:`web-import-background-${backgroundId.toLowerCase()}`,
+        description:{value:fvttTextHTML('从网页角色卡导入的背景名称记录。请在 FVTT 内补充属性提升、技能与工具熟练、起源专长及装备。'),chat:''},
+        advancement:{}
+      },
+      effects:[],folder:null,sort:items.length,ownership:{default:0},flags:{}
+    });
+  }
+
+  const featureTypeMap={race:'race',classFeatures:'class',other:'feat'};
+  const featureCategoryNames={race:'种族特质',classFeatures:'职业特性',other:'专长与其他特性'};
+  let featureSequence=0;
+  for(const category of ['race','classFeatures','other']){
+    for(const feature of (snapshot.featureEntries?.[category]||[])){
+      featureSequence++;
+      const maxRaw=fvttNumber(feature.maxUses);
+      const maxUses=maxRaw===null?0:Math.max(0,Math.min(99,Math.floor(maxRaw)));
+      const usedCount=Math.min(maxUses,Array.isArray(feature.used)?feature.used.filter(Boolean).length:0);
+      const description=typeof feature.richHTML==='string'&&feature.richHTML.trim()
+        ? feature.richHTML
+        : fvttTextHTML(feature.description||'');
+      const uses={
+        spent:usedCount,
+        max:maxUses>0?String(maxUses):'',
+        recovery:'',
+        value:maxUses>0?Math.max(0,maxUses-usedCount):null,
+        per:''
+      };
+      const itemId=fvttRandomId();
+      items.push({
+        _id:itemId,
+        name:String(feature.name||'').trim()||'未命名特性',
+        type:'feat',
+        img:'icons/svg/book.svg',
+        system:{
+          identifier:`web-import-${category.toLowerCase()}-${featureSequence}-${itemId.toLowerCase()}`,
+          description:{value:description,chat:'',unidentified:''},
+          type:{value:featureTypeMap[category],subtype:''},
+          requirements:'',
+          properties:[],
+          uses,
+          activities:{},
+          advancement:{}
+        },
+        effects:[],folder:null,sort:items.length,ownership:{default:0},flags:{}
+      });
+    }
+  }
+
+  const abilities={};
+  const savesExpertise=[];
+  for(const key of FVTT_ABILITY_KEYS){
+    const score=fvttNumber(snapshot.abilities?.[key]);
+    const saveRank=Math.max(0,Math.min(2,Number(snapshot.proficiencies?.[`save-${key}`]||0)));
+    abilities[key]={proficient:saveRank>0?1:0};
+    if(score!==null)abilities[key].value=Math.max(0,Math.floor(score));
+    if(saveRank===2)savesExpertise.push(key.toUpperCase());
+  }
+  if(savesExpertise.length){
+    warnings.push(`FVTT 的豁免熟练只有未熟练/熟练两档；网页中标记为精通的豁免已按熟练导出：${savesExpertise.join('、')}`);
+  }
+
+  const skills={};
+  for(const [webKey,fvttKey] of Object.entries(FVTT_SKILL_KEYS)){
+    const rank=Math.max(0,Math.min(2,Number(snapshot.proficiencies?.[`skill-${webKey}`]||0)));
+    if(rank>0){
+      const row=snapshot.skillAbilities?.[webKey]||'';
+      skills[fvttKey]={value:rank,ability:row};
+    }
+  }
+
+  const details={
+    alignment:String(snapshot.alignment||''),
+    xp:{value:Math.max(0,Math.floor(fvttNumber(snapshot.xp)??0))},
+    appearance:String(snapshot.appearance||''),
+    trait:String(snapshot.personality||''),
+    ideal:String(snapshot.ideal||''),
+    bond:String(snapshot.bond||''),
+    flaw:String(snapshot.flaw||''),
+    age:String(snapshot.age||''),
+    height:String(snapshot.height||''),
+    weight:String(snapshot.weight||''),
+    eyes:String(snapshot.eyes||''),
+    skin:String(snapshot.skin||''),
+    hair:String(snapshot.hair||''),
+    faith:String(snapshot.faith||''),
+    originalClass:originalClassId,
+    biography:{value:'',public:''}
+  };
+  if(raceId)details.race=raceId;
+  if(backgroundId)details.background=backgroundId;
+  const bioNotes=[];
+  if(snapshot.playerName)bioNotes.push(`<p><strong>玩家：</strong>${String(snapshot.playerName).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</p>`);
+  if(snapshot.classText&&!classResult.classes.length)bioNotes.push(`<p><strong>网页职业记录：</strong>${String(snapshot.classText).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</p>`);
+  const totalClassLevels=classResult.classes.reduce((sum,item)=>sum+item.levels,0);
+  const enteredPB=fvttNumber(snapshot.proficiencyBonus);
+  if(enteredPB!==null){
+    if(totalClassLevels>0){
+      const calculatedPB=Math.min(6,Math.floor((totalClassLevels-1)/4)+2);
+      if(enteredPB!==calculatedPB){
+        warnings.push(`网页熟练加值为 ${enteredPB>=0?'+':''}${enteredPB}，FVTT 会根据职业总等级自动计算为 +${calculatedPB}；如属特殊规则，请在 FVTT 中调整`);
+        bioNotes.push(`<p><strong>网页记录熟练加值：</strong>${enteredPB>=0?'+':''}${enteredPB}（FVTT 会按职业总等级自动计算）</p>`);
+      }
+    }else{
+      warnings.push('未匹配到职业等级，网页熟练加值已记入人物传记备注，FVTT 无法据此自动计算');
+      bioNotes.push(`<p><strong>网页记录熟练加值：</strong>${enteredPB>=0?'+':''}${enteredPB}</p>`);
+    }
+  }
+  details.biography.value=bioNotes.join('');
+
+  const attributes={inspiration:fvttBoolean(snapshot.inspiration)};
+  const hp={};
+  const hpMax=fvttNumber(snapshot.hpMax),hpCurrent=fvttNumber(snapshot.hpCurrent),hpTemp=fvttNumber(snapshot.hpTemp);
+  if(hpMax!==null)hp.max=Math.max(0,Math.floor(hpMax));
+  if(hpCurrent!==null)hp.value=Math.max(0,Math.floor(hpCurrent));
+  if(hpTemp!==null)hp.temp=Math.max(0,Math.floor(hpTemp));
+  if(Object.keys(hp).length)attributes.hp=hp;
+
+  const ac=fvttNumber(snapshot.ac);
+  if(ac!==null){
+    const value=Math.max(0,Math.floor(ac));
+    attributes.ac={flat:value,override:value,value};
+  }
+  const speed=fvttNumber(snapshot.speed);
+  if(speed!==null){
+    const speedText=String(snapshot.speed||'').toLowerCase();
+    const units=/米|公尺|\bm\b|meter/.test(speedText)?'m':'ft';
+    attributes.movement={units,speeds:{walk:Math.max(0,speed)}};
+  }
+
+  const actor={
+    _id:fvttRandomId(),
+    name,
+    type:'character',
+    img:'icons/svg/mystery-man.svg',
+    system:{abilities,skills,details,attributes},
+    items,
+    effects:[],
+    prototypeToken:{name,actorLink:true},
+    folder:null,
+    sort:0,
+    ownership:{default:0},
+    flags:{}
+  };
+  return {actor,warnings,classCount:classResult.classes.length,featureCount:featureSequence};
+}
+function collectFVTTExportSnapshot(){
+  const identity=[...document.querySelectorAll('#core .identity .field input')].map(input=>input.value.trim());
+  const profileValue=labelText=>{
+    const field=[...document.querySelectorAll('#profile .portrait-layout .panel .field')]
+      .find(node=>node.querySelector('label')?.textContent.trim()===labelText);
+    return field?.querySelector('input,textarea')?.value??'';
+  };
+  const traitValue=index=>document.querySelectorAll('#profile .traits .panel')[index]?.querySelector('textarea')?.value??'';
+  const rowRanks={};
+  const skillAbilities={};
+  document.querySelectorAll('[data-ability-row]').forEach(row=>{
+    const key=row.dataset.key;
+    rowRanks[key]=Number(row.querySelector('.prof')?.dataset.rank||0);
+    if(key.startsWith('skill-'))skillAbilities[key.slice(6)]=row.dataset.abilityRow;
+  });
+  return {
+    name:identity[0]||'',
+    classText:identity[1]||'',
+    race:identity[2]||'',
+    background:identity[3]||'',
+    playerName:identity[4]||'',
+    alignment:identity[5]||'',
+    xp:identity[6]||'',
+    inspiration:identity[7]||'',
+    abilities:Object.fromEntries(FVTT_ABILITY_KEYS.map(key=>[key,document.querySelector(`[data-ability="${key}"]`)?.value??''])),
+    proficiencies:rowRanks,
+    skillAbilities,
+    ac:document.querySelector('#combat input[aria-label="护甲等级"]')?.value??'',
+    speed:document.querySelector('#combat input[aria-label="速度"]')?.value??'',
+    hpMax:document.querySelector('#hp-max')?.value??'',
+    hpCurrent:document.querySelector('#hp-current')?.value??'',
+    hpTemp:document.querySelector('#hp-temp')?.value??'',
+    proficiencyBonus:document.querySelector('#proficiency-bonus')?.value??'',
+    age:profileValue('年龄'),
+    height:profileValue('身高'),
+    weight:profileValue('体重'),
+    eyes:profileValue('眼睛'),
+    skin:profileValue('肤色'),
+    hair:profileValue('发色'),
+    faith:profileValue('信仰'),
+    appearance:profileValue('外貌与标志性特征'),
+    personality:traitValue(0),
+    ideal:traitValue(1),
+    bond:traitValue(2),
+    flaw:traitValue(3),
+    featureEntries:collectFeatureEntries()
+  };
+}
+function exportFVTTActorJSON(){
+  const snapshot=collectFVTTExportSnapshot();
+  const result=buildFVTTActor(snapshot);
+  const blob=new Blob([JSON.stringify(result.actor,null,2)],{type:'application/json;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const link=document.createElement('a');
+  const safe=(snapshot.name||'fvtt-character').replace(/[\\/:*?"<>|]/g,'-');
+  link.href=url;
+  link.download=`${safe}_FVTT.json`;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1500);
+  const note=result.warnings.length?`；注意：${result.warnings.join('；')}`:'';
+  toast(`FVTT 角色 JSON 已导出：${result.classCount} 个职业、${result.featureCount} 个特性${note}`);
+}
+const fvttExportButton=document.querySelector('#export-fvtt-json');
+if(fvttExportButton)fvttExportButton.addEventListener('click',exportFVTTActorJSON);
+
+var _importJsonBtn=document.querySelector('#import-json');if(_importJsonBtn)_importJsonBtn.addEventListener('click',()=>document.querySelector('#json-file').click());
+var _jsonFileInput=document.querySelector('#json-file');
+if(_jsonFileInput)_jsonFileInput.addEventListener('change',async event=>{
+  const file=event.target.files[0];if(!file)return;
+  try{
+    const data=JSON.parse(await file.text());
+    characterApplyData(data);
+    document.dispatchEvent(new Event('character-imported'));
+    toast(`角色卡 JSON v${data.version??'?'} 已读取并适配 v${CHARACTER_SCHEMA_VERSION}`);
+  }catch(error){console.error('角色卡 JSON 读取失败',error);toast('无法读取：不是有效的角色卡 JSON')}
+  finally{event.target.value=''}
+});
+function applyData(data){characterApplyData(data)}
+const __scriptTag=(attrs,content)=>'<scr'+'ipt'+(attrs?' '+attrs:'')+'>'+content+'</scr'+'ipt>';
+const STATIC_RUNTIME_SOURCE=`(function(){
+  function storageKey(){try{return 'dnd-sheet-'+(typeof ensureSheetId==='function'?ensureSheetId():'default')}catch(e){return 'dnd-sheet-default'}}
+  function readStored(){try{var raw=localStorage.getItem(storageKey());return raw?JSON.parse(raw):null}catch(e){return null}}
+  function writeStored(){try{localStorage.setItem(storageKey(),JSON.stringify(collectData()))}catch(e){}}
+  function loadInitial(){
+    var el=document.getElementById('sheet-initial-data');var initial=null;
+    try{initial=el?JSON.parse(el.textContent):null}catch(e){}
+    if(initial&&typeof applyData==='function'){applyData(initial)}
+    var stored=readStored();
+    if(stored){applyData(stored)}
+    if(typeof markEmptySpells==='function'){markEmptySpells()}
+  }
+  var t;
+  document.addEventListener('input',function(){clearTimeout(t);t=setTimeout(writeStored,400)});
+  document.addEventListener('change',function(){clearTimeout(t);t=setTimeout(writeStored,400)});
+  var btn=document.getElementById('save-static');
+  if(btn){btn.addEventListener('click',function(){if(typeof downloadStaticHTML==='function'){downloadStaticHTML()}if(typeof toast==='function'){toast('已生成更新后的 HTML，请下载并覆盖原文件')}})}
+  loadInitial();
+})();`;
+function buildStaticHTML(){
+  const data=collectData();
+  const doc=new DOMParser().parseFromString(__BODY_HTML,'text/html');
+  const toolbar=doc.querySelector('.toolbar');
+  if(toolbar)toolbar.innerHTML='<button type="button" id="save-static">保存更改</button><button type="button" class="secondary" id="export-pdf">导出 PDF</button><span class="toolbar-tip" title="打开页面即自动保存到本机；点击「保存更改」可下载更新后的 HTML 文件并覆盖旧文件；「导出 PDF」通过浏览器打印窗口另存为 PDF">已启用本机自动保存</span>';
+  const bodyMarkup=doc.body.innerHTML;
+  const json=JSON.stringify(data).replace(/<\//g,'<\\/');
+  return '<!doctype html>\n<html lang="zh-CN">'+__HEAD_HTML+'<body>'+bodyMarkup+'\n'+__scriptTag('',__SCRIPT_SOURCE)+'\n'+__scriptTag('id="sheet-initial-data" type="application/json"',json)+'\n'+__scriptTag('',STATIC_RUNTIME_SOURCE)+'</body></html>';
+}
+function downloadStaticHTML(){
+  const html=buildStaticHTML();
+  const blob=new Blob([html],{type:'text/html;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const link=document.createElement('a');
+  const name=(collectData().identity?.name||'dnd-character-sheet').replace(/[\\/:*?"<>|]/g,'-');
+  link.href=url;link.download=name+'.html';
+  document.body.appendChild(link);link.click();link.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1500);
+}
+var _exportHtmlBtn=document.querySelector('#export-html');
+if(_exportHtmlBtn)_exportHtmlBtn.addEventListener('click',()=>{downloadStaticHTML();toast('已导出静态 HTML 角色卡')});
+var _exportPdfBtn=document.querySelector('#export-pdf');
+if(_exportPdfBtn)_exportPdfBtn.addEventListener('click',()=>{toast('在打印窗口把目标选为「另存为 PDF」');setTimeout(()=>window.print(),420)});
+let radarResizeTimer;window.addEventListener('resize',()=>{clearTimeout(radarResizeTimer);radarResizeTimer=setTimeout(updateRadar,80)});
+updateDerived();
+markEmptySpells();
+</script>
+<script src="js/db.js"></script>
+<script src="js/editor-storage.js"></script>
+</body></html>
