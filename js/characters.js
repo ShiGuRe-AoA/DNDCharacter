@@ -45,19 +45,21 @@ function exportJSON(data, name) {
 function card(data) {
   const { name = '', race = '', classText = '' } = data.identity || {};
   const title = String(name ?? '').trim() || '未命名角色';
-  const node = element('article', '', 'panel');
+  const node = element('article', '', 'panel character-card');
   if (typeof data.portrait === 'string' && /^data:image\/(png|jpeg|webp|gif);base64,/i.test(data.portrait)) {
     const portrait = element('img', '', 'portrait');
     portrait.src = data.portrait;
     portrait.alt = title + '的立绘';
     portrait.loading = 'lazy';
+    node.classList.add('has-portrait');
     node.append(portrait);
   }
 
-  node.append(element('h2', title));
-  node.append(element('p', [race, classText].filter(Boolean).join(' · ') || '种族和职业待填写'));
+  const summary = element('div', '', 'character-summary');
+  summary.append(element('h2', title));
+  summary.append(element('p', [race, classText].filter(Boolean).join(' · ') || '种族和职业待填写'));
   const time = Date.parse(data.exportedAt);
-  node.append(element('p', Number.isFinite(time) ? (isCloud ? '云端存档 · ' : '本机存档 · ') + date.format(time) : (isCloud ? '云端存档' : '本机存档'), 'details'));
+  summary.append(element('p', Number.isFinite(time) ? (isCloud ? '云端存档 · ' : '本机存档 · ') + date.format(time) : (isCloud ? '云端存档' : '本机存档'), 'details'));
   const actions = element('div', '', 'actions');
   const edit = element('a', '打开编辑', 'button primary');
   edit.href = 'character.html?id=' + encodeURIComponent(data.sheetId) + storageQuery;
@@ -96,6 +98,7 @@ function card(data) {
     await Cloud.cards(user).create({ ...source, sheetId: crypto.randomUUID() });
     status.textContent = '已复制到「' + user.username + '」的云端角色。';
   }));
+  node.prepend(summary);
   node.append(actions);
   return node;
 }
