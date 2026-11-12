@@ -16,7 +16,7 @@ input,textarea{width:100%;border:0;border-bottom:1px solid var(--line);backgroun
 .combat{grid-template-columns:repeat(5,1fr)}.stat{text-align:center;padding:.55rem .45rem;min-height:4.25rem;display:grid;align-content:center}.stat strong{color:var(--deep);font:700 .65rem/1.2 system-ui,sans-serif;letter-spacing:.06em}.stat input,.stat output{text-align:center;font-size:1.15rem;font-weight:700;border:0;min-height:1.8rem;display:grid;place-items:center}.two{grid-template-columns:1fr 1fr}.three{grid-template-columns:repeat(3,1fr)}.skills-layout{grid-template-columns:.9fr 1.25fr;align-items:start}.skill-side{display:grid;gap:1rem}.checks{display:grid;gap:.38rem}.check{display:grid;grid-template-columns:1.5rem 1fr 2.8rem;gap:.45rem;align-items:center;min-height:1.85rem;font-size:.84rem}.prof{appearance:none;width:1.15rem;height:1.15rem;border:1px solid var(--purple);border-radius:50%;padding:0;cursor:pointer;background:transparent;position:relative}.prof[data-rank="1"]{background:radial-gradient(circle,var(--purple) 0 44%,transparent 49%)}.prof[data-rank="2"]{background:radial-gradient(circle,var(--gold) 0 30%,transparent 34% 54%,var(--purple) 57% 70%,transparent 73%);border-color:var(--gold)}.derived{display:block;text-align:center;font-weight:700;color:var(--deep);font-family:system-ui,sans-serif;border:0;padding:.08rem}.auto-field[data-overridden="1"]{color:#8d3f57;background:linear-gradient(transparent 72%,rgba(201,132,147,.17) 72%);border-bottom-color:var(--rose)}.auto-hint{margin:.7rem 0 0;color:var(--muted);font:600 .66rem/1.5 system-ui,sans-serif}.hp-bar{position:relative;height:1.05rem;margin-top:.85rem;overflow:hidden;border:1px solid #6b557f4d;border-radius:999px;background:#d8ccd0;box-shadow:inset 0 1px 3px #3d263535}.hp-fill{height:100%;width:0;background:linear-gradient(90deg,#8fa590,#6d9a78);border-radius:inherit;transition:width .35s ease,background .35s ease}.hp-bar.low .hp-fill{background:linear-gradient(90deg,#c75b65,#9c1830)}.hp-bar.zero .hp-fill{background:#555}.hp-label{margin:.35rem 0 0;text-align:center;color:var(--muted);font:700 .68rem/1 system-ui,sans-serif}.legend{margin:.7rem 0 0;color:var(--muted);font:600 .7rem/1.6 system-ui,sans-serif}.legend i{display:inline-block;width:.72rem;height:.72rem;border:1px solid var(--purple);border-radius:50%;vertical-align:-.08rem;margin:0 .16rem}.legend .p{background:var(--purple)}.legend .e{box-shadow:inset 0 0 0 2px var(--paper),inset 0 0 0 5px var(--gold)}table{width:100%;border-collapse:collapse;font-size:.84rem}th{padding:.55rem;color:white;background:var(--purple);font:700 .67rem/1.2 system-ui,sans-serif;letter-spacing:.07em}td{border-bottom:1px solid #6f58852b;padding:.25rem .45rem}td input{border:0}
 .toolbar{position:fixed;z-index:25;right:1rem;top:1rem;display:flex;gap:.5rem;padding:.55rem;border:1px solid #ffffff80;border-radius:14px;background:#fff9e9e8;box-shadow:0 8px 28px #34263135;backdrop-filter:blur(12px)}.toolbar button{border:1px solid #6b557f55;border-radius:9px;background:var(--purple);color:white;padding:.58rem .82rem;font:700 .75rem/1 system-ui,sans-serif;cursor:pointer;transition:.18s}.toolbar button:hover{background:var(--deep);transform:translateY(-1px)}.toolbar button.secondary{background:#fff;color:var(--deep)}.modifier-drawer{position:fixed;z-index:30;right:0;top:50%;width:320px;display:grid;grid-template-columns:46px 1fr;transform:translate(calc(100% - 46px),-50%);transition:transform .28s ease;filter:drop-shadow(0 12px 24px #24192b38)}.modifier-drawer.open{transform:translate(0,-50%)}.modifier-tab{align-self:start;min-height:6.2rem;border:1px solid #ffffff70;border-right:0;border-radius:16px 0 0 16px;background:var(--deep);color:white;cursor:pointer;font:700 .8rem/1.1 system-ui,sans-serif;letter-spacing:.18em;writing-mode:vertical-rl;padding:.8rem .65rem}.modifier-tab:hover{background:var(--purple)}.modifier-content{padding:1.15rem 1rem 1.2rem;border:1px solid #6b557f55;border-right:0;border-radius:0 0 0 18px;background:#fff9e9f5;backdrop-filter:blur(14px)}.modifier-content h2{margin:0;color:var(--deep);font-size:1.15rem;letter-spacing:.12em}.modifier-intro{margin:.45rem 0 1rem;color:var(--muted);font:600 .72rem/1.55 system-ui,sans-serif}.modifier-list{display:grid;gap:.75rem}.modifier-option{display:grid;grid-template-columns:auto 1fr;gap:.7rem;align-items:start;padding:.8rem;border:1px solid #6b557f38;border-radius:12px;background:#fffdf8;cursor:pointer}.modifier-option:hover{border-color:#6b557f70}.modifier-option input{appearance:none;width:2.2rem;height:1.2rem;margin:.08rem 0 0;border:1px solid #6b557f70;border-radius:999px;background:#d7ccd7;position:relative;cursor:pointer}.modifier-option input:after{content:"";position:absolute;width:.86rem;height:.86rem;left:.12rem;top:.1rem;border-radius:50%;background:white;box-shadow:0 1px 3px #3a283a55;transition:.18s}.modifier-option input:checked{background:var(--purple)}.modifier-option input:checked:after{left:1.08rem}.modifier-option strong{display:block;color:var(--deep);font-size:.88rem}.modifier-option small{display:block;margin-top:.2rem;color:var(--muted);font:600 .7rem/1.5 system-ui,sans-serif}.toast{position:fixed;z-index:40;left:50%;bottom:1.25rem;transform:translate(-50%,1rem);padding:.7rem 1rem;border-radius:999px;background:var(--deep);color:white;font:700 .78rem/1 system-ui,sans-serif;box-shadow:0 8px 24px #241b2940;opacity:0;pointer-events:none;transition:.22s}.toast.show{opacity:1;transform:translate(-50%,0)}
 .feature-grid{grid-template-columns:1fr}.feature-grid textarea{min-height:12rem}.inventory{grid-template-columns:1.15fr 1.5fr .7fr}.coins{display:grid;grid-template-columns:repeat(2,1fr);gap:.6rem}.coin{padding:.4rem;border:1px solid #c89e5185;border-radius:50%;text-align:center;background:#fff7d9}.coin label{font-size:.67rem}.coin input{text-align:center;border:0}.portrait-layout{grid-template-columns:1fr 1.15fr}.portrait{min-height:355px;display:grid;place-items:center;text-align:center;color:var(--muted);border:1px dashed #6f588566;border-radius:49% 49% 18px 18px/25% 25% 18px 18px;background:radial-gradient(ellipse,#b8a1d324,transparent 67%)}.portrait span{display:block;font-size:3.2rem;opacity:.35}.traits{grid-template-columns:repeat(2,1fr)}.traits textarea{min-height:8rem}.story textarea{min-height:20rem}
-.spell-summary{grid-template-columns:1.3fr repeat(3,1fr)}.spellbook{display:grid;gap:1.2rem}.spell-level{display:grid;grid-template-columns:8rem 1fr;gap:1rem;align-items:stretch}.level-badge{display:grid;place-items:center;align-content:center;gap:.15rem;min-height:8rem;border:1px solid var(--gold);border-radius:52% 48% 20px 20px/34% 34% 18px 18px;color:white;background:linear-gradient(150deg,var(--purple),#9075a5)}.level-badge b{font-size:2.2rem;line-height:1}.level-badge span{font-size:.72rem;letter-spacing:.12em}.slots{display:flex;gap:.35rem;margin-top:.4rem}.slots i{width:.7rem;height:.7rem;border:1px solid white;border-radius:50%}.spell-lines{display:grid;grid-template-columns:repeat(2,1fr);gap:.3rem 1rem;padding:.7rem 1rem}.spell-line{display:grid;grid-template-columns:1rem 1fr;gap:.45rem;align-items:center}.spell-line input[type=checkbox]{width:.8rem;height:.8rem;padding:0;accent-color:var(--purple)}.spell-line input[type=text]{padding:.18rem}.footer{padding:2.4rem 2rem 3rem;text-align:center;color:var(--muted);border-top:1px solid #c89e5166;background:linear-gradient(transparent,#ead39a2e)}.footer strong{color:var(--deep);letter-spacing:.16em}
+.spell-summary{grid-template-columns:1.3fr repeat(3,1fr)}.spellbook{display:grid;gap:1.2rem}.spell-level{display:grid;grid-template-columns:8rem 1fr;gap:1rem;align-items:stretch}.level-badge{display:grid;place-items:center;align-content:center;gap:.15rem;min-height:8rem;border:1px solid var(--gold);border-radius:52% 48% 20px 20px/34% 34% 18px 18px;color:white;background:linear-gradient(150deg,var(--purple),#9075a5)}.level-badge b{font-size:2.2rem;line-height:1}.level-badge span{font-size:.72rem;letter-spacing:.12em}.slots{display:flex;gap:.35rem;margin-top:.4rem}.slots i{width:.7rem;height:.7rem;border:1px solid white;border-radius:50%}.footer{padding:2.4rem 2rem 3rem;text-align:center;color:var(--muted);border-top:1px solid #c89e5166;background:linear-gradient(transparent,#ead39a2e)}.footer strong{color:var(--deep);letter-spacing:.16em}
 
 /* 召唤物角色卡 */
 .summon-section{margin-top:1.2rem}
@@ -76,8 +76,8 @@ textarea.rich-source+.rich-editor{min-height:2.6rem;resize:none}
 .slot-pip:hover{transform:scale(1.15)}
 .slot-pip.used{background:#fff;box-shadow:inset 0 0 0 2px #9075a5}
 .slot-count-label{color:#fff;font:600 .56rem/1 system-ui,sans-serif;opacity:.9}
-.spell-line .spell-name-input{display:block!important;min-width:0;width:100%;padding:.18rem .12rem;border:0;border-bottom:1px solid var(--line);background:transparent;color:var(--ink);font:inherit}
-.spell-line .spell-name-input:focus{border-color:var(--purple);box-shadow:0 2px 0 #6b557f1c}
+
+
 
 
 /* 本地角色立绘 */
@@ -95,8 +95,8 @@ textarea.rich-source+.rich-editor{min-height:2.6rem;resize:none}
 @media print{.portrait-controls{display:none}.portrait{break-inside:avoid}}
 
 @media(max-width:900px){.rail{left:auto;right:.6rem;top:auto;bottom:.7rem;transform:none;grid-auto-flow:column}.rail a{width:1.9rem;height:1.9rem}.toolbar{left:.6rem;right:auto;top:.6rem}.sheet{width:min(100% - 1rem,760px);margin-top:.5rem;border-radius:24px}.hero{padding:4rem 2rem 2.5rem;grid-template-columns:1fr;text-align:center}.dragon{margin:auto;width:105px;font-size:3.7rem}.content{padding:3.2rem 1.25rem}.identity,.inventory,.skills-layout,.spell-summary{grid-template-columns:repeat(2,1fr)}.feature-grid{grid-template-columns:1fr}.combat{grid-template-columns:repeat(5,1fr)}.ability-showcase{grid-template-columns:1fr}.abilities{grid-template-columns:repeat(3,1fr)}.radar-wrap{height:320px}.portrait-layout{grid-template-columns:1fr}}
-@media(max-width:560px){.hero{padding:4rem 1.2rem 2.2rem}.hero-note{line-height:1.6}.content{padding-inline:.85rem}.identity,.feature-grid,.inventory,.skills-layout,.spell-summary,.two,.three,.traits{grid-template-columns:1fr}.combat{grid-template-columns:repeat(3,1fr)}.abilities{grid-template-columns:repeat(2,1fr)}.radar-wrap{height:285px}.chapter-head{gap:.55rem}.chapter-head h2{font-size:1.28rem}.subtitle{margin-left:0;line-height:1.6}.spell-level{grid-template-columns:1fr}.level-badge{min-height:4.6rem;border-radius:16px}.level-badge b{font-size:1.65rem}.spell-lines{grid-template-columns:1fr}.rail a{font-size:.6rem}.toolbar button{padding:.52rem .62rem;font-size:.68rem}.modifier-drawer{width:min(310px,calc(100vw - .5rem))}}
-@media print{body{background:#fff}.rail,.toolbar,.modifier-drawer,.toast,.footer{display:none}.sheet{width:100%;margin:0;box-shadow:none;border:0;border-radius:0}.content{padding:1.3rem 1.4rem 2rem}.chapter{margin-top:1.1rem;break-inside:auto}.chapter:first-child{margin-top:0}.identity{grid-template-columns:repeat(4,1fr)}.feature-grid{grid-template-columns:repeat(3,1fr)}.inventory{grid-template-columns:1.15fr 1.5fr .7fr}.skills-layout{grid-template-columns:.9fr 1.25fr}.spell-summary{grid-template-columns:1.3fr repeat(3,1fr)}.combat{grid-template-columns:repeat(5,1fr)}.abilities{grid-template-columns:repeat(6,1fr)}.ability-showcase{grid-template-columns:1.15fr .85fr}.portrait-layout{grid-template-columns:1fr 1.15fr}.traits,.two,.three{grid-template-columns:repeat(2,1fr)}.spell-level{grid-template-columns:5.2rem 1fr;gap:.6rem}.spell-level.empty{display:none}.level-badge{min-height:3.6rem;border-radius:14px}.level-badge b{font-size:1.4rem}.slots i{width:.5rem;height:.5rem}.spell-lines{grid-template-columns:repeat(2,1fr);padding:.45rem .7rem;gap:.15rem .8rem}.spell-line{grid-template-columns:.9rem 1fr}.panel{padding:.75rem .9rem;margin-bottom:.4rem}.panel:last-child{margin-bottom:0}textarea{min-height:0!important;height:auto!important}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+@media(max-width:560px){.hero{padding:4rem 1.2rem 2.2rem}.hero-note{line-height:1.6}.content{padding-inline:.85rem}.identity,.feature-grid,.inventory,.skills-layout,.spell-summary,.two,.three,.traits{grid-template-columns:1fr}.combat{grid-template-columns:repeat(3,1fr)}.abilities{grid-template-columns:repeat(2,1fr)}.radar-wrap{height:285px}.chapter-head{gap:.55rem}.chapter-head h2{font-size:1.28rem}.subtitle{margin-left:0;line-height:1.6}.spell-level{grid-template-columns:1fr}.level-badge{min-height:4.6rem;border-radius:16px}.level-badge b{font-size:1.65rem}.rail a{font-size:.6rem}.toolbar button{padding:.52rem .62rem;font-size:.68rem}.modifier-drawer{width:min(310px,calc(100vw - .5rem))}}
+@media print{body{background:#fff}.rail,.toolbar,.modifier-drawer,.toast,.footer{display:none}.sheet{width:100%;margin:0;box-shadow:none;border:0;border-radius:0}.content{padding:1.3rem 1.4rem 2rem}.chapter{margin-top:1.1rem;break-inside:auto}.chapter:first-child{margin-top:0}.identity{grid-template-columns:repeat(4,1fr)}.feature-grid{grid-template-columns:repeat(3,1fr)}.inventory{grid-template-columns:1.15fr 1.5fr .7fr}.skills-layout{grid-template-columns:.9fr 1.25fr}.spell-summary{grid-template-columns:1.3fr repeat(3,1fr)}.combat{grid-template-columns:repeat(5,1fr)}.abilities{grid-template-columns:repeat(6,1fr)}.ability-showcase{grid-template-columns:1.15fr .85fr}.portrait-layout{grid-template-columns:1fr 1.15fr}.traits,.two,.three{grid-template-columns:repeat(2,1fr)}.spell-level{grid-template-columns:5.2rem 1fr;gap:.6rem}.spell-level.empty{display:none}.level-badge{min-height:3.6rem;border-radius:14px}.level-badge b{font-size:1.4rem}.slots i{width:.5rem;height:.5rem}.panel{padding:.75rem .9rem;margin-bottom:.4rem}.panel:last-child{margin-bottom:0}textarea{min-height:0!important;height:auto!important}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 @page{size:A4;margin:11mm}
 .toolbar-tip{align-self:center;max-width:9rem;color:var(--muted);font:600 .64rem/1.3 system-ui,sans-serif;letter-spacing:.02em}@media(max-width:560px){.toolbar-tip{display:none}}
 
@@ -152,8 +152,6 @@ textarea.rich-source+.rich-editor{min-height:2.6rem;resize:none}
   .slot-pips{gap:.16rem}
   .slot-pip{width:.55rem;height:.55rem;print-color-adjust:exact;-webkit-print-color-adjust:exact}
   .slot-count{height:1.1rem!important;width:1.8rem!important;font-size:.62rem!important}
-  .spell-lines{grid-template-columns:repeat(2,minmax(0,1fr))!important;padding:.4rem .6rem!important;gap:.12rem .65rem!important}
-  .spell-line{grid-template-columns:.85rem minmax(0,1fr)!important}
   .panel{padding:.7rem .8rem!important;margin-bottom:.3rem!important;break-inside:avoid!important;page-break-inside:avoid!important}
   .panel:before{display:none}
   .panel-title{break-after:avoid-page;page-break-after:avoid}
@@ -299,6 +297,44 @@ textarea.rich-source+.rich-editor{min-height:2.6rem;resize:none}
 .feature-entry-uses label{font-size:.6rem}
 #spell-ability,#spell-save-dc,#spell-attack-bonus{transition:background .15s}
 @media(max-width:560px){.feature-entry-uses{gap:.15rem}.feature-entry-uses input{padding:.3rem 0}}
+.spellbook{gap:.6rem;margin-top:.85rem}
+.spell-level{grid-template-columns:7rem minmax(0,1fr);gap:.65rem}
+.level-badge{min-height:4rem;padding:.35rem;border-radius:15px}
+.level-badge b{font-size:1.4rem}
+.slot-tracker{gap:.15rem;margin-top:.15rem}
+.spell-list{display:grid;align-content:center;gap:.35rem;min-height:4rem;padding:.5rem .65rem}
+.spell-empty{margin:0;color:var(--muted);font-size:.8rem}
+.spell-entry{min-width:0;border:1px solid var(--line);border-radius:9px;background:#fffaf0}
+.spell-entry summary{padding:.45rem .55rem;color:var(--deep);cursor:pointer;overflow-wrap:anywhere}
+.spell-entry[open] summary{border-bottom:1px solid var(--line)}
+.spell-entry-body{display:grid;gap:.45rem;padding:.6rem .7rem;font-size:.88rem;overflow-wrap:anywhere}
+.spell-entry-body p{margin:0}
+.spell-description{white-space:pre-wrap;line-height:1.6}
+.spell-entry-actions,.spell-dialog-actions{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem}
+.spell-option{display:inline-flex;align-items:center;gap:.35rem;color:var(--deep)}
+.spell-option input{appearance:none;flex:none;width:1rem;height:1rem;border:1px solid var(--purple);border-radius:50%;padding:0;margin:0;cursor:pointer}
+.spell-option input:checked{background:radial-gradient(circle,var(--purple) 0 47%,transparent 52%)}
+.spell-option input:focus-visible,.spell-entry summary:focus-visible{outline:2px solid var(--purple);outline-offset:3px}
+.spell-add{margin-top:.85rem}
+.spell-dialog{width:min(34rem,calc(100% - 1.5rem));max-height:calc(100dvh - 1.5rem);padding:1.2rem;border:1px solid var(--gold);border-radius:18px;background:var(--paper);color:var(--ink);box-shadow:var(--shadow)}
+.spell-dialog::backdrop{background:#2d2331a8}
+.spell-dialog form{display:grid;gap:.8rem}
+.spell-dialog h3,.spell-dialog fieldset{margin:0}
+.spell-dialog fieldset{min-width:0;padding:.45rem .6rem;border:1px solid var(--line);border-radius:8px}
+.spell-dialog label:not(.spell-option){display:grid;gap:.2rem}
+.spell-dialog select{width:100%;min-width:0;font:inherit;color:var(--ink);background:#fffdf6;border:1px solid var(--line);border-radius:6px;padding:.3rem}
+.spell-dialog textarea{min-height:3rem;resize:none;overflow:hidden}
+.spell-dialog-actions{justify-content:flex-end}
+@media(max-width:560px){
+  .spell-level{grid-template-columns:5.6rem minmax(0,1fr);gap:.45rem}
+  .spell-list{padding:.4rem .45rem}
+}
+@media print{
+  .spell-add,.spell-dialog,.spell-entry-body{display:none!important}
+  .spell-list{min-height:0;padding:.3rem!important}
+  .spell-entry summary{list-style:none;padding:.2rem .3rem}
+  .spell-entry summary::-webkit-details-marker{display:none}
+}
 </style>
 </head>
 <body>
@@ -376,10 +412,35 @@ textarea.rich-source+.rich-editor{min-height:2.6rem;resize:none}
 </section>
 
 <section class="chapter" id="spells"><div class="chapter-head"><span class="mark">Ⅴ</span><h2>法术书</h2></div><p class="subtitle">从戏法到九环，把法术位与已知法术收进长卷的最后一章。</p>
-<div class="panel grid spell-summary"><div class="field"><label>施法职业</label><input id="spell-class" data-field="spellbook.casting.className" data-rich-skip="1" placeholder="如：法师（可选）"></div><div class="field"><label>施法属性</label><input id="spell-ability" data-field="spellbook.casting.ability" class="auto-field" data-auto="spell-ability" placeholder="自动识别，可手动修改"></div><div class="field"><label>法术豁免 DC</label><input id="spell-save-dc" data-field="spellbook.casting.saveDC" class="auto-field" data-auto="spell-save-dc" inputmode="numeric"></div><div class="field"><label>法术攻击加值</label><input id="spell-attack-bonus" data-field="spellbook.casting.attackBonus" class="auto-field" data-auto="spell-attack-bonus" inputmode="numeric"></div></div><div class="spellbook" id="spellbook" style="margin-top:1.2rem"></div>
+<div class="panel grid spell-summary"><div class="field"><label>施法职业</label><input id="spell-class" data-field="spellbook.casting.className" data-rich-skip="1" placeholder="如：法师（可选）"></div><div class="field"><label>施法属性</label><input id="spell-ability" data-field="spellbook.casting.ability" class="auto-field" data-auto="spell-ability" placeholder="自动识别，可手动修改"></div><div class="field"><label>法术豁免 DC</label><input id="spell-save-dc" data-field="spellbook.casting.saveDC" class="auto-field" data-auto="spell-save-dc" inputmode="numeric"></div><div class="field"><label>法术攻击加值</label><input id="spell-attack-bonus" data-field="spellbook.casting.attackBonus" class="auto-field" data-auto="spell-attack-bonus" inputmode="numeric"></div></div><button class="feature-add spell-add" type="button" id="add-spell">添加法术</button><div class="spellbook" id="spellbook"></div>
 </section>
 </div><footer class="footer"><strong>✦ EVERY ROLL WRITES A NEW STORY ✦</strong><br><small>DND 5E 童话风 · 智能长卷角色卡</small></footer>
 </main>
+<dialog class="spell-dialog" id="spell-dialog" aria-labelledby="spell-dialog-title">
+  <form id="spell-form">
+    <h3 id="spell-dialog-title">添加法术</h3>
+    <label>法术名<input name="spellName" placeholder="未命名法术" data-rich-skip autofocus></label>
+    <div class="grid two">
+      <label>环阶<select name="level"></select></label>
+      <label>学派<select name="school"></select></label>
+    </div>
+    <fieldset><legend>法术成分</legend><div class="spell-entry-actions">
+      <label class="spell-option"><input type="checkbox" name="verbal">语言</label>
+      <label class="spell-option"><input type="checkbox" name="somatic">姿势</label>
+      <label class="spell-option"><input type="checkbox" name="material">材料</label>
+    </div></fieldset>
+    <div class="spell-entry-actions">
+      <label class="spell-option"><input type="checkbox" name="concentration">专注</label>
+      <label class="spell-option"><input type="checkbox" name="ritual">仪式</label>
+    </div>
+    <label>持续时间<input name="duration" data-rich-skip></label>
+    <label>描述<textarea name="description" rows="2" data-rich-skip></textarea></label>
+    <div class="spell-dialog-actions">
+      <button class="feature-add" type="button" id="cancel-spell">取消</button>
+      <button class="feature-add" type="submit">确认</button>
+    </div>
+  </form>
+</dialog>
 <script>
 const __HEAD_HTML=document.head.outerHTML;
 const __BODY_HTML=(()=>{const c=document.body.cloneNode(true);c.querySelectorAll('script').forEach(s=>s.remove());return c.outerHTML})();
@@ -396,12 +457,158 @@ document.querySelector('#skills').innerHTML=skillDefs.map(([label,ability,key])=
 document.querySelector('#attacks').innerHTML=Array.from({length:4},(_,i)=>`<tr data-attack-row="${i}"><td><input data-field="attacks.${i}.name"></td><td><input data-field="attacks.${i}.attackBonus"></td><td><input data-field="attacks.${i}.damageAndType"></td><td><input data-field="attacks.${i}.rangeAndNotes"></td></tr>`).join('');
 const book=document.querySelector('#spellbook');
 for(let level=0;level<=9;level++){
-  const count=level===0?6:level<=3?10:level<=6?8:6;
-  const lines=Array.from({length:count},(_,i)=>`<label class="spell-line"><input type="checkbox" data-field="spellbook.spells.${level}.${i}.prepared" data-spell-prepared="${level}:${i}" aria-label="${level}环第${i+1}项已准备"><input class="spell-name-input" type="text" data-field="spellbook.spells.${level}.${i}.name" data-spell-name="${level}:${i}" aria-label="${level}环第${i+1}项法术名称"></label>`).join('');
   const slots=level?`<div class="slot-tracker" data-slot-level="${level}"><label class="slot-count-label" for="slot-count-${level}">法术位数量</label><input class="slot-count" id="slot-count-${level}" data-save-skip data-slot-count="${level}" type="number" min="0" max="20" step="1" inputmode="numeric" aria-label="${level}环法术位数量" placeholder="数量"><div class="slot-pips" data-slot-pips="${level}" aria-label="${level}环法术位使用状态"></div></div>`:'';
-  book.insertAdjacentHTML('beforeend',`<div class="spell-level" data-spell-level="${level}"><div class="level-badge"><b>${level}</b><span>${level===0?'戏法':level+' 环法术'}</span>${slots}</div><div class="panel spell-lines">${lines}</div></div>`);
+  book.insertAdjacentHTML('beforeend',`<div class="spell-level" data-spell-level="${level}"><div class="level-badge"><b>${level}</b><span>${level===0?'戏法':level+' 环法术'}</span>${slots}</div><div class="panel spell-list"><p class="spell-empty">暂无法术</p></div></div>`);
 }
 
+
+const spellSchools={
+  abjuration:'防护',conjuration:'咒法',divination:'预言',enchantment:'惑控',
+  evocation:'塑能',illusion:'幻术',necromancy:'死灵',transmutation:'变化'
+};
+const spellComponentLabels={verbal:'语言',somatic:'姿势',material:'材料'};
+const spellEntries=new WeakMap();
+const spellDialog=document.querySelector('#spell-dialog');
+const spellForm=document.querySelector('#spell-form');
+const spellControls=spellForm.elements;
+const spellDescription=spellControls.namedItem('description');
+const spellLevelLabel=level=>Number(level)===0?'戏法':level+' 环';
+let editingSpell=null;
+
+for(let level=0;level<=9;level++) spellControls.level.add(new Option(spellLevelLabel(level),level));
+spellControls.school.add(new Option('未选择',''));
+for(const [value,label] of Object.entries(spellSchools)) spellControls.school.add(new Option(label,value));
+
+function resizeSpellDescription(){
+  spellDescription.style.height='auto';
+  spellDescription.style.height=(spellDescription.scrollHeight+2)+'px';
+}
+function openSpellForm(entry=null){
+  editingSpell=entry;
+  const data=entry?spellEntries.get(entry):{};
+  spellForm.reset();
+  spellControls.spellName.value=data.name??'';
+  spellControls.level.value=entry?.closest('[data-spell-level]').dataset.spellLevel??'0';
+  spellControls.school.value=Object.hasOwn(spellSchools,data.school)?data.school:'';
+  for(const key of Object.keys(spellComponentLabels)) spellControls[key].checked=Boolean(data.components?.[key]);
+  spellControls.concentration.checked=Boolean(data.concentration);
+  spellControls.ritual.checked=Boolean(data.ritual);
+  spellControls.duration.value=data.duration??'';
+  spellDescription.value=data.description??'';
+  document.querySelector('#spell-dialog-title').textContent=entry?'编辑法术':'添加法术';
+  spellDialog.showModal();
+  resizeSpellDescription();
+}
+
+function createSpellEntry(data){
+  const entry=document.createElement('details');
+  entry.className='spell-entry';
+  entry.setAttribute('name','spellbook-entry');
+  entry.innerHTML='<summary></summary><div class="spell-entry-body"><p data-spell-meta></p><p class="spell-description" hidden></p><div class="spell-entry-actions"><label class="spell-option"><input type="checkbox" data-prepared>已准备</label><button class="feature-add" type="button" data-edit-spell>编辑</button><button class="feature-add" type="button" data-delete-spell>删除</button></div></div>';
+  spellEntries.set(entry,data);
+  const summary=entry.querySelector('summary');
+  summary.textContent=data.name;
+  const components=Object.entries(spellComponentLabels).filter(([key])=>data.components?.[key]).map(([,label])=>label);
+  entry.querySelector('[data-spell-meta]').textContent=[
+    spellSchools[data.school]||'学派未填写',
+    components.length?'成分：'+components.join('、'):'',
+    data.concentration?'专注':'',
+    data.ritual?'仪式':'',
+    data.duration?'持续时间：'+data.duration:''
+  ].filter(Boolean).join(' · ');
+  const description=entry.querySelector('.spell-description');
+  description.textContent=data.description??'';
+  description.hidden=!data.description;
+  const prepared=entry.querySelector('[data-prepared]');
+  prepared.checked=data.prepared;
+  prepared.addEventListener('change',()=>{data.prepared=prepared.checked});
+  entry.querySelector('[data-edit-spell]').addEventListener('click',()=>openSpellForm(entry));
+  entry.querySelector('[data-delete-spell]').addEventListener('click',()=>{
+    if(!window.confirm('删除「'+data.name+'」？'))return;
+    entry.remove();
+    markEmptySpells();
+    scheduleStaticSave();
+    document.querySelector('#add-spell').focus();
+  });
+  return entry;
+}
+
+function spellList(level){
+  return book.querySelector('[data-spell-level="'+level+'"] .spell-list');
+}
+
+function collectSpells(){
+  return Object.fromEntries([...book.querySelectorAll('[data-spell-level]')].map(group=>[
+    group.dataset.spellLevel,[...group.querySelectorAll('.spell-entry')].map(entry=>spellEntries.get(entry))
+  ]));
+}
+
+function restoreSpells(saved={}){
+  for(let level=0;level<=9;level++){
+    const list=spellList(level);
+    list.querySelectorAll('.spell-entry').forEach(entry=>entry.remove());
+    const spells=saved?.[level];
+    if(!Array.isArray(spells))continue;
+    for(const item of spells){
+      if(!item||typeof item!=='object')continue;
+      const name=String(item.name??'').trim();
+      if(!name&&!item.prepared&&!item.school&&!item.description&&!item.duration&&!item.ruleRef&&
+        !item.concentration&&!item.ritual&&!Object.keys(spellComponentLabels).some(key=>item.components?.[key]))continue;
+      list.append(createSpellEntry({...item,name:name||'未命名法术',prepared:Boolean(item.prepared)}));
+    }
+  }
+  markEmptySpells();
+}
+
+function restoreLegacySpells(fields){
+  // Legacy v1–v8 used consecutive checkbox/name pairs after the final casting input.
+  const castingId=document.querySelector('#spell-attack-bonus').dataset.saveId;
+  let field=Number(castingId.slice('field-'.length))+1;
+  const nextField=()=>fields['field-'+String(field++).padStart(3,'0')];
+  const spells={};
+  for(let level=0;level<=9;level++){
+    const count=level===0?6:level<=3?10:level<=6?8:6;
+    spells[level]=Array.from({length:count},()=>{
+      const prepared=Boolean(nextField()?.checked);
+      const name=nextField()?.value??'';
+      return {name,prepared};
+    });
+  }
+  restoreSpells(spells);
+}
+
+document.querySelector('#add-spell').addEventListener('click',()=>openSpellForm());
+document.querySelector('#cancel-spell').addEventListener('click',()=>spellDialog.close());
+spellDescription.addEventListener('input',resizeSpellDescription);
+for(const event of ['input','change'])spellForm.addEventListener(event,event=>event.stopPropagation());
+spellForm.addEventListener('submit',event=>{
+  event.preventDefault();
+  const prior=editingSpell?spellEntries.get(editingSpell):{};
+  const components={...prior.components};
+  for(const key of Object.keys(spellComponentLabels)) components[key]=spellControls[key].checked;
+  const data={
+    ...prior,
+    name:spellControls.spellName.value.trim()||'未命名法术',
+    prepared:Boolean(prior.prepared),
+    school:spellControls.school.value,
+    components,
+    concentration:spellControls.concentration.checked,
+    ritual:spellControls.ritual.checked,
+    duration:spellControls.duration.value.trim(),
+    description:spellDescription.value.trim()
+  };
+  const list=spellList(spellControls.level.value);
+  const entry=createSpellEntry(data);
+  if(editingSpell?.parentElement===list)editingSpell.replaceWith(entry);
+  else{
+    editingSpell?.remove();
+    list.append(entry);
+  }
+  spellDialog.close();
+  entry.querySelector('summary').focus();
+  markEmptySpells();
+  scheduleStaticSave();
+});
 
 function renderSpellSlotPips(level,preserve=true,usedStates=null){
   const countInput=document.querySelector(`[data-slot-count="${level}"]`);
@@ -429,6 +636,7 @@ function renderSpellSlotPips(level,preserve=true,usedStates=null){
     });
     pips.appendChild(pip);
   }
+  markEmptySpells();
 }
 function scheduleStaticSave(){
   document.dispatchEvent(new Event('change',{bubbles:true}));
@@ -460,7 +668,13 @@ document.querySelectorAll('[data-slot-count]').forEach(input=>{
   input.addEventListener('change',()=>renderSpellSlotPips(Number(input.dataset.slotCount),true));
 });
 
-function markEmptySpells(){document.querySelectorAll('.spell-level').forEach(el=>{const t=[...el.querySelectorAll('input[type=text]')].some(i=>i.value.trim());const c=[...el.querySelectorAll('input[type=checkbox]')].some(i=>i.checked);el.classList.toggle('empty',!t&&!c)})}
+function markEmptySpells(){
+  for(const group of book.querySelectorAll('[data-spell-level]')){
+    const hasSpells=Boolean(group.querySelector('.spell-entry'));
+    group.querySelector('.spell-empty').hidden=hasSpells;
+    group.classList.toggle('empty',!hasSpells&&!group.querySelector('.slot-pip'));
+  }
+}
 let __printSummonOpenStates=null;
 let __printFeatureOpenStates=null;
 window.addEventListener('beforeprint',()=>{
@@ -697,7 +911,7 @@ function restoreRichEditor(control,html){
 }
 attachRichEditor();
 
-const editable=()=>[...document.querySelectorAll('input:not([type="file"]):not([data-auto-skip]):not([data-save-skip]),textarea')].filter(el=>!el.closest('.summon-card')&&!el.closest('.feature-entry'));
+const editable=()=>[...document.querySelectorAll('input:not([type="file"]):not([data-auto-skip]):not([data-save-skip]),textarea')].filter(el=>!el.closest('.summon-card')&&!el.closest('.feature-entry')&&!el.closest('#spell-dialog,.spell-entry'));
 editable().forEach((el,index)=>el.dataset.saveId=`field-${String(index+1).padStart(3,'0')}`);
 const toast=message=>{const el=document.querySelector('#toast');el.textContent=message;el.classList.add('show');clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>el.classList.remove('show'),2200)};
 
@@ -1093,13 +1307,7 @@ function characterCollectData(){
     tr.querySelectorAll('[data-field]').forEach(el=>attack[el.dataset.field.split('.').at(-1)]=characterExportField(el));
     result.attacks.push(attack);
   });
-  document.querySelectorAll('#spellbook [data-spell-level]').forEach(levelEl=>{
-    const level=levelEl.dataset.spellLevel;
-    result.spellbook.spells[level]=[...levelEl.querySelectorAll('.spell-line')].map(row=>({
-      name:row.querySelector('[data-spell-name]')?.value??'',
-      prepared:Boolean(row.querySelector('[data-spell-prepared]')?.checked)
-    }));
-  });
+  result.spellbook.spells=collectSpells();
   document.querySelectorAll('[data-ability-row]').forEach(row=>{
     const key=row.dataset.key,rank=Number(row.querySelector('.prof')?.dataset.rank??0);
     if(key.startsWith('save-'))result.proficiencies.savingThrows[key.slice(5)]=rank;
@@ -1133,6 +1341,7 @@ function characterApplyData(data){
     restoreModifierNumeric(data.automation?.modifierValues||data.modifierValues||{});
     restoreFeatureEntries(resolveFeatureEntries(data));
     restoreSummons(data.summons||[]);
+    restoreSpells(data.spellbook?.spells);
     restoreSpellSlots(data.spellbook?.slots||{});
     restorePortrait(data.portrait||'');
   }else if(data.fields&&typeof data.fields==='object'){
@@ -1156,6 +1365,7 @@ function characterApplyData(data){
     restoreModifierNumeric(data.modifierValues||{});
     restoreFeatureEntries(resolveFeatureEntries(data));
     restoreSummons(data.summons||[]);
+    restoreLegacySpells(data.fields);
     restoreSpellSlots(data.spellSlots||{});
     restorePortrait(data.portrait||'');
   }else throw new Error('无法识别的角色卡版本');

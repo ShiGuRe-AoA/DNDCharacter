@@ -662,195 +662,31 @@
         },
         "spells": {
           "type": "object",
-          "properties": {
-            "0": {
+          "patternProperties": {
+            "^[0-9]$": {
               "type": "array",
               "items": {
                 "type": "object",
                 "properties": {
-                  "name": {
-                    "type": "string"
+                  "name": { "type": "string" },
+                  "prepared": { "type": "boolean" },
+                  "school": { "type": "string" },
+                  "components": {
+                    "type": "object",
+                    "properties": {
+                      "verbal": { "type": "boolean" },
+                      "somatic": { "type": "boolean" },
+                      "material": { "type": "boolean" }
+                    },
+                    "additionalProperties": true
                   },
-                  "prepared": {
-                    "type": "boolean"
-                  }
+                  "concentration": { "type": "boolean" },
+                  "ritual": { "type": "boolean" },
+                  "duration": { "type": "string" },
+                  "description": { "type": "string" }
                 },
                 "additionalProperties": true,
-                "required": [
-                  "name",
-                  "prepared"
-                ]
-              }
-            },
-            "1": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string"
-                  },
-                  "prepared": {
-                    "type": "boolean"
-                  }
-                },
-                "additionalProperties": true,
-                "required": [
-                  "name",
-                  "prepared"
-                ]
-              }
-            },
-            "2": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string"
-                  },
-                  "prepared": {
-                    "type": "boolean"
-                  }
-                },
-                "additionalProperties": true,
-                "required": [
-                  "name",
-                  "prepared"
-                ]
-              }
-            },
-            "3": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string"
-                  },
-                  "prepared": {
-                    "type": "boolean"
-                  }
-                },
-                "additionalProperties": true,
-                "required": [
-                  "name",
-                  "prepared"
-                ]
-              }
-            },
-            "4": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string"
-                  },
-                  "prepared": {
-                    "type": "boolean"
-                  }
-                },
-                "additionalProperties": true,
-                "required": [
-                  "name",
-                  "prepared"
-                ]
-              }
-            },
-            "5": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string"
-                  },
-                  "prepared": {
-                    "type": "boolean"
-                  }
-                },
-                "additionalProperties": true,
-                "required": [
-                  "name",
-                  "prepared"
-                ]
-              }
-            },
-            "6": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string"
-                  },
-                  "prepared": {
-                    "type": "boolean"
-                  }
-                },
-                "additionalProperties": true,
-                "required": [
-                  "name",
-                  "prepared"
-                ]
-              }
-            },
-            "7": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string"
-                  },
-                  "prepared": {
-                    "type": "boolean"
-                  }
-                },
-                "additionalProperties": true,
-                "required": [
-                  "name",
-                  "prepared"
-                ]
-              }
-            },
-            "8": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string"
-                  },
-                  "prepared": {
-                    "type": "boolean"
-                  }
-                },
-                "additionalProperties": true,
-                "required": [
-                  "name",
-                  "prepared"
-                ]
-              }
-            },
-            "9": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string"
-                  },
-                  "prepared": {
-                    "type": "boolean"
-                  }
-                },
-                "additionalProperties": true,
-                "required": [
-                  "name",
-                  "prepared"
-                ]
+                "required": ["name", "prepared"]
               }
             }
           },
