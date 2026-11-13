@@ -182,10 +182,30 @@ async function searchSpells(request, db) {
   })) });
 }
 
+async function classCatalog(request,db){
+  if(request.method!=='GET')fail(405,'此操作不受支持');
+  if(!db)fail(503,'职业规则库尚未配置');
+  const id=new URL(request.url).searchParams.get('class');
+  if(!id){
+    const {results}=await db.prepare('SELECT id,name,english_name,hit_die,casting_ability FROM rules_classes ORDER BY name').all();
+    return json({classes:results});
+  }
+  if(!/^[a-z]+$/.test(id))fail(400,'无效职业');
+  const [subclasses,features,subclassFeatures]=await db.batch([
+    db.prepare('SELECT id,name,english_name,ruleset,source FROM rules_subclasses WHERE class_id=? ORDER BY name,source,id').bind(id),
+    db.prepare('SELECT id,name,level,uses,uses_by_level,description FROM rules_class_features WHERE class_id=? ORDER BY level,rowid').bind(id),
+    db.prepare('SELECT f.id,f.subclass_id,f.name,f.level,f.uses,f.uses_by_level,f.description FROM rules_subclass_features f JOIN rules_subclasses s ON s.id=f.subclass_id WHERE s.class_id=? ORDER BY f.level,f.rowid').bind(id)
+  ]);
+  return json({subclasses:subclasses.results,features:features.results,subclassFeatures:subclassFeatures.results});
+}
+
 async function handleApi(request, env, path) {
   try {
     if (path.length === 2 && path[0] === 'rules' && path[1] === 'spells') {
       return await searchSpells(request, env.RULES_DB);
+    }
+    if (path.length === 2 && path[0] === 'rules' && path[1] === 'classes') {
+      return await classCatalog(request, env.RULES_DB);
     }
     const db = env.DB;
     if (!db) fail(503, '云端存档尚未配置');

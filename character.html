@@ -362,7 +362,7 @@ textarea.rich-source+.rich-editor{min-height:2.6rem;resize:none}
 <header class="hero"><div><p class="eyebrow">FIFTH EDITION · CHARACTER RECORD</p><h1>冒险者角色卡</h1><p class="hero-note">记录属性、旅途与故事，陪伴角色走过每一次冒险。</p></div><div class="dragon" aria-label="龙形装饰">🐉</div></header>
 <div class="content">
 <section class="chapter" id="core"><div class="chapter-head"><span class="mark">Ⅰ</span><h2>角色核心</h2></div><p class="subtitle"></p>
-<div class="panel grid identity"><div class="field"><label>角色名称</label><input placeholder="在此写下名字" data-field="identity.name"></div><div class="field"><label>职业与等级</label><input id="class-level" placeholder="例如：战士 5级" data-field="identity.classText"></div><div class="field"><label>种族</label><input data-field="identity.race"></div><div class="field"><label>背景</label><input data-field="identity.background"></div><div class="field"><label>玩家名称</label><input data-field="identity.playerName"></div><div class="field"><label>阵营</label><input data-field="identity.alignment"></div><div class="field"><label>经验值</label><input data-field="identity.experience"></div><div class="field"><label>激励</label><input data-field="identity.inspiration"></div></div>
+<div class="panel grid identity"><div class="field"><label>角色名称</label><input placeholder="在此写下名字" data-field="identity.name"></div><div class="field"><label>职业</label><input id="class-level" placeholder="例如：战士" data-field="identity.className"><ul class="spell-matches" id="class-matches" aria-label="职业建议" hidden></ul></div><div class="field"><label>子职业</label><input id="character-subclass" data-field="identity.subclassName"><ul class="spell-matches" id="subclass-matches" aria-label="子职业建议" hidden></ul></div><div class="field"><label>等级</label><input id="character-level" inputmode="numeric" placeholder="1–20" data-field="identity.level"></div><div class="field"><label>种族</label><input data-field="identity.race"></div><div class="field"><label>背景</label><input data-field="identity.background"></div><div class="field"><label>玩家名称</label><input data-field="identity.playerName"></div><div class="field"><label>阵营</label><input data-field="identity.alignment"></div><div class="field"><label>经验值</label><input data-field="identity.experience"></div><div class="field"><label>激励</label><input data-field="identity.inspiration"></div></div>
 <div class="ability-showcase"><div class="grid abilities">
 <article class="ability"><h3>力量 STR</h3><input class="score" data-ability="str" inputmode="numeric" aria-label="力量值" data-field="abilities.str"><output class="modifier" data-mod="str">—</output></article><article class="ability"><h3>敏捷 DEX</h3><input class="score" data-ability="dex" inputmode="numeric" aria-label="敏捷值" data-field="abilities.dex"><output class="modifier" data-mod="dex">—</output></article><article class="ability"><h3>体质 CON</h3><input class="score" data-ability="con" inputmode="numeric" aria-label="体质值" data-field="abilities.con"><output class="modifier" data-mod="con">—</output></article><article class="ability"><h3>智力 INT</h3><input class="score" data-ability="int" inputmode="numeric" aria-label="智力值" data-field="abilities.int"><output class="modifier" data-mod="int">—</output></article><article class="ability"><h3>感知 WIS</h3><input class="score" data-ability="wis" inputmode="numeric" aria-label="感知值" data-field="abilities.wis"><output class="modifier" data-mod="wis">—</output></article><article class="ability"><h3>魅力 CHA</h3><input class="score" data-ability="cha" inputmode="numeric" aria-label="魅力值" data-field="abilities.cha"><output class="modifier" data-mod="cha">—</output></article>
 </div><div class="panel radar-panel"><h3 class="panel-title">六维能力概览</h3><div class="radar-wrap"><canvas id="ability-radar" role="img" aria-label="六维属性雷达图"></canvas></div><p class="radar-summary" id="radar-summary">填写属性后实时生成能力轮廓</p></div></div></section>
@@ -854,13 +854,15 @@ function classTotalLevel(text){
   return total>=1&&total<=20?total:null;
 }
 function updateProficiencyBonus(){
-  const level=classTotalLevel(document.querySelector('#class-level')?.value);
+  const level=characterLevel();
   const pb=level===null?2:2+Math.floor((level-1)/4);
   applyAuto('proficiency-bonus',pb);
 }
 function updateSpellAuto(){
   const classText=document.querySelector('#spell-class')?.value.trim()||document.querySelector('#class-level')?.value.trim()||'';
-  applyAuto('spell-ability',matchSpellAbility(classText));
+  const keys={str:'力量',dex:'敏捷',con:'体质',int:'智力',wis:'感知',cha:'魅力'};
+  const catalogAbility=document.querySelector('#spell-class').value.trim()?null:classEntry()?.casting_ability;
+  applyAuto('spell-ability',keys[catalogAbility]||matchSpellAbility(classText));
   const ability=normalizedAbilityKey(document.querySelector('#spell-ability')?.value);
   const mod=ability?abilityMod(ability):null;
   const pb=proficiencyBonus();
@@ -869,7 +871,9 @@ function updateSpellAuto(){
 }
 
 function updateClassAndHealth(){
-  const text=document.querySelector('#class-level').value.trim(),matched=matchClass(text),level=parseLevel(text),con=abilityMod('con');
+  const text=document.querySelector('#class-level').value.trim(),level=characterLevel(),con=abilityMod('con');
+  const catalogClass=classEntry();
+  const matched=catalogClass?{die:catalogClass.hit_die}:matchClass(text);
   applyAuto('hit-die-type',matched?`d${matched.die}`:'');
   applyAuto('hit-dice-count',matched&&level!==null?level:'');
   if(matched&&level!==null&&con!==null){const first=matched.die+con,later=Math.floor(matched.die/2)+1+con,tough=modifierEnabled('tough')?level*2:0;applyAuto('hp-max',first+(level-1)*later+tough)}else applyAuto('hp-max','');
@@ -914,12 +918,13 @@ function updateDerived(){
   updateSpellAuto();
   updateHpVisual();
   updateRadar();
+  refreshFeatureUseCounts();
   refreshRichDisplays();
 }
 document.querySelectorAll('.prof').forEach(button=>button.addEventListener('click',()=>{const rank=(Number(button.dataset.rank)+1)%3;button.dataset.rank=String(rank);const label=button.parentElement.querySelector('span').textContent;button.setAttribute('aria-label',`${label}：${rankName[rank]}`);updateDerived()}));
 modifierInputs().forEach(input=>input.addEventListener('change',updateDerived));
 autoFields().forEach(el=>{el.dataset.overridden='0';el.addEventListener('input',()=>{el.dataset.overridden=el.value.trim()===''?'0':'1';updateDerived()})});
-document.querySelectorAll('[data-ability],#class-level,#spell-class').forEach(input=>input.addEventListener('input',updateDerived));
+document.querySelectorAll('[data-ability],#class-level,#character-level,#spell-class').forEach(input=>input.addEventListener('input',updateDerived));
 document.querySelectorAll('[data-modifier-value]').forEach(input=>input.addEventListener('input',()=>{updateDerived();scheduleStaticSave()}));
 document.querySelector('#hp-current').addEventListener('input',updateHpVisual);
 
@@ -977,7 +982,7 @@ function keywordValues(){
 }
 function replaceKeywordText(text,values=keywordValues()){
   return text.replace(/(?<![a-z0-9_@])@(pb|str|dex|con|int|wis|cha)(?![a-z0-9_])/gi,
-    (_,key)=>values[key.toLowerCase()]==null?'—':bonus(values[key.toLowerCase()]));
+    (_,key)=>values[key.toLowerCase()]==null?'—':String(values[key.toLowerCase()]));
 }
 function renderKeywordHTML(html,values){
   if(!html.includes('@'))return html;
@@ -1024,7 +1029,9 @@ function refreshRichDisplay(control,values=keywordValues()){
     control.dataset.richHtml=plainTextToRichHTML(control.value);
   }
   if(editor===document.activeElement)return;
-  const display=renderKeywordHTML(control.dataset.richHtml,values);
+    const raw=control.value.trim();
+  const display=control.matches('[data-feature-field=maxUses]')&&/^max\(/i.test(raw)
+    ?String(featureUsesNumber(raw)??'—'):renderKeywordHTML(control.dataset.richHtml,values);
   if(editor.innerHTML!==display)editor.innerHTML=display;
 }
 function refreshRichDisplays(){
@@ -1112,7 +1119,7 @@ function restoreRichEditor(control,html){
 
 attachRichEditor();
 
-const editable=()=>[...document.querySelectorAll('input:not([type="file"]):not([data-auto-skip]):not([data-save-skip]),textarea')].filter(el=>!el.closest('.summon-card')&&!el.closest('.feature-entry')&&!el.closest('#spell-dialog,.spell-entry'));
+const editable=()=>[...document.querySelectorAll('input:not([type="file"]):not([data-auto-skip]):not([data-save-skip]),textarea')].filter(el=>!el.closest('.summon-card')&&!el.closest('.feature-entry')&&!el.closest('#spell-dialog,.spell-entry')&&!el.matches('#character-level,#character-subclass'));
 editable().forEach((el,index)=>el.dataset.saveId=`field-${String(index+1).padStart(3,'0')}`);
 const toast=message=>{const el=document.querySelector('#toast');el.textContent=message;el.classList.add('show');clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>el.classList.remove('show'),2200)};
 
@@ -1209,7 +1216,28 @@ function updateFeatureEntrySummary(card){
   const summary=card.querySelector('.feature-entry-name');
   if(summary)summary.textContent=replaceKeywordText(name);
 }
-function featureMaxUses(card){const raw=card.querySelector('[data-feature-field="maxUses"]')?.value.trim()||'';return raw!==''&&Number.isFinite(Number(raw))?Math.max(0,Math.min(99,Math.floor(Number(raw)))):0}
+function featureUsesNumber(raw){
+ const values=keywordValues();
+ const resolve=value=>{
+   const keyword=value.match(/^@(pb|str|dex|con|int|wis|cha)$/i);
+   if(keyword)return values[keyword[1].toLowerCase()]??null;
+   return /^[+-]?\d+$/.test(value)?Number(value):null;
+ };
+ const text=String(raw??'').normalize('NFKC').trim();
+ const minimum=text.match(/^max\((\d+)\s*,\s*(@(?:pb|str|dex|con|int|wis|cha))\)$/i);
+ if(minimum)return Math.max(Number(minimum[1]),resolve(minimum[2])??0);
+ return resolve(text);
+}
+function featureMaxUses(card){
+ const raw=card.querySelector('[data-feature-field="maxUses"]')?.value;
+ return Math.max(0,Math.min(99,featureUsesNumber(raw)??0));
+}
+function refreshFeatureUseCounts(){
+ for(const card of document.querySelectorAll('.feature-entry')){
+   const input=card.querySelector('[data-feature-field="maxUses"]');
+   if(input.value.includes('@')&&featureMaxUses(card)!==featureUsedFlags(card).length)renderFeatureEntryPips(card,true);
+ }
+}
 function featureUsedFlags(card){return [...card.querySelectorAll('.feature-use-pip')].map(pip=>pip.classList.contains('used'))}
 function syncFeatureCurrentUses(card){
  const max=featureMaxUses(card),used=featureUsedFlags(card).filter(Boolean).length;
@@ -1235,7 +1263,7 @@ function renderFeatureEntryPips(card,preserve=true,usedStates=null){
  syncFeatureCurrentUses(card);
 }
 function setFeatureCurrentUses(card,value){
- const max=featureMaxUses(card),parsed=Number(value);
+ const max=featureMaxUses(card),parsed=featureUsesNumber(value);
  const current=Math.max(0,Math.min(max,Number.isFinite(parsed)?Math.floor(parsed):max));
  const spent=max-current;
  card.querySelectorAll('.feature-use-pip').forEach((pip,index)=>updateFeaturePip(pip,index<spent,index));
@@ -1247,6 +1275,7 @@ function createFeatureEntry(category,data={}){
   const details=document.createElement('details');
   details.className='feature-entry';
   details.dataset.featureCategory=category;
+  if(data.ruleFeature)details.dataset.ruleFeature=data.ruleFeature;
   details.open=data.open!==false;
   details.innerHTML=`
     <summary>
@@ -1256,7 +1285,7 @@ function createFeatureEntry(category,data={}){
     <div class="feature-entry-body">
       <div class="feature-entry-meta">
         <div class="field"><label>名称</label><input type="text" data-rich-skip="1" data-feature-field="name" placeholder="特性名称" value="${escapeSummon(data.name??'')}"></div>
-        <div class="feature-entry-uses"><div class="field"><label>可用</label><input type="number" min="0" max="99" step="1" inputmode="numeric" data-rich-skip="1" data-feature-field="currentUses" placeholder="剩余"></div><div class="field"><label>最大</label><input type="number" min="0" max="99" step="1" inputmode="numeric" data-rich-skip="1" data-feature-field="maxUses" placeholder="次数" value="${escapeSummon(data.maxUses??data.uses??'')}"></div></div>
+        <div class="feature-entry-uses"><div class="field"><label>可用</label><input type="text" inputmode="numeric" data-rich-skip="1" data-feature-field="currentUses" placeholder="剩余"></div><div class="field"><label>最大</label><input type="text" inputmode="numeric" data-rich-skip="1" data-feature-field="maxUses" placeholder="次数" value="${escapeSummon(data.maxUses??data.uses??'')}"></div></div>
       </div>
       <div class="field feature-entry-description"><label>描述</label><textarea data-feature-field="description" placeholder="${escapeSummon(data.placeholder??'填写特性的效果、触发条件与恢复方式')}"></textarea></div>
       <div class="feature-entry-actions"><button type="button" class="feature-delete">删除条目</button></div>
@@ -1298,6 +1327,7 @@ function collectFeatureEntries(){
       const get=field=>card.querySelector(`[data-feature-field="${field}"]`)?.value??'';
       const description=card.querySelector('[data-feature-field="description"]');
       return {
+        ruleFeature:card.dataset.ruleFeature,
         name:get('name'),
         nameHTML:card.querySelector('[data-feature-field=name]').dataset.richHtml,
         maxUses:get('maxUses'),
@@ -1514,6 +1544,8 @@ function characterCollectData(){
     });
     result.attacks.push(attack);
   });
+  result.identity.classText=legacyClassText();
+  result.identity.subclassId=selectedSubclassId;
   result.spellbook.spells=collectSpells();
   document.querySelectorAll('[data-ability-row]').forEach(row=>{
     const key=row.dataset.key,rank=Number(row.querySelector('.prof')?.dataset.rank??0);
@@ -1531,6 +1563,7 @@ function characterApplyData(data){
   if(data.version>=9&&!data.fields){
     __characterImportedBase=data;
     CHARACTER_FIELDS.forEach(el=>characterImportField(el,characterGetPath(data,el.dataset.field),data.formattedText?.[el.dataset.field]));
+    restoreClassIdentity(data.identity,data.formattedText);
     document.querySelectorAll('[data-ability-row]').forEach(row=>{
       const key=row.dataset.key;
       const rank=key.startsWith('save-')?data.proficiencies?.savingThrows?.[key.slice(5)]:data.proficiencies?.skills?.[key.slice(6)];
@@ -1572,11 +1605,13 @@ function characterApplyData(data){
     restoreModifierNumeric(data.modifierValues||{});
     restoreFeatureEntries(resolveFeatureEntries(data));
     restoreSummons(data.summons||[]);
+    restoreClassIdentity({classText:classInput.value});
     restoreLegacySpells(data.fields);
     restoreSpellSlots(data.spellSlots||{});
     restorePortrait(data.portrait||'');
   }else throw new Error('无法识别的角色卡版本');
   if(data.sheetId)__sheetId=data.sheetId;
+  scheduleClassRules();
   updateDerived();
   markEmptySpells();
 }
@@ -1632,7 +1667,7 @@ function fvttTextHTML(value){
   return '<p>'+String(value??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\r\n?/g,'\n').split('\n').join('<br>')+'</p>';
 }
 function parseFVTTClasses(raw){
-  const text=String(raw??'').trim();
+  const text=String(raw??'').normalize('NFKC').trim();
   if(!text)return {classes:[],warnings:[]};
   const aliases=FVTT_CLASS_DEFS.flatMap(def=>def.aliases.map(alias=>({def,alias:alias.trim()})))
     .sort((a,b)=>b.alias.length-a.alias.length);
@@ -1732,12 +1767,12 @@ function buildFVTTActor(snapshot){
   for(const category of ['race','classFeatures','other']){
     for(const feature of (snapshot.featureEntries?.[category]||[])){
       featureSequence++;
-      const maxRaw=fvttNumber(feature.maxUses);
+      const maxRaw=featureUsesNumber(feature.maxUses);
       const maxUses=maxRaw===null?0:Math.max(0,Math.min(99,Math.floor(maxRaw)));
       const usedCount=Math.min(maxUses,Array.isArray(feature.used)?feature.used.filter(Boolean).length:0);
       const description=typeof feature.richHTML==='string'&&feature.richHTML.trim()
-        ? feature.richHTML
-        : fvttTextHTML(feature.description||'');
+        ? renderKeywordHTML(safeRichHTML(feature.richHTML),keywordValues())
+        : fvttTextHTML(replaceKeywordText(String(feature.description||'')));
       const uses={
         spent:usedCount,
         max:maxUses>0?String(maxUses):'',
@@ -1748,7 +1783,7 @@ function buildFVTTActor(snapshot){
       const itemId=fvttRandomId();
       items.push({
         _id:itemId,
-        name:String(feature.name||'').trim()||'未命名特性',
+        name:replaceKeywordText(String(feature.name||'').trim())||'未命名特性',
         type:'feat',
         img:'icons/svg/book.svg',
         system:{
@@ -1864,7 +1899,7 @@ function buildFVTTActor(snapshot){
   return {actor,warnings,classCount:classResult.classes.length,featureCount:featureSequence};
 }
 function collectFVTTExportSnapshot(){
-  const identity=[...document.querySelectorAll('#core .identity .field input')].map(input=>input.value.trim());
+  const identity=Object.fromEntries([...document.querySelectorAll('#core .identity input[data-field]')].map(input=>[input.dataset.field.split('.')[1],input.value.trim()]));
   const profileValue=labelText=>{
     const field=[...document.querySelectorAll('#profile .portrait-layout .panel .field')]
       .find(node=>node.querySelector('label')?.textContent.trim()===labelText);
@@ -1879,14 +1914,14 @@ function collectFVTTExportSnapshot(){
     if(key.startsWith('skill-'))skillAbilities[key.slice(6)]=row.dataset.abilityRow;
   });
   return {
-    name:identity[0]||'',
-    classText:identity[1]||'',
-    race:identity[2]||'',
-    background:identity[3]||'',
-    playerName:identity[4]||'',
-    alignment:identity[5]||'',
-    xp:identity[6]||'',
-    inspiration:identity[7]||'',
+    name:identity.name||'',
+    classText:legacyClassText(),
+    race:identity.race||'',
+    background:identity.background||'',
+    playerName:identity.playerName||'',
+    alignment:identity.alignment||'',
+    xp:identity.experience||'',
+    inspiration:identity.inspiration||'',
     abilities:Object.fromEntries(FVTT_ABILITY_KEYS.map(key=>[key,document.querySelector(`[data-ability="${key}"]`)?.value??''])),
     proficiencies:rowRanks,
     skillAbilities,
@@ -1987,8 +2022,181 @@ if(_exportHtmlBtn)_exportHtmlBtn.addEventListener('click',()=>{downloadStaticHTM
 var _exportPdfBtn=document.querySelector('#export-pdf');
 if(_exportPdfBtn)_exportPdfBtn.addEventListener('click',()=>{toast('在打印窗口把目标选为「另存为 PDF」');setTimeout(()=>window.print(),420)});
 let radarResizeTimer;window.addEventListener('resize',()=>{clearTimeout(radarResizeTimer);radarResizeTimer=setTimeout(updateRadar,80)});
+const classInput=document.querySelector('#class-level');
+const levelInput=document.querySelector('#character-level');
+const subclassInput=document.querySelector('#character-subclass');
+const catalogCache=new Map();
+let classCatalog=[];
+let classSyncVersion=0;
+let classSyncTimer;
+let selectedSubclassId='';
+let catalogActive=false;
+
+function catalogKey(text){
+  return String(text??'').normalize('NFKC').trim().toLowerCase().replace(/\s+/g,'');
+}
+function classEntry(){
+  const key=catalogKey(classInput.value);
+  if(!key)return null;
+  const aliases={邪术师:'warlock',契术师:'warlock',巫师:'wizard',人工造物师:'artificer',圣骑士:'paladin'};
+  return classCatalog.find(item=>item.id===aliases[key]||[item.name,item.english_name].some(name=>catalogKey(name)===key));
+}
+function characterLevel(){
+  const raw=levelInput.value.normalize('NFKC').trim();
+  if(!raw)return classTotalLevel(classInput.value);
+  const value=Number(raw);
+  return Number.isInteger(value)&&value>=1&&value<=20?value:null;
+}
+function legacyClassText(){
+  const name=classInput.value.trim(),level=levelInput.value.trim();
+  return [name,level?level+'级':''].filter(Boolean).join(' ');
+}
+function restoreClassIdentity(identity={},formattedText={}){
+  selectedSubclassId=identity.subclassId||'';
+  if(identity.className!==undefined){
+    for(const [input,key] of [[classInput,'className'],[levelInput,'level'],[subclassInput,'subclassName']]){
+      if(identity[key]===undefined){input.value='';restoreRichEditor(input)}
+    }
+    return;
+  }
+  const legacy=String(identity.classText??'').trim();
+  // Keep multiclass strings intact so older sheets retain their total-level calculation.
+  const single=/[、,，;；/+＋]/.test(legacy)?null:
+    legacy.match(/^(.*?)\s+(?:level\s*|lv\.?\s*)?(\d{1,2})\s*级?$/i)||
+    legacy.match(/^(.*?)(\d{1,2}|[一二三四五六七八九十]{1,3})\s*级$/);
+  classInput.value=single?single[1].trim():legacy;
+  levelInput.value=single?(parseLevel(legacy)??''):'';
+  subclassInput.value='';
+  restoreRichEditor(classInput,single?null:formattedText['identity.classText']);
+  restoreRichEditor(levelInput);
+  restoreRichEditor(subclassInput);
+}
+async function fetchClassCatalog(id=''){
+  const response=await fetch('/api/rules/classes'+(id?'?class='+encodeURIComponent(id):''));
+  if(!response.ok)throw new Error('职业规则库暂不可用');
+  return response.json();
+}
+function classDetails(id){
+  if(!catalogCache.has(id)){
+    catalogCache.set(id,fetchClassCatalog(id).catch(error=>{catalogCache.delete(id);throw error}));
+  }
+  return catalogCache.get(id);
+}
+function fillCatalogInput(input,value){
+  input.value=value;
+  restoreRichEditor(input);
+  input.dispatchEvent(new Event('input',{bubbles:true}));
+}
+function catalogSuggestions(input,items,pick){
+  const list=input.closest('.field').querySelector('ul');
+  const query=catalogKey(input.value);
+  const matches=items.filter(item=>[item.name,item.english_name].some(name=>catalogKey(name).includes(query)));
+  list.replaceChildren(...matches.map(item=>{
+    const li=document.createElement('li'),button=document.createElement('button'),meta=document.createElement('small');
+    button.type='button';
+    button.textContent=item.name;
+    meta.textContent=[item.english_name,item.source,item.ruleset==='unspecified'?'版本未标明':''].filter(Boolean).join(' · ');
+    button.append(meta);
+    button.onclick=()=>{pick(item);list.hidden=true;input._richEditor.focus()};
+    li.append(button);
+    return li;
+  }));
+  list.hidden=!matches.length;
+}
+function featureUsesAtLevel(feature,level){
+  const uses=String(feature.uses_by_level||'').split(';').map(part=>part.split(':'))
+    .filter(([minimum,count])=>count!==undefined&&Number(minimum)<=level);
+  return uses.at(-1)?.[1]??feature.uses??'';
+}
+function syncCatalogFeatures(features,level){
+  const list=document.querySelector('#feature-list-classFeatures');
+  const existing=new Map([...list.querySelectorAll('.feature-entry[data-rule-feature]')].map(card=>[card.dataset.ruleFeature,card]));
+  let changed=false;
+  for(const feature of features){
+    const maxUses=featureUsesAtLevel(feature,level);
+    const card=existing.get(feature.id);
+    existing.delete(feature.id);
+    if(card){
+      const input=card.querySelector('[data-feature-field=maxUses]');
+      if(input.value!==maxUses){
+        input.value=maxUses;
+        restoreRichEditor(input);
+        renderFeatureEntryPips(card,true);
+        changed=true;
+      }
+      continue;
+    }
+    createFeatureEntry('classFeatures',{ruleFeature:feature.id,name:feature.name,maxUses,description:feature.description,open:false});
+    changed=true;
+  }
+  for(const card of existing.values()){card.remove();changed=true}
+  if(changed)scheduleStaticSave();
+}
+async function syncClassRules(){
+  if(!catalogActive||document.querySelector('.sheet').inert)return;
+  const version=++classSyncVersion;
+  const item=classEntry(),level=characterLevel();
+  if(!item){
+    if(selectedSubclassId){selectedSubclassId='';scheduleStaticSave()}
+    syncCatalogFeatures([],level);
+    subclassInput.closest('.field').querySelector('ul').hidden=true;
+    return;
+  }
+  try{
+    const data=await classDetails(item.id);
+    if(version!==classSyncVersion)return;
+    const key=catalogKey(subclassInput.value);
+    const matches=data.subclasses.filter(sub=>[sub.name,sub.english_name].some(name=>key&&catalogKey(name)===key));
+    const subclass=matches.find(sub=>sub.id===selectedSubclassId)||(matches.length===1?matches[0]:null);
+    const nextSubclassId=subclass?.id||'';
+    if(nextSubclassId!==selectedSubclassId){selectedSubclassId=nextSubclassId;scheduleStaticSave()}
+    syncCatalogFeatures([...data.features,...data.subclassFeatures.filter(feature=>feature.subclass_id===subclass?.id)]
+      .filter(feature=>level!==null&&feature.level<=level),level);
+    if(document.activeElement===subclassInput._richEditor){
+      catalogSuggestions(subclassInput,data.subclasses,sub=>{
+        selectedSubclassId=sub.id;
+        fillCatalogInput(subclassInput,sub.name);
+      });
+    }
+  }catch(error){
+    console.warn('职业规则同步暂不可用',error);
+  }
+}
+function scheduleClassRules(){
+  classSyncVersion++;
+  clearTimeout(classSyncTimer);
+  if(!classEntry())subclassInput.closest('.field').querySelector('ul').hidden=true;
+  classSyncTimer=setTimeout(syncClassRules,220);
+}
+function enableClassCatalog(){
+  if(!/^https?:$/.test(location.protocol))return;
+  fetchClassCatalog().then(data=>{
+    classCatalog=data.classes;
+    catalogActive=true;
+    if(document.activeElement===classInput._richEditor)showClassSuggestions();
+    updateDerived();
+    scheduleClassRules();
+  }).catch(()=>{});
+}
+function showClassSuggestions(){
+  catalogSuggestions(classInput,classCatalog,item=>fillCatalogInput(classInput,item.name));
+}
+for(const input of [classInput,subclassInput]){
+  const field=input.closest('.field'),list=field.querySelector('ul');
+  field.addEventListener('focusout',event=>{if(!field.contains(event.relatedTarget))list.hidden=true});
+}
+classInput._richEditor.addEventListener('focus',showClassSuggestions);
+classInput.addEventListener('input',event=>{
+  if(!event.isComposing)showClassSuggestions();
+});
+subclassInput._richEditor.addEventListener('focus',scheduleClassRules);
+for(const input of [classInput,levelInput,subclassInput])input.addEventListener('input',event=>{
+  if(!event.isComposing)scheduleClassRules();
+});
+
 updateDerived();
 markEmptySpells();
+if(!document.querySelector('#save-static'))enableClassCatalog();
 </script>
 <script src="js/db.js"></script>
 <script src="js/cloud.js"></script>

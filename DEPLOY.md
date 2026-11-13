@@ -44,3 +44,15 @@ npx.cmd wrangler d1 execute dndcharacter-rules-db --remote --command "SELECT COU
 生成的 SQL 可重复导入。现有测试法术的 ID 和公开摘要会保留。新条目使用来源、规则集、名称、原始页面路径及锚点生成 ID。名称或出处更正涉及已使用的条目时，需要显式保留旧 ID 或建立迁移映射。导入不会删除旧条目。
 
 原始法术正文、材料、职业键、施法时间、距离、来源定位和审核状态保存在 `spell_import_details` 中。搜索接口读取 `spells` 的可公开字段及现有摘要。生成的 SQL 包含完整原文，供数据库导入使用，请勿放入 Git 或静态资源目录。
+
+## 职业与子职业目录
+
+在本地解包 CHM 后，安装 Python 的 lxml 依赖，再执行：
+
+```powershell
+python scripts/Extract-ClassCatalog.py <解包目录> <输出目录>
+python scripts/Build-ClassCatalogSql.py <输出目录> rules-migrations/0002_classes.sql
+npx.cmd wrangler d1 execute <RULES_DB实际名称> --remote --file=<输出目录>/class-catalog-import.sql
+```
+
+CSV 和整批 SQL 含原始规则正文。确认对应内容的发布授权后，再导入线上规则库并部署 Worker。API 会向角色卡提供职业及子职业特性的描述。初版覆盖 2024 核心职业和可识别的扩展子职业。旧版 2014 页面及无法可靠匹配的页面记录在审核清单中。

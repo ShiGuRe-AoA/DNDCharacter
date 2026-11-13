@@ -39,6 +39,10 @@
         "name": {
           "type": "string"
         },
+        "className": { "type": "string" },
+        "level": { "type": "string" },
+        "subclassName": { "type": "string" },
+        "subclassId": { "type": "string" },
         "classText": {
           "type": "string"
         },
