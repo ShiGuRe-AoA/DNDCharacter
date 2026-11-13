@@ -1,4 +1,4 @@
-CREATE TABLE spells (
+CREATE TABLE IF NOT EXISTS spells (
   id TEXT PRIMARY KEY,
   name TEXT NOT NULL,
   english_name TEXT NOT NULL,
@@ -46,4 +46,5 @@ INSERT INTO spells (
   ('spell-2024-misty-step', '迷踪步', 'Misty Step', '迷踪步', 'mistystep', '2024', '玩家手册2024', 'core', 2, 'conjuration', 1, 0, 0, 0, 0, '立即', '短距离传送到一个能看见的未被占据空间。'),
   ('spell-2024-invisibility', '隐形术', 'Invisibility', '隐形术', 'invisibility', '2024', '玩家手册2024', 'core', 2, 'illusion', 1, 1, 1, 1, 0, '专注，至多1小时', '使目标隐形，直到持续时间结束或触发提前结束的条件。'),
   ('spell-2024-counterspell', '法术反制', 'Counterspell', '法术反制', 'counterspell', '2024', '玩家手册2024', 'core', 3, 'abjuration', 0, 1, 0, 0, 0, '立即', '尝试打断附近生物正在施展的法术。'),
-  ('spell-2024-fireball', '火球术', 'Fireball', '火球术', 'fireball', '2024', '玩家手册2024', 'core', 3, 'evocation', 1, 1, 1, 0, 0, '立即', '在指定位置引发爆炸，对范围内的生物造成火焰伤害。');
+  ('spell-2024-fireball', '火球术', 'Fireball', '火球术', 'fireball', '2024', '玩家手册2024', 'core', 3, 'evocation', 1, 1, 1, 0, 0, '立即', '在指定位置引发爆炸，对范围内的生物造成火焰伤害。')
+ON CONFLICT(id) DO NOTHING;

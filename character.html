@@ -323,7 +323,12 @@ textarea.rich-source+.rich-editor{min-height:2.6rem;resize:none}
 .spell-dialog fieldset{min-width:0;padding:.45rem .6rem;border:1px solid var(--line);border-radius:8px}
 .spell-dialog label:not(.spell-option){display:grid;gap:.2rem}
 .spell-dialog select{width:100%;min-width:0;font:inherit;color:var(--ink);background:#fffdf6;border:1px solid var(--line);border-radius:6px;padding:.3rem}
-.spell-dialog textarea{min-height:3rem;resize:none;overflow:hidden}
+.spell-dialog textarea.rich-source+.rich-editor{min-height:3rem}
+.ability .score+.rich-editor{font-size:1.7rem;font-weight:700;text-align:center}
+.stat input+.rich-editor,.check .derived+.rich-editor,.summon-ability input+.rich-editor{text-align:center}
+.stat input+.rich-editor{font-size:1.15rem;font-weight:700}
+.slot-count+.rich-editor{width:2.25rem;min-height:1.35rem;padding:.05rem .15rem;border:1px solid #ffffffa8;border-radius:6px;background:#ffffff20;color:white;text-align:center;font:700 .72rem/1.2 system-ui,sans-serif}
+.auto-field[data-overridden="1"]+.rich-editor{color:#8d3f57;border-bottom-color:var(--rose)}
 .spell-dialog-actions{justify-content:flex-end}
 .spell-matches{list-style:none;margin:.25rem 0 0;padding:0;max-height:12rem;overflow:auto;border:1px solid var(--line);border-radius:8px;background:#fffdf6}
 .spell-matches button{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:.25rem .6rem;width:100%;padding:.42rem .55rem;border:0;background:transparent;text-align:left;color:var(--deep);font:inherit;cursor:pointer}
@@ -484,16 +489,13 @@ const spellForm=document.querySelector('#spell-form');
 const spellControls=spellForm.elements;
 const spellDescription=spellControls.namedItem('description');
 const spellLevelLabel=level=>Number(level)===0?'戏法':level+' 环';
+const spellRulesetLabel=ruleset=>ruleset==='unspecified'?'版本未标明':ruleset||'';
 let editingSpell=null;
 
 for(let level=0;level<=9;level++) spellControls.level.add(new Option(spellLevelLabel(level),level));
 spellControls.school.add(new Option('未选择',''));
 for(const [value,label] of Object.entries(spellSchools)) spellControls.school.add(new Option(label,value));
 
-function resizeSpellDescription(){
-  spellDescription.style.height='auto';
-  spellDescription.style.height=(spellDescription.scrollHeight+2)+'px';
-}
 const spellMatches=document.querySelector('#spell-matches');
 const spellLookupStatus=document.querySelector('#spell-lookup-status');
 let spellRuleRef=null;
@@ -518,15 +520,17 @@ function fillSpellForm(data,level){
   spellControls.ritual.checked=Boolean(data.ritual);
   spellControls.duration.value=data.duration??'';
   spellDescription.value=data.description??'';
+  restoreRichEditor(spellControls.spellName,data.nameHTML);
+  restoreRichEditor(spellControls.duration,data.durationHTML);
+  restoreRichEditor(spellDescription,data.descriptionHTML);
 }
 
 function pickRuleSpell(data){
   clearSpellMatches();
   fillSpellForm(data,data.level);
   spellRuleRef={id:data.id,ruleset:data.ruleset,source:data.source,sourceType:data.sourceType};
-  resizeSpellDescription();
-  spellControls.spellName.focus();
-  spellLookupStatus.textContent='已填入 '+data.name+'（'+data.ruleset+'）';
+  spellControls.spellName._richEditor.focus();
+  spellLookupStatus.textContent='已填入 '+data.name+'（'+spellRulesetLabel(data.ruleset)+'）';
 }
 
 function renderSpellMatches(spells){
@@ -537,7 +541,7 @@ function renderSpellMatches(spells){
     const name=document.createElement('span');
     name.textContent=data.name;
     const meta=document.createElement('small');
-    meta.textContent=[data.englishName,data.ruleset,spellLevelLabel(data.level)].join(' · ');
+    meta.textContent=[data.englishName,spellRulesetLabel(data.ruleset),spellLevelLabel(data.level),data.source].filter(Boolean).join(' · ');
     button.append(name,meta);
     button.addEventListener('click',()=>pickRuleSpell(data));
     item.append(button);
@@ -569,7 +573,6 @@ function queueSpellLookup(event){
   },200);
 }
 spellControls.spellName.addEventListener('input',queueSpellLookup);
-spellControls.spellName.addEventListener('compositionend',queueSpellLookup);
 spellDialog.addEventListener('close',clearSpellMatches);
 
 
@@ -582,7 +585,30 @@ function openSpellForm(entry=null){
   fillSpellForm(data,entry?.closest('[data-spell-level]').dataset.spellLevel??'0');
   document.querySelector('#spell-dialog-title').textContent=entry?'编辑法术':'添加法术';
   spellDialog.showModal();
-  resizeSpellDescription();
+}
+
+function renderSpellEntry(entry,values=keywordValues()){
+  const data=spellEntries.get(entry);
+  const summary=entry.querySelector('summary');
+  summary.innerHTML=renderKeywordHTML(data.nameHTML==null?plainTextToRichHTML(data.name):safeRichHTML(data.nameHTML),values);
+  const components=Object.entries(spellComponentLabels).filter(([key])=>data.components?.[key]).map(([,label])=>label);
+  const meta=[
+    spellSchools[data.school]||'学派未填写',
+    components.length?'成分：'+components.join('、'):'',
+    data.concentration?'专注':'',
+    data.ritual?'仪式':'',
+    [data.ruleRef?.source,spellRulesetLabel(data.ruleRef?.ruleset)].filter(Boolean).join(' ')
+  ].filter(Boolean).join(' · ');
+  const metaNode=entry.querySelector('[data-spell-meta]');
+  metaNode.textContent=replaceKeywordText(meta,values);
+  if(data.duration){
+    const duration=document.createElement('span');
+    duration.innerHTML=renderKeywordHTML(data.durationHTML==null?plainTextToRichHTML(data.duration):safeRichHTML(data.durationHTML),values);
+    metaNode.append(' · 持续时间：',duration);
+  }
+  const description=entry.querySelector('.spell-description');
+  description.innerHTML=renderKeywordHTML(data.descriptionHTML==null?plainTextToRichHTML(data.description):safeRichHTML(data.descriptionHTML),values);
+  description.hidden=!data.description;
 }
 
 function createSpellEntry(data){
@@ -591,20 +617,7 @@ function createSpellEntry(data){
   entry.setAttribute('name','spellbook-entry');
   entry.innerHTML='<summary></summary><div class="spell-entry-body"><p data-spell-meta></p><p class="spell-description" hidden></p><div class="spell-entry-actions"><label class="spell-option"><input type="checkbox" data-prepared>已准备</label><button class="feature-add" type="button" data-edit-spell>编辑</button><button class="feature-add" type="button" data-delete-spell>删除</button></div></div>';
   spellEntries.set(entry,data);
-  const summary=entry.querySelector('summary');
-  summary.textContent=data.name;
-  const components=Object.entries(spellComponentLabels).filter(([key])=>data.components?.[key]).map(([,label])=>label);
-  entry.querySelector('[data-spell-meta]').textContent=[
-    spellSchools[data.school]||'学派未填写',
-    components.length?'成分：'+components.join('、'):'',
-    data.concentration?'专注':'',
-    data.ritual?'仪式':'',
-    data.duration?'持续时间：'+data.duration:'',
-    [data.ruleRef?.source,data.ruleRef?.ruleset].filter(Boolean).join(' ')
-  ].filter(Boolean).join(' · ');
-  const description=entry.querySelector('.spell-description');
-  description.textContent=data.description??'';
-  description.hidden=!data.description;
+  renderSpellEntry(entry);
   const prepared=entry.querySelector('[data-prepared]');
   prepared.checked=data.prepared;
   prepared.addEventListener('change',()=>{data.prepared=prepared.checked});
@@ -665,7 +678,6 @@ function restoreLegacySpells(fields){
 
 document.querySelector('#add-spell').addEventListener('click',()=>openSpellForm());
 document.querySelector('#cancel-spell').addEventListener('click',()=>spellDialog.close());
-spellDescription.addEventListener('input',resizeSpellDescription);
 for(const event of ['input','change'])spellForm.addEventListener(event,event=>event.stopPropagation());
 spellForm.addEventListener('submit',event=>{
   event.preventDefault();
@@ -680,8 +692,11 @@ spellForm.addEventListener('submit',event=>{
     components,
     concentration:spellControls.concentration.checked,
     ritual:spellControls.ritual.checked,
-    duration:spellControls.duration.value.trim(),
-    description:spellDescription.value.trim()
+    duration:spellControls.duration.value,
+    description:spellDescription.value,
+    nameHTML:spellControls.spellName.value.trim()?spellControls.spellName.dataset.richHtml:undefined,
+    durationHTML:spellControls.duration.dataset.richHtml,
+    descriptionHTML:spellDescription.dataset.richHtml
   };
   if(spellRuleRef)data.ruleRef=spellRuleRef;
   else delete data.ruleRef;
@@ -749,6 +764,7 @@ function restoreSpellSlots(saved={}){
       input.value='';
       renderSpellSlotPips(level,false,[]);
     }
+    refreshRichDisplay(input);
   }
 }
 document.querySelectorAll('[data-slot-count]').forEach(input=>{
@@ -767,6 +783,7 @@ let __printSummonOpenStates=null;
 let __printFeatureOpenStates=null;
 window.addEventListener('beforeprint',()=>{
   markEmptySpells();
+  document.activeElement?.closest('.rich-editor')?.blur();
   updateDerived();
   updateRadar();
   __printSummonOpenStates=[...document.querySelectorAll('.summon-card')].map(card=>card.open);
@@ -897,6 +914,7 @@ function updateDerived(){
   updateSpellAuto();
   updateHpVisual();
   updateRadar();
+  refreshRichDisplays();
 }
 document.querySelectorAll('.prof').forEach(button=>button.addEventListener('click',()=>{const rank=(Number(button.dataset.rank)+1)%3;button.dataset.rank=String(rank);const label=button.parentElement.querySelector('span').textContent;button.setAttribute('aria-label',`${label}：${rankName[rank]}`);updateDerived()}));
 modifierInputs().forEach(input=>input.addEventListener('change',updateDerived));
@@ -951,52 +969,147 @@ function plainTextToRichHTML(text){
     .replace(/[&<>]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[ch]))
     .split('\n').join('<br>');
 }
+function keywordValues(){
+  const proficiency=document.querySelector('#proficiency-bonus').value.trim();
+  const values={pb:proficiency&&Number.isFinite(Number(proficiency))?Number(proficiency):null};
+  for(const [,key] of saveDefs)values[key]=abilityMod(key);
+  return values;
+}
+function replaceKeywordText(text,values=keywordValues()){
+  return text.replace(/(?<![a-z0-9_@])@(pb|str|dex|con|int|wis|cha)(?![a-z0-9_])/gi,
+    (_,key)=>values[key.toLowerCase()]==null?'—':bonus(values[key.toLowerCase()]));
+}
+function renderKeywordHTML(html,values){
+  if(!html.includes('@'))return html;
+  const template=document.createElement('template');
+  template.innerHTML=html;
+
+  const blocks=new Set(['BR','DIV','P','UL','OL','LI']);
+  const groups=[[]];
+  function groupText(parent){
+    for(const node of parent.childNodes){
+      if(node.nodeType===Node.TEXT_NODE){groups.at(-1).push(node);continue}
+      const block=blocks.has(node.tagName);
+      if(block)groups.push([]);
+      groupText(node);
+      if(block)groups.push([]);
+    }
+  }
+  groupText(template.content);
+  for(const nodes of groups){
+    let text='';
+    const offsets=nodes.map(node=>{
+      const start=text.length;
+      text+=node.data;
+      return start;
+    });
+    const matches=[...text.matchAll(/(?<![a-z0-9_@])@(pb|str|dex|con|int|wis|cha)(?![a-z0-9_])/gi)];
+    for(const match of matches.reverse()){
+      const start=match.index,end=start+match[0].length;
+      const replacement=replaceKeywordText(match[0],values);
+      for(let index=nodes.length-1;index>=0;index--){
+        const offset=offsets[index],node=nodes[index];
+        const from=Math.max(0,start-offset),to=Math.min(node.length,end-offset);
+        if(from<to)node.replaceData(from,to-from,offset<=start?replacement:'');
+      }
+    }
+  }
+  return template.innerHTML;
+}
+function refreshRichDisplay(control,values=keywordValues()){
+  const editor=control._richEditor;
+  if(!editor)return;
+  if(control.value!==control._richValue){
+    control._richValue=control.value;
+    control.dataset.richHtml=plainTextToRichHTML(control.value);
+  }
+  if(editor===document.activeElement)return;
+  const display=renderKeywordHTML(control.dataset.richHtml,values);
+  if(editor.innerHTML!==display)editor.innerHTML=display;
+}
+function refreshRichDisplays(){
+  const values=keywordValues();
+  document.querySelectorAll('.summon-card').forEach(updateSummonSummary);
+  document.querySelectorAll('.rich-source').forEach(control=>refreshRichDisplay(control,values));
+  document.querySelectorAll('.spell-entry').forEach(entry=>renderSpellEntry(entry,values));
+  document.querySelectorAll('.feature-entry').forEach(updateFeatureEntrySummary);
+}
 function attachRichEditor(root=document){
-  root.querySelectorAll('input:not([type="file"]):not([type="checkbox"]):not([type="radio"]):not([readonly]):not([data-auto]):not([data-save-skip]):not([data-rich-skip]):not(.spell-name-input):not([inputmode="numeric"]),textarea:not([data-rich-skip])').forEach(control=>{
-    if(control.dataset.richReady==='1')return;
-    control.dataset.richReady='1';
+  root.querySelectorAll('input:not([type="file"]):not([type="checkbox"]):not([type="radio"]):not([readonly]),textarea:not([data-feature-legacy])').forEach(control=>{
+    if(control._richEditor)return;
     control.classList.add('rich-source');
     const editor=document.createElement('div');
+    const multiline=control.tagName==='TEXTAREA';
+    const numeric=control.type==='number'||control.inputMode==='numeric';
+    if(control.type==='number')control.type='text';
     editor.className='rich-editor';
     editor.contentEditable='true';
     editor.setAttribute('role','textbox');
-    editor.setAttribute('aria-multiline',String(control.tagName==='TEXTAREA'));
+    editor.setAttribute('aria-multiline',String(multiline));
     editor.dataset.placeholder=control.getAttribute('placeholder')||'';
-    editor.innerHTML=safeRichHTML(control.dataset.richHtml||control.value||'');
+    editor.inputMode=control.inputMode||(numeric?'numeric':'text');
+    const label=control.getAttribute('aria-label')||control.labels?.[0]?.textContent.trim()||
+      control.closest('.field,label,.stat')?.querySelector('label,strong')?.textContent.trim();
+    if(label)editor.setAttribute('aria-label',label);
+    if(control.autofocus){editor.autofocus=true;control.autofocus=false}
     control.insertAdjacentElement('afterend',editor);
     control._richEditor=editor;
-    editor.addEventListener('input',()=>{
+    for(const label of control.labels??[]){
+      label.addEventListener('click',event=>{
+        if(event.target.closest('select,button,a,.rich-editor'))return;
+        event.preventDefault();
+        editor.focus();
+      });
+    }
+    restoreRichEditor(control);
+    let edited=false;
+    editor.addEventListener('focus',()=>{
+      edited=false;
+      if(editor.innerHTML!==control.dataset.richHtml)editor.innerHTML=control.dataset.richHtml;
+    });
+    function commitInput(isComposing=false){
       const html=safeRichHTML(editor.innerHTML);
+      control.value=richPlainText(html);
+      control._richValue=control.value;
       control.dataset.richHtml=html;
-      control.value=richPlainText(editor.innerHTML);
-      control.dispatchEvent(new Event('input',{bubbles:true}));
-      editor.style.height='auto';
+      edited=true;
+      control.dispatchEvent(new InputEvent('input',{bubbles:true,isComposing}));
+    }
+    editor.addEventListener('input',event=>{
+      event.stopPropagation();
+      commitInput(event.isComposing);
+    });
+    editor.addEventListener('compositionend',()=>commitInput());
+    editor.addEventListener('blur',()=>{
+      if(edited)control.dispatchEvent(new Event('change',{bubbles:true}));
+      refreshRichDisplay(control);
     });
     editor.addEventListener('keydown',event=>{
       if((event.ctrlKey||event.metaKey)&&event.key.toLowerCase()==='b'){
-        event.preventDefault();document.execCommand('bold',false);editor.dispatchEvent(new Event('input',{bubbles:true}));
+        event.preventDefault();document.execCommand('bold',false);
       }
-      if(control.tagName==='INPUT'&&event.key==='Enter')event.preventDefault();
+      if(!multiline&&event.key==='Enter'&&!event.isComposing)event.preventDefault();
     });
     editor.addEventListener('paste',event=>{
       event.preventDefault();
       const plain=event.clipboardData?.getData('text/plain')||'';
-      // Paste as plain text to avoid hidden paragraph/list wrappers from Word, web pages, etc.
-      // Keep intentional line breaks, but collapse runs of blank lines to a single paragraph break.
-      const normalized=plain.replace(/\r\n?/g,'\n').replace(/\u00a0/g,' ')
-        .replace(/[ \t]+\n/g,'\n').replace(/\n{3,}/g,'\n\n');
+      const normalized=multiline
+        ?plain.replace(/\r\n?/g,'\n').replace(/[ \t]+\n/g,'\n').replace(/\n{3,}/g,'\n\n')
+        :plain.replace(/[\r\n]+/g,' ');
       document.execCommand('insertHTML',false,plainTextToRichHTML(normalized));
-      editor.dispatchEvent(new Event('input',{bubbles:true}));
     });
   });
 }
 function restoreRichEditor(control,html){
   if(!control?._richEditor)return;
-  const safe=html==null?String(control.value??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>'):safeRichHTML(html);
-  control._richEditor.innerHTML=safe;
-  control.dataset.richHtml=safe;
+  const safe=html==null?plainTextToRichHTML(control.value):safeRichHTML(html);
   control.value=richPlainText(safe);
+  control._richValue=control.value;
+  control.dataset.richHtml=safe;
+  const editor=control._richEditor;
+  editor.innerHTML=editor===document.activeElement?control.dataset.richHtml:renderKeywordHTML(control.dataset.richHtml,keywordValues());
 }
+
 attachRichEditor();
 
 const editable=()=>[...document.querySelectorAll('input:not([type="file"]):not([data-auto-skip]):not([data-save-skip]),textarea')].filter(el=>!el.closest('.summon-card')&&!el.closest('.feature-entry')&&!el.closest('#spell-dialog,.spell-entry'));
@@ -1056,7 +1169,7 @@ function updateSummonSummary(card){
   const name=card.querySelector('[data-summon-field="name"]').value.trim()||'未命名召唤物';
   const current=card.querySelector('[data-summon-field="hpCurrent"]').value.trim();
   const max=card.querySelector('[data-summon-field="hpMax"]').value.trim();
-  card.querySelector('.summon-summary-name').textContent=name;
+  card.querySelector('.summon-summary-name').textContent=replaceKeywordText(name);
   card.querySelector('.summon-summary-hp').textContent=`生命值：${current||'—'} / ${max||'—'}`;
   card.querySelectorAll('[data-summon-ability]').forEach(scoreInput=>{
     const key=scoreInput.dataset.summonAbility;
@@ -1068,6 +1181,7 @@ function updateSummonSummary(card){
       const mod=Math.floor((Number(raw)-10)/2);
       modInput.value=mod>=0?`+${mod}`:String(mod);
     }
+    refreshRichDisplay(modInput);
   });
 }
 function collectSummons(){
@@ -1093,14 +1207,14 @@ const featureCategoryDefs=[
 function updateFeatureEntrySummary(card){
   const name=card.querySelector('[data-feature-field="name"]')?.value.trim()||'未命名特性';
   const summary=card.querySelector('.feature-entry-name');
-  if(summary)summary.textContent=name;
+  if(summary)summary.textContent=replaceKeywordText(name);
 }
 function featureMaxUses(card){const raw=card.querySelector('[data-feature-field="maxUses"]')?.value.trim()||'';return raw!==''&&Number.isFinite(Number(raw))?Math.max(0,Math.min(99,Math.floor(Number(raw)))):0}
 function featureUsedFlags(card){return [...card.querySelectorAll('.feature-use-pip')].map(pip=>pip.classList.contains('used'))}
 function syncFeatureCurrentUses(card){
  const max=featureMaxUses(card),used=featureUsedFlags(card).filter(Boolean).length;
  const current=card.querySelector('[data-feature-field="currentUses"]');
- if(current)current.value=max?String(max-used):'';
+ if(current){current.value=max?String(max-used):'';refreshRichDisplay(current);}
 }
 function updateFeaturePip(pip,used,index){
  pip.classList.toggle('used',used);pip.setAttribute('aria-pressed',String(used));
@@ -1169,6 +1283,7 @@ function createFeatureEntry(category,data={}){
   });
   list.appendChild(details);
   attachRichEditor(details);
+  if(data.nameHTML!=null)restoreRichEditor(nameInput,data.nameHTML);
   if(data.richHTML!==undefined&&data.richHTML!==null)restoreRichEditor(description,data.richHTML);
   renderFeatureEntryPips(details,false,Array.isArray(data.used)?data.used:[]);
   if(!Array.isArray(data.used)&&data.currentUses!==undefined&&data.currentUses!=='')setFeatureCurrentUses(details,data.currentUses);
@@ -1184,6 +1299,7 @@ function collectFeatureEntries(){
       const description=card.querySelector('[data-feature-field="description"]');
       return {
         name:get('name'),
+        nameHTML:card.querySelector('[data-feature-field=name]').dataset.richHtml,
         maxUses:get('maxUses'),
         currentUses:get('currentUses'),
         used:[...card.querySelectorAll('.feature-entry-slots .feature-use-pip')].map(pip=>pip.classList.contains('used')),
@@ -1392,7 +1508,10 @@ function characterCollectData(){
   });
   document.querySelectorAll('#attacks tr[data-attack-row]').forEach(tr=>{
     const attack={};
-    tr.querySelectorAll('[data-field]').forEach(el=>attack[el.dataset.field.split('.').at(-1)]=characterExportField(el));
+    tr.querySelectorAll('[data-field]').forEach(el=>{
+      attack[el.dataset.field.split('.').at(-1)]=characterExportField(el);
+      if(el._richEditor)result.formattedText[el.dataset.field]=el.dataset.richHtml;
+    });
     result.attacks.push(attack);
   });
   result.spellbook.spells=collectSpells();
