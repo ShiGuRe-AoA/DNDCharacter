@@ -173,7 +173,8 @@ def infer_subclass_features(doc,profiles,subclass_name,reviewed=None):
  selector='//body//font[@color] | //body//h3 | //body//h4 | //body//h5'
  if reviewed:selector+=' | //body//strong | //body//b'
  for node in doc.xpath(selector):
-  if node.xpath('ancestor::table | ancestor::h1 | ancestor::h2 | ancestor::li'):continue
+  if node.xpath('ancestor::h1 | ancestor::h2 | ancestor::li'):continue
+  if not reviewed and node.xpath('ancestor::table'):continue
   label=bilingual(text(node))
   match=re.fullmatch(r'([\u3400-\u9fff][^。！？\n]{0,30}?)\s+([A-Za-z][A-Za-z0-9 ,\'’&()\-:]{1,65})',label)
   if not match or match[1]==subclass_name or match[2].endswith(('Options','Spells Table')):continue
