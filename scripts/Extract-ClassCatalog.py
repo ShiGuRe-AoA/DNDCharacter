@@ -28,7 +28,48 @@ def layout_text(element):
  for br in element.xpath('.//br'):
   br.tail='\n'+(br.tail or '')
  return '\n'.join(norm(line) for line in element.text_content().splitlines() if norm(line))
-def features(doc):
+def legacy_subclass_markers(doc):
+ levels={}
+ for table in doc.xpath('//table'):
+  rows=table.xpath('.//tr')
+  if not rows:continue
+  header=[text(cell) for cell in rows[0].xpath('./td|./th')]
+  if len(header)<2 or '等级' not in header[0] or '特性' not in header[1]:continue
+  for row in rows[1:]:
+   cells=[text(cell) for cell in row.xpath('./td|./th')]
+   if len(cells)<2:continue
+   match=re.fullmatch(r'(\d{1,2})(?:st|nd|rd|th|级)?',cells[0],re.I)
+   if match:
+    for name in re.split(r'[，、；]',cells[1]):
+     levels[norm(name)]=int(match[1])
+ markers={}
+ for label in doc.xpath('//em | //i'):
+  match=re.fullmatch(r'第?\s*(\d{1,2})\s*级.{1,55}特性[。.]?',text(label))
+  extra_label=None
+  if not match and text(label)=='特性':
+   previous=label.getprevious()
+   if previous is not None:
+    match=re.fullmatch(r'第?\s*(\d{1,2})\s*级.{1,55}特性',text(previous)+text(label))
+    if match:extra_label=previous
+  if not match:continue
+  heading=(extra_label if extra_label is not None else label).getprevious()
+  while heading is not None and (heading.tag=='br' or not text(heading)):
+   heading=heading.getprevious()
+  if heading is not None and heading.tag in ('font','strong','b','span'):
+   name=bilingual(text(heading))
+   if name and len(name)<=100:
+    markers[heading]=(None,int(match[1]),name)
+    markers[label]=None
+    if extra_label is not None:markers[extra_label]=None
+ for heading in doc.xpath('//strong | //b | //h3 | //h4 | //h5'):
+  if any(el in heading.iterancestors() or heading in el.iterancestors() for el in markers):continue
+  name=bilingual(text(heading))
+  chinese=re.split(r'\s+(?=[A-Za-z])',name,maxsplit=1)[0]
+  if chinese in levels and chinese!=name and heading.getparent().tag not in ('td','th'):
+   markers[heading]=(None,levels[chinese],name)
+ return markers
+
+def features(doc,legacy=False):
  markers=[]
  for element in doc.xpath('//font[@color] | //h3 | //h4 | //h5 | //strong'):
   if element.tag=='font' and element.get('color','').lower() not in ('#800000','#d08c36'): continue
@@ -37,6 +78,7 @@ def features(doc):
   if any(element in el.iterancestors() or el in element.iterancestors() for el,_ in markers):continue
   markers.append((element,match))
  markers={element:match for element,match in markers}
+ if not markers and legacy:markers=legacy_subclass_markers(doc)
  if not markers:return []
  out=[]; chunks=[]; active=None
  def add(value):
@@ -48,6 +90,7 @@ def features(doc):
  def scan(el):
   nonlocal active,chunks
   if el in markers:
+   if markers[el] is None:return
    flush(); active=markers[el];chunks=[];return
   if not isinstance(el.tag,str) or el.tag in ('script','style','img','nav'):return
   if el.tag in ('h1','h2','h3') and active and not any(m in el.iterdescendants() for m in markers):
@@ -86,7 +129,7 @@ def resource(name,body,ruleset,owner):
 def run(root,out):
  out.mkdir(parents=True,exist_ok=True)
  classes=[];subclasses=[];base=[];subs=[];audit=[]
- books={'玩家手册2024':'core','艾伯伦：奇械锻炉':'official_supplement','被遗忘的国度':'official_supplement','鸦阁魔域：魔障深藏':'official_supplement'}
+ books={'玩家手册':'core','塔莎的万事坩埚':'official_supplement','珊娜萨的万事指南':'official_supplement','荒洲探险家指南':'official_supplement','拉尼卡公会长指南':'official_supplement','玩家手册2024':'core','艾伯伦：奇械锻炉':'official_supplement','被遗忘的国度':'official_supplement','鸦阁魔域：魔障深藏':'official_supplement'}
  for cn,(cid,en,die,ability) in CLASS.items():
   path=root/'玩家手册2024'/'角色职业'/cn/(cn+'.htm')
   if cid=='artificer':path=root/'艾伯伦：奇械锻炉'/'第一章'/'奇械师.htm'
@@ -107,9 +150,27 @@ def run(root,out):
    if '子职' not in '/'.join(child.relative_to(root).parts[:-1]) or '-' not in child.stem:continue
    parent=by_name.get(child.stem.split('-',1)[0])
    if parent:candidates[child]=(parent,'2024' if book!='第三方' else 'unspecified')
+ # Legacy books organize subclass pages below a class folder; TCE uses a (TCE) suffix.
+ for book,parts in {
+  '塔莎的万事坩埚':('玩家选项','职业'),
+  '珊娜萨的万事指南':('角色选项',),
+  '玩家手册':('职业',)
+ }.items():
+  for folder in (root/book).joinpath(*parts).iterdir():
+   parent=by_name.get(re.sub(r'[（(]TCE[）)]$','',folder.name))
+   if not folder.is_dir() or not parent:continue
+   for child in folder.iterdir():
+    if child.is_file() and child.suffix.lower() in ('.htm','.html'):candidates[child]=(parent,'2014')
+ for book in ('荒洲探险家指南','拉尼卡公会长指南'):
+  for child in (root/book).rglob('*.htm'):
+   parent=by_name.get(re.split(r'[-·]',child.stem,maxsplit=1)[0])
+   if parent and re.search(r'[-·]',child.stem):candidates[child]=(parent,'2014')
  for path,(parent,ruleset) in sorted(candidates.items()):
-  rel=path.relative_to(root).as_posix(); parts=rel.split('/');doc=read(path); feats=features(doc)
+  rel=path.relative_to(root).as_posix(); parts=rel.split('/');doc=read(path); feats=features(doc,ruleset=='2014')
   heads=doc.xpath('//h1|//h2')
+  if ruleset=='2014' and (not heads or parts[0]=='玩家手册'):
+   title=re.split(r'[-·]',path.stem)[-1]
+   heads=[node for node in doc.xpath('//body/p | //body/h2 | //body/strong') if len(text(node))<=90 and (text(node).startswith(title) or (parts[0]=='珊娜萨的万事指南' and re.search(r'[A-Za-z]',text(node))))]
   if not feats or not heads:
    audit.append((rel,'no_explicit_level_features'));continue
   name=bilingual(text(heads[0])); cn,en=re.match(r'^(.*?)(?:\s+([A-Za-z].*))?$',name).groups()
@@ -121,7 +182,7 @@ def run(root,out):
    uses,progression,recovery,status=resource(label,body,ruleset,sid)
    subs.append(dict(id='subclass-feature-'+digest(sid+'|'+str(level)+'|'+label),subclass_id=sid,name=label,level=level,uses=uses,uses_by_level=progression,recovery=recovery,description=body,source_path=rel,review_status=status))
  for path in sorted((root/'玩家手册'/'职业').rglob('*.html')):
-  audit.append((path.relative_to(root).as_posix(),'legacy_2014_requires_level_mapping'))
+  if path not in candidates:audit.append((path.relative_to(root).as_posix(),'legacy_2014_requires_level_mapping'))
  for name,rows in [('classes',classes),('subclasses',subclasses),('class_features',base),('subclass_features',subs)]:
   if not rows or len({r['id'] for r in rows})!=len(rows):raise ValueError('Missing or duplicate '+name)
   with (out/(name+'.csv')).open('w',encoding='utf-8-sig',newline='') as f:

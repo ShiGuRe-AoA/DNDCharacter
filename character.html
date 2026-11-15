@@ -2133,7 +2133,7 @@ function catalogSuggestions(input,items,pick){
     const li=document.createElement('li'),button=document.createElement('button'),meta=document.createElement('small');
     button.type='button';
     button.textContent=item.name;
-    meta.textContent=[item.english_name,item.source,item.ruleset==='unspecified'?'版本未标明':''].filter(Boolean).join(' · ');
+    meta.textContent=[item.english_name,item.source,spellRulesetLabel(item.ruleset)].filter(Boolean).join(' · ');
     button.append(meta);
     button.onclick=()=>{pick(item);list.hidden=true;input._richEditor.focus()};
     li.append(button);
