@@ -55,4 +55,4 @@ python scripts/Build-ClassCatalogSql.py <输出目录> rules-migrations/0002_cla
 npx.cmd wrangler d1 execute <RULES_DB实际名称> --remote --file=<输出目录>/class-catalog-import.sql
 ```
 
-CSV 和整批 SQL 含原始规则正文。确认对应内容的发布授权后，再导入线上规则库并部署 Worker。API 会向角色卡提供职业及子职业特性的描述。初版覆盖 2024 核心职业和可识别的扩展子职业。旧版 2014 页面及无法可靠匹配的页面记录在审核清单中。
+CSV 和整批 SQL 含原始规则正文。确认对应内容的发布授权后，再导入线上规则库并部署 Worker。API 会向角色卡提供职业及子职业特性的描述。子职业首先按 CHM 的「本书速查 → 职业速查」建立目录。已识别的目录外条目继续保留。目录中部分页面的特性等级无法自动识别，仍保留子职业条目，并在审核清单中记录待补正文。

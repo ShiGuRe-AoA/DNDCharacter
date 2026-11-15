@@ -1,5 +1,6 @@
 import argparse,csv,hashlib,re
 from pathlib import Path
+from collections import Counter, defaultdict
 from lxml import html,etree
 
 CLASS = {
@@ -71,7 +72,7 @@ def legacy_subclass_markers(doc):
 
 def features(doc,legacy=False):
  markers=[]
- for element in doc.xpath('//font[@color] | //h3 | //h4 | //h5 | //strong'):
+ for element in doc.xpath('//font[@color] | //h3 | //h4 | //h5 | //strong | //u | //b | //span'):
   if element.tag=='font' and element.get('color','').lower() not in ('#800000','#d08c36'): continue
   match=LEVEL.fullmatch(text(element))
   if not match or not 1<=int(match[1])<=20 or len(match[2])>100: continue
@@ -126,6 +127,95 @@ def resource(name,body,ruleset,owner):
   return options.pop(),'',recovery,'auto_extracted'
  return '','',recovery,'manual_review' if rests or candidates else 'not_detected'
 
+def quick_reference(root):
+ toc=read(root/'DND五版不全书.hhc')
+ sections=toc.xpath('//li[object/param[@name="Name" and @value="本书速查"]]/ul/li[object/param[@name="Name" and @value="职业速查"]]')
+ if len(sections)!=1:raise ValueError('Expected one 本书速查 → 职业速查 section')
+ def value(node,name):
+  return next(iter(node.xpath(f'./object/param[@name="{name}"]/@value')),'')
+ for group in sections[0].xpath('./ul/li[ul]'):
+  page=value(group,'Local')
+  if not page:continue
+  links={}
+  for node in group.xpath('./ul/li'):
+   name=value(node,'Name'); target=value(node,'Local')
+   if (not target or name.startswith('—') or target.startswith('速查/') or
+       name in ('超魔法选项','禁令恩惠选项','战技选项','血咒','血族专长') or
+       name.startswith(('魔能祈唤选项','大招变体'))):continue
+   links[root/target]=re.sub(r'（[^）]+）$','',name)
+  yield value(group,'Name'),root/page,links
+
+def quick_ruleset(relative):
+ if relative.parts[0] in ('玩家手册2024','艾伯伦：奇械锻炉','被遗忘的国度','鸦阁魔域：魔障深藏'):return '2024'
+ if relative.parts[0] in ('第三方','其他','奥术之书','奥术奥秘'):return 'unspecified'
+ return '2014'
+
+# These layouts have reviewed bilingual headers and prose unlock levels.
+REVIEWED_UNLOCKS={
+ '游荡者-残戮行医': {'Medic':3,'Transfusion':3,'Field Surgeon':9,'Toxic Shock':13,'Bloodbound':17},
+ '德鲁伊-落英结社': {'Petal Dance':2,'Petal Beast Mimicry':6,'Spirit of Obojima':10,'Winds of Revival':14},
+ '术士-鬼之血脉': {'Arcane Prison':1,'Oni Traits':1,'Ogre Manipulation':6,'Boiling Power':14,'Transformation':18},
+ '化狼结社': {'Heightened Senses':3,'Hybrid Transformation':3,"Stalker's Prowess":7,
+   'Advanced Transformation':11,'Brand of the Voracious':15,'Hybrid Transformation Mastery':18},
+ '弑灵结社': {'Rite of the Dawn':3,'Curse Specialist':3,'Ethereal Step':7,
+   'Brand of Sundering':11,'Blood Curse of the Exorcist':15,'Rite Revival':18},
+ '渎魂结社': {'Otherworldly Patron':3,'Pact Magic':3,'Rite Focus':3,'Mystic Frenzy':7,
+   'Revealed Arcana':7,'Brand of the Sapping Scar':11,'Unsealed Arcana':15},
+ '突变结社': {'Mutagencraft':3,'Strange Metabolism':7,'Brand of Axiom':11,
+   'Blood Curse of Corrosion':15,'Exalted Mutation':18}
+}
+
+def infer_subclass_features(doc,profiles,subclass_name,reviewed=None):
+ # Colored bilingual headings delimit features in several older book layouts.
+ patterns=Counter(tuple(profile) for profile in profiles if profile)
+ if not patterns and not reviewed:return []
+ candidates=[]
+ selector='//body//font[@color] | //body//h3 | //body//h4 | //body//h5'
+ if reviewed:selector+=' | //body//strong | //body//b'
+ for node in doc.xpath(selector):
+  if node.xpath('ancestor::table | ancestor::h1 | ancestor::h2 | ancestor::li'):continue
+  label=bilingual(text(node))
+  match=re.fullmatch(r'([\u3400-\u9fff][^。！？\n]{0,30}?)\s+([A-Za-z][A-Za-z0-9 ,\'’&()\-:]{1,65})',label)
+  if not match or match[1]==subclass_name or match[2].endswith(('Options','Spells Table')):continue
+  if reviewed and match[2] not in reviewed:continue
+  if any(old in node.iterancestors() for old in candidates):continue
+  candidates.append(node)
+ if not candidates:return []
+ chunks=[]; rows=[]; heading=None
+ def flush():
+  if heading is None:return
+  body='\n'.join(norm(line) for line in ''.join(chunks).splitlines() if norm(line))
+  if body:rows.append((bilingual(text(heading)),body))
+ def walk(node):
+  nonlocal heading,chunks
+  if node in headings:
+   flush();heading=node;chunks=[];return
+  if not isinstance(node.tag,str) or node.tag in ('script','style','nav'):return
+  if heading is not None:
+   if node.tag in ('br','p','li','tr','div'):chunks.append('\n')
+   if node.text:chunks.append(node.text)
+  for child in node:
+   walk(child)
+   if heading is not None and child.tail:chunks.append(child.tail)
+ headings=set(candidates)
+ walk(doc);flush()
+ if not rows:return []
+ if reviewed:
+  return [(reviewed[re.split(r'\s+(?=[A-Za-z])',name,maxsplit=1)[1]],name,body) for name,body in rows]
+ count=len(rows)
+ explicit=[]
+ for _,body in rows:
+  lead=norm(body)
+  match=re.match(r'^(?:同样|此外)?[，, ]*(?:当你(?:达到|到达|升至|升到)?|在|从|自|达到|到达)?\s*第?\s*(\d{1,2})\s*级(?:起|时|后|开始|加入|的|[，：])',lead)
+  explicit.append(int(match[1]) if match else None)
+ possible=[profile for profile in patterns if len(profile)==count and all(given is None or given==level for given,level in zip(explicit,profile))]
+ if not possible:
+  return [(level,name,body) for level,(name,body) in zip(explicit,rows) if level and any(level in profile for profile in patterns)]
+ ranked=sorted(possible,key=lambda profile:(-patterns[profile],profile))
+ if len(ranked)>1 and patterns[ranked[0]]==patterns[ranked[1]]:
+  return [(level,name,body) for level,(name,body) in zip(explicit,rows) if level and any(level in profile for profile in patterns)]
+ return [(level,name,body) for level,(name,body) in zip(ranked[0],rows)]
+
 def run(root,out):
  out.mkdir(parents=True,exist_ok=True)
  classes=[];subclasses=[];base=[];subs=[];audit=[]
@@ -139,8 +229,30 @@ def run(root,out):
   for level,name,body in features(read(path)):
    uses,progression,recovery,status=resource(name,body,'2024',cid)
    base.append(dict(id='class-feature-'+digest(cid+'|'+str(level)+'|'+name),class_id=cid,name=name,level=level,uses=uses,uses_by_level=progression,recovery=recovery,description=body,source_path=rel,review_status=status))
+ indexed={}
+ third_party={
+  '血猎手':('bloodhunter','Blood Hunter',10),'邪狱使':('illrigger','Illrigger',10),
+  '铳士（尖塔）':('gunslinger','Gunslinger',8),'怪物猎人（鬼魅幽谷）':('monsterhunter','Monster Hunter',10),
+  '拳斗士':('pugilist','Pugilist',10),'血族（吸血鬼）':('kindred','Kindred',10)
+ }
+ for name,path,links in quick_reference(root):
+  class_name=re.sub(r'（[^）]+）$','',name)
+  parent=next((record for record in classes if record['name']==class_name),None)
+  if parent is None:
+   cid,en,die=third_party[name]
+   rel=path.relative_to(root)
+   parent=dict(id=cid,name=class_name,english_name=en,ruleset='unspecified',source=rel.parts[1],source_type='third_party',hit_die=die,casting_ability='',source_path=rel.as_posix())
+   classes.append(parent)
+   parsed=features(read(path),legacy=True)
+   if not parsed:audit.append((rel.as_posix(),'class_features_need_review'))
+   for level,label,body in parsed:
+    uses,progression,recovery,status=resource(label,body,'unspecified',cid)
+    base.append(dict(id='class-feature-'+digest(cid+'|'+str(level)+'|'+label),class_id=cid,name=label,level=level,uses=uses,uses_by_level=progression,recovery=recovery,description=body,source_path=rel.as_posix(),review_status=status))
+  for child,label in links.items():
+   indexed[child]=(parent,label)
  candidates={}
  for record in classes:
+  if record['source_type']=='third_party':continue
   path=root/record['source_path']
   for child in path.parent.glob('*.htm'):
    if child!=path and '法术' not in child.stem:candidates[child]=(record,'2024')
@@ -165,21 +277,52 @@ def run(root,out):
   for child in (root/book).rglob('*.htm'):
    parent=by_name.get(re.split(r'[-·]',child.stem,maxsplit=1)[0])
    if parent and re.search(r'[-·]',child.stem):candidates[child]=(parent,'2014')
+ for child,(parent,label) in indexed.items():
+  _,ruleset=candidates.get(child,(parent,quick_ruleset(child.relative_to(root))))
+  candidates[child]=(parent,ruleset)
+ profiles=defaultdict(list)
+ parsed_pages={}
+ for path,(parent,ruleset) in candidates.items():
+  parsed=features(read(path),ruleset!='2024')
+  parsed_pages[path]=parsed
+  if parsed:
+   profiles[parent['id'],ruleset].append(sorted(level for level,_ in {(level,label) for level,label,_ in parsed}))
  for path,(parent,ruleset) in sorted(candidates.items()):
-  rel=path.relative_to(root).as_posix(); parts=rel.split('/');doc=read(path); feats=features(doc,ruleset=='2014')
+  rel=path.relative_to(root).as_posix(); parts=rel.split('/');doc=read(path); feats=parsed_pages[path]
+  inferred=False
   heads=doc.xpath('//h1|//h2')
   if ruleset=='2014' and (not heads or parts[0]=='玩家手册'):
    title=re.split(r'[-·]',path.stem)[-1]
    heads=[node for node in doc.xpath('//body/p | //body/h2 | //body/strong') if len(text(node))<=90 and (text(node).startswith(title) or (parts[0]=='珊娜萨的万事指南' and re.search(r'[A-Za-z]',text(node))))]
-  if not feats or not heads:
-   audit.append((rel,'no_explicit_level_features'));continue
-  name=bilingual(text(heads[0])); cn,en=re.match(r'^(.*?)(?:\s+([A-Za-z].*))?$',name).groups()
+  if not feats:
+   if path not in indexed:
+    audit.append((rel,'no_explicit_level_features'));continue
+   cid=parent['id']
+   reference=profiles[cid,ruleset]
+   if not reference or ruleset=='unspecified':
+    reference=[*reference,*profiles[cid,'2014'],*profiles[cid,'2024']]
+   feats=infer_subclass_features(doc,reference,indexed[path][1],REVIEWED_UNLOCKS.get(path.stem))
+   inferred=bool(feats)
+   audit.append((rel,'inferred_levels_review' if inferred else 'no_explicit_level_features'))
+  if not heads and path not in indexed:
+   audit.append((rel,'no_subclass_title'));continue
+  fallback=indexed[path][1] if path in indexed else path.stem
+  name=bilingual(text(heads[0])) if heads else fallback
+  cn,en=re.match(r'^(.*?)(?:\s+([A-Za-z].*))?$',name).groups()
+  if path in indexed and not en:cn=fallback
   if not en:audit.append((rel,'no_english_title'))
   sid='subclass-'+digest(rel)
   source=parts[1] if parts[0]=='第三方' else (parts[1] if parts[0]=='被遗忘的国度' else parts[0])
-  subclasses.append(dict(id=sid,class_id=parent['id'],name=cn,english_name=en or '',ruleset=ruleset,source=source,source_type=books.get(parts[0],'third_party'),source_path=rel))
+  subclasses.append(dict(id=sid,class_id=parent['id'],name=cn,english_name=en or '',ruleset=ruleset,source=source,source_type=books.get(parts[0],'third_party' if parts[0]=='第三方' else 'official_supplement'),source_path=rel))
+  grouped={}
   for level,label,body in feats:
+   texts=grouped.setdefault((level,label),[])
+   if body not in texts:texts.append(body)
+  for (level,label),texts in grouped.items():
+   if len(texts)>1:audit.append((rel,'repeated_feature_heading'))
+   body='\n\n'.join(texts)
    uses,progression,recovery,status=resource(label,body,ruleset,sid)
+   if inferred:status='inferred_level:'+status
    subs.append(dict(id='subclass-feature-'+digest(sid+'|'+str(level)+'|'+label),subclass_id=sid,name=label,level=level,uses=uses,uses_by_level=progression,recovery=recovery,description=body,source_path=rel,review_status=status))
  for path in sorted((root/'玩家手册'/'职业').rglob('*.html')):
   if path not in candidates:audit.append((path.relative_to(root).as_posix(),'legacy_2014_requires_level_mapping'))
