@@ -489,6 +489,7 @@ const spellDialog=document.querySelector('#spell-dialog');
 const spellForm=document.querySelector('#spell-form');
 const spellControls=spellForm.elements;
 const spellDescription=spellControls.namedItem('description');
+const spellConfirm=spellForm.querySelector('[type=submit]');
 const spellLevelLabel=level=>Number(level)===0?'戏法':level+' 环';
 const spellRulesetLabel=ruleset=>ruleset==='unspecified'?'版本未标明':ruleset||'';
 let editingSpell=null;
@@ -502,8 +503,12 @@ const spellLookupStatus=document.querySelector('#spell-lookup-status');
 let spellRuleRef=null;
 let lookupTimer;
 let lookupRequest;
+let spellDetailRequest;
 
 function clearSpellMatches(){
+  spellDetailRequest?.abort();
+  spellDetailRequest=null;
+  spellConfirm.disabled=false;
   clearTimeout(lookupTimer);
   lookupRequest?.abort();
   lookupRequest=null;
@@ -526,13 +531,41 @@ function fillSpellForm(data,level){
   restoreRichEditor(spellDescription,data.descriptionHTML);
 }
 
-function pickRuleSpell(data){
+async function pickRuleSpell(data){
   clearSpellMatches();
   fillSpellForm(data,data.level);
   spellRuleRef={id:data.id,ruleset:data.ruleset,source:data.source,sourceType:data.sourceType};
   spellControls.spellName._richEditor.focus();
-  spellLookupStatus.textContent='已填入 '+data.name+'（'+spellRulesetLabel(data.ruleset)+'）';
+  const request=new AbortController();
+  spellDetailRequest=request;
+  spellConfirm.disabled=true;
+  const initialHTML=spellDescription.dataset.richHtml;
+  spellLookupStatus.textContent='正在读取完整法术描述…';
+  try{
+    const response=await fetch('/api/rules/spells/'+encodeURIComponent(data.id),{signal:request.signal});
+    if(!response.ok)throw new Error('法术正文不可用');
+    const {description}=await response.json();
+    if(typeof description!=='string'||!description.trim())throw new Error('法术正文为空');
+    if(spellDetailRequest!==request||!spellDialog.open)return;
+    if(spellDescription.dataset.richHtml!==initialHTML){
+      spellLookupStatus.textContent='已保留你编辑的描述';
+      return;
+    }
+    spellDescription.value=description;
+    restoreRichEditor(spellDescription);
+    spellLookupStatus.textContent='已填入 '+data.name+'（'+spellRulesetLabel(data.ruleset)+'）的完整描述';
+  }catch(error){
+    if(spellDetailRequest===request&&spellDialog.open){
+      spellLookupStatus.textContent='无法读取完整描述，可重新选择法术或手动填写';
+    }
+  }finally{
+    if(spellDetailRequest===request){
+      spellDetailRequest=null;
+      spellConfirm.disabled=false;
+    }
+  }
 }
+
 
 function renderSpellMatches(spells){
   const items=spells.map(data=>{
@@ -685,6 +718,7 @@ document.querySelector('#cancel-spell').addEventListener('click',()=>spellDialog
 for(const event of ['input','change'])spellForm.addEventListener(event,event=>event.stopPropagation());
 spellForm.addEventListener('submit',event=>{
   event.preventDefault();
+  if(spellDetailRequest)return;
   const prior=editingSpell?spellEntries.get(editingSpell):{};
   const components={...prior.components};
   for(const key of Object.keys(spellComponentLabels)) components[key]=spellControls[key].checked;

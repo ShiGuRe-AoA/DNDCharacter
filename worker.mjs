@@ -182,6 +182,20 @@ async function searchSpells(request, db) {
   })) });
 }
 
+async function spellDescription(request, db, id) {
+  if (request.method !== 'GET') fail(405, '此操作不受支持');
+  if (!/^[a-z0-9-]{1,80}$/.test(id)) fail(404, '找不到法术');
+  if (!db) fail(503, '法术库尚未配置');
+  const row = await db.prepare(`
+    SELECT d.full_description AS description
+    FROM spell_import_details d
+    JOIN spells s ON s.id = d.spell_id
+    WHERE d.spell_id = ?
+  `).bind(id).first();
+  if (!row?.description?.trim()) fail(404, '找不到法术正文');
+  return json({ description: row.description });
+}
+
 async function classCatalog(request,db){
   if(request.method!=='GET')fail(405,'此操作不受支持');
   if(!db)fail(503,'职业规则库尚未配置');
@@ -201,6 +215,9 @@ async function classCatalog(request,db){
 
 async function handleApi(request, env, path) {
   try {
+    if (path.length === 3 && path[0] === 'rules' && path[1] === 'spells') {
+      return await spellDescription(request, env.RULES_DB, path[2]);
+    }
     if (path.length === 2 && path[0] === 'rules' && path[1] === 'spells') {
       return await searchSpells(request, env.RULES_DB);
     }
