@@ -674,6 +674,7 @@
                 "properties": {
                   "name": { "type": "string" },
                   "prepared": { "type": "boolean" },
+                  "alwaysPrepared": { "type": "boolean" },
                   "school": { "type": "string" },
                   "components": {
                     "type": "object",

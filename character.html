@@ -305,7 +305,12 @@ textarea.rich-source+.rich-editor{min-height:2.6rem;resize:none}
 .spell-list{display:grid;align-content:center;gap:.35rem;min-height:4rem;padding:.5rem .65rem}
 .spell-empty{margin:0;color:var(--muted);font-size:.8rem}
 .spell-entry{min-width:0;border:1px solid var(--line);border-radius:9px;background:#fffaf0}
-.spell-entry summary{padding:.45rem .55rem;color:var(--deep);cursor:pointer;overflow-wrap:anywhere}
+.spell-entry summary{display:flex;align-items:center;gap:.4rem;padding:.45rem .55rem;color:var(--deep);cursor:pointer;overflow-wrap:anywhere;list-style:none}
+.spell-entry summary::-webkit-details-marker{display:none}
+.spell-entry summary::before{content:"▸";flex:none}
+.spell-entry[open] summary::before{content:"▾"}
+.spell-entry-title{flex:1;min-width:0}
+.spell-always-prepared{flex:none;font-size:.75rem;white-space:nowrap;cursor:pointer}
 .spell-entry[open] summary{border-bottom:1px solid var(--line)}
 .spell-entry-body{display:grid;gap:.45rem;padding:.6rem .7rem;font-size:.88rem;overflow-wrap:anywhere}
 .spell-entry-body p{margin:0}
@@ -345,7 +350,7 @@ textarea.rich-source+.rich-editor{min-height:2.6rem;resize:none}
   .spell-add,.spell-dialog,.spell-entry-body{display:none!important}
   .spell-list{min-height:0;padding:.3rem!important}
   .spell-entry summary{list-style:none;padding:.2rem .3rem}
-  .spell-entry summary::-webkit-details-marker{display:none}
+  .spell-entry summary::before{display:none}
 }
 </style>
 </head>
@@ -623,8 +628,8 @@ function openSpellForm(entry=null){
 
 function renderSpellEntry(entry,values=keywordValues()){
   const data=spellEntries.get(entry);
-  const summary=entry.querySelector('summary');
-  summary.innerHTML=renderKeywordHTML(data.nameHTML==null?plainTextToRichHTML(data.name):safeRichHTML(data.nameHTML),values);
+  const title=entry.querySelector('.spell-entry-title');
+  title.innerHTML=renderKeywordHTML(data.nameHTML==null?plainTextToRichHTML(data.name):safeRichHTML(data.nameHTML),values);
   const components=Object.entries(spellComponentLabels).filter(([key])=>data.components?.[key]).map(([,label])=>label);
   const meta=[
     spellSchools[data.school]||'学派未填写',
@@ -649,10 +654,14 @@ function createSpellEntry(data){
   const entry=document.createElement('details');
   entry.className='spell-entry';
   entry.setAttribute('name','spellbook-entry');
-  entry.innerHTML='<summary></summary><div class="spell-entry-body"><p data-spell-meta></p><p class="spell-description" hidden></p><div class="spell-entry-actions"><label class="spell-option"><input type="checkbox" data-prepared>已准备</label><button class="feature-add" type="button" data-edit-spell>编辑</button><button class="feature-add" type="button" data-delete-spell>删除</button></div></div>';
+  entry.innerHTML='<summary><span class="spell-entry-title"></span><label class="spell-option spell-always-prepared"><input type="checkbox" data-always-prepared>恒定预备</label></summary><div class="spell-entry-body"><p data-spell-meta></p><p class="spell-description" hidden></p><div class="spell-entry-actions"><label class="spell-option"><input type="checkbox" data-prepared>已准备</label><button class="feature-add" type="button" data-edit-spell>编辑</button><button class="feature-add" type="button" data-delete-spell>删除</button></div></div>';
   spellEntries.set(entry,data);
   if([data.name,data.duration,data.description].some(value=>keywordPattern.test(String(value??''))))keywordSpells.add(entry);
   renderSpellEntry(entry);
+  const alwaysPrepared=entry.querySelector('[data-always-prepared]');
+  alwaysPrepared.checked=Boolean(data.alwaysPrepared);
+  alwaysPrepared.closest('label').addEventListener('click',event=>event.stopPropagation());
+  alwaysPrepared.addEventListener('change',()=>{data.alwaysPrepared=alwaysPrepared.checked});
   const prepared=entry.querySelector('[data-prepared]');
   prepared.checked=data.prepared;
   prepared.addEventListener('change',()=>{data.prepared=prepared.checked});
@@ -688,7 +697,7 @@ function restoreSpells(saved={}){
     for(const item of spells){
       if(!item||typeof item!=='object')continue;
       const name=String(item.name??'').trim();
-      if(!name&&!item.prepared&&!item.school&&!item.description&&!item.duration&&!item.ruleRef&&
+      if(!name&&!item.prepared&&!item.alwaysPrepared&&!item.school&&!item.description&&!item.duration&&!item.ruleRef&&
         !item.concentration&&!item.ritual&&!Object.keys(spellComponentLabels).some(key=>item.components?.[key]))continue;
       list.append(createSpellEntry({...item,name:name||'未命名法术',prepared:Boolean(item.prepared)}));
     }
@@ -726,6 +735,7 @@ spellForm.addEventListener('submit',event=>{
     ...prior,
     name:spellControls.spellName.value.trim()||'未命名法术',
     prepared:Boolean(prior.prepared),
+    alwaysPrepared:Boolean(prior.alwaysPrepared),
     school:spellControls.school.value,
     components,
     concentration:spellControls.concentration.checked,
